@@ -3,6 +3,7 @@ const { QueryTypes } = require('sequelize');
 const { sequelize } = require('../../../util/sequelizedb');
 const { uploadFile } = require('../../Models/UploadModal')
 const path = require('path');
+const easyinvoice = require('easyinvoice');
 require('dotenv').config();
 const fs = require('fs');
 
@@ -170,7 +171,7 @@ class StaffController {
 
     async getInfoBook_service(req, res) {
         let infoBookFuture = await sequelize.query(`select IDService FROM BookItem as bi,Book as b WHERE IDService = ${req.body.idService} AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook AND b.StatusBook = N'Đã đặt lịch'`);
-        let infoBookDone = await sequelize.query(`select IDService FROM BookItem as bi,Book as b WHERE IDService = ${req.body.idService} AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook AND b.Status = N'Đã thanh toán'`);
+        let infoBookDone = await sequelize.query(`select IDService FROM BookItem as bi,Book as b WHERE IDService = ${req.body.idService} AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook AND b.StatusBook = N'Đã thanh toán'`);
         return res.status(200).json({
             status: 'success',
             infoBookFuture: infoBookFuture[0],
@@ -198,7 +199,6 @@ class StaffController {
         let employeesIsActive = await sequelize.query(`select * from Staff WHERE Status = N'Hoạt Động' AND TypeStaff = 1`)
         res.render('staff/employee', {
             employee: employee[0],
-            lengthEmployee,
             store: store[0],
             managers: managers[0],
             services: services[0],
@@ -331,10 +331,12 @@ class StaffController {
     }
     async mainBooking(req, res) {
         let employees = await sequelize.query(`SELECT * FROM Staff WHERE IDStore = ${req.query.idStore} AND Status = N'Hoạt Động' AND TypeStaff = 1`);
-        let bookings = await sequelize.query(`SELECT * FROM Book as b, Shift as s WHERE IDStore =  ${req.query.idStore} AND StatusBook = N'Đã đặt lịch' AND b.IDShiftBook = s.IDShift`)
+        let bookings = await sequelize.query(`SELECT * FROM Book as b, Shift as s WHERE IDStore =  ${req.query.idStore} AND b.IDShiftBook = s.IDShift`)
         let bookingJs = JSON.stringify(bookings[0]);
         let services = await sequelize.query(`SELECT * FROM Service WHERE Status = N'Hoạt Động'`)
         let shift = await sequelize.query(`SELECT * FROM Shift`)
+        let store = await sequelize.query(`SELECT * FROM Store WHERE IDStore = ${req.query.idStore}`)
+        let storeJs = JSON.stringify(store[0])
         res.render('staff/booking', {
             employees: employees[0],
             lengthEmployee: employees[0].length,
@@ -343,6 +345,7 @@ class StaffController {
             bookingJs: bookingJs,
             services: services[0],
             shift: shift[0],
+            storeJs: storeJs,
         })
     }
     async getInfoBooking(req, res) {
@@ -350,7 +353,8 @@ class StaffController {
         const date = req.body.dateBook;
         let booking = await sequelize.query(`
         SELECT * FROM Book as b,BookItem as bi,Staff as s,Service as sv WHERE b.DateBook = '${date}' AND b.PhoneCustomer = '${phone}' AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook
-        AND s.IDStaff = b.IDStaff AND sv.IDService = bi.IDService`)
+        AND s.IDStaff = b.IDStaff AND sv.IDService = bi.IDService AND b.IDStaff = bi.IDStaff 
+        AND b.IDShiftBook = (SELECT s.IDShift FROM Shift as s WHERE HourStart = ${req.body.hourStart} AND MinuteStart = ${req.body.minuteStart})`)
         let customer = await sequelize.query(`SELECT * FROM Customer WHERE PhoneCustomer = '${phone}'`)
         return res.status(200).json({
             status: 'success',
@@ -361,7 +365,7 @@ class StaffController {
 
     async getBooking_idEmployee(req, res) {
         const id = req.body.idEmployee
-        let bookings = await sequelize.query(`SELECT * FROM Book as b ,Shift as s WHERE IDStaff = '${id}' AND b.IDShiftBook = s.IDShift`)
+        let bookings = await sequelize.query(`SELECT * FROM Book as b ,Shift as s WHERE IDStaff = '${id}' AND b.IDShiftBook = s.IDShift AND b.StatusBook = N'Đã đặt lịch'`)
 
         return res.status(200).json({
             status: 'success',
@@ -416,6 +420,148 @@ class StaffController {
                 }
             }
         }
+    }
+
+    async getEmployee_Date_Time(req, res) {
+        let employee = await sequelize.query(`SELECT IDStaff FROM Book WHERE DateBook = '${req.body.date}' AND IDShiftBook = ${req.body.shift}`)
+        if (employee[0].length > 0) {
+            return res.status(200).json({
+                status: 'have employee',
+                idEmployee: employee[0][0].IDStaff
+            })
+        }
+        else {
+            return res.status(200).json({
+                status: 'not have employee',
+                idEmployee: ''
+            })
+        }
+    }
+
+    async getEmployeeRegis_Date(req, res) {
+        let employee = await sequelize.query(`SELECT * FROM RegisShift WHERE DateRegis = '${req.body.date}'`)
+        if (employee[0].length > 0) {
+            return res.status(200).json({
+                status_employee: 'have employee',
+                employees: employee[0]
+            })
+        }
+        else {
+            return res.status(200).json({
+                status_employee: 'not have employee',
+                employees: ''
+            })
+        }
+    }
+
+    async checkPhoneCus_book(req, res) {
+        let checkPhone = await sequelize.query(`SELECT * FROM Customer WHERE PhoneCustomer = '${req.body.phone}'`);
+        if (checkPhone[0].length > 0) {
+            return res.status(200).json({
+                status: 'found',
+            })
+        }
+        else {
+            return res.status(200).json({
+                status: 'not found',
+            })
+        }
+
+    }
+    async addBooking(req, res) {
+        const body = req.body;
+        let insertBooking = await sequelize.query(`INSERT INTO [dbo].[Book]
+        ([DateBook]
+        ,[IDShiftBook]
+        ,[IDStaff]
+        ,[PhoneCustomer]
+        ,[IDStore]
+        ,[StatusBook]) VALUES 
+        ('${body.date}',${body.shift},'${body.staff}','${body.phoneCus}',${body.store},N'Đã đặt lịch')
+        `)
+
+        var sql = `INSERT INTO [dbo].[BookItem]
+        ([DateBook]
+        ,[IDShiftBook]
+        ,[IDService]
+        ,[IDStaff])`;
+        var arrServicesId = body.arrService;
+        var isDone = false;
+        arrServicesId.forEach((item, index) => {
+            if (index == 0) {
+                sql += `VALUES ('${body.date}',${body.shift},${item},'${body.staff}')`
+            }
+            else {
+                sql += `,('${body.date}',${body.shift},${item},'${body.staff}')`
+            }
+
+            isDone = index == arrServicesId.length - 1 ? true : false;
+        })
+        if (isDone) {
+            let insertBookItem = await sequelize.query(sql);
+            let updatePriceBookitem = await sequelize.query(`UPDATE b
+                        SET b.Price = s.ListPrice
+                        FROM BookItem b
+                        INNER JOIN
+                        Service s
+                        ON b.IDService = s.IDService AND b.DateBook = '${body.date}' AND b.IDShiftBook = ${body.shift}`, {
+                raw: true,
+                type: QueryTypes.UPDATE,
+            })
+            let updatePaymentBook = await sequelize.query(`UPDATE Book SET Payment = (SELECT Sum(Price) 
+            FROM BookItem WHERE DateBook = '${body.date}' AND IDShiftBook = ${body.shift} AND IDStaff = '${body.staff}') WHERE DateBook = '${body.date}' AND IDShiftBook = ${body.shift} AND IDStaff = '${body.staff}'`)
+            return res.status(200).json({
+                status: 'success',
+            })
+        }
+    }
+
+    async checkHaveBooking_Phone_Date(req, res) {
+        let booking = await sequelize.query(`SELECT * FROM Book WHERE PhoneCustomer = '${req.body.phone}' AND StatusBook = N'Đã đặt lịch'`)
+
+        if (booking[0].length > 0) {
+            return res.status(200).json({
+                status: 'found',
+                datebook: booking[0][0].DateBook
+            })
+        }
+        else {
+            return res.status(200).json({
+                status: 'not found',
+                datebook: '',
+            })
+        }
+    }
+
+    async cancelBooking(req, res) {
+        let book = await sequelize.query(`SELECT * FROM BookItem as bi,Book as b
+        WHERE bi.DateBook = b.DateBook AND bi.IDShiftBook = b.IDShiftBook AND b.IDStaff = bi.IDStaff AND b.StatusBook = N'Đã đặt lịch' AND b.PhoneCustomer = '${req.body.phone}'
+        `)
+        let deleteBookItem = await sequelize.query(`DELETE BookItem WHERE DateBook = '${book[0][0].DateBook}' AND IDShiftBook = ${book[0][0].IDShiftBook} AND IDStaff = '${book[0][0].IDStaff}'`)
+
+        let deleteBook = await sequelize.query(`DELETE Book WHERE PhoneCustomer = '${req.body.phone}' AND StatusBook = N'Đã đặt lịch'`)
+
+        return res.status(200).json({
+            status: 'success',
+        })
+    }
+
+    async createBill(req, res) {
+        const body = req.body;
+        let insertBill = await sequelize.query(`INSERT INTO [dbo].[Bill]
+                ([IDBill]
+                ,[DateCreate]
+                ,[Status]
+                ,[Payment]
+                ,[IDStaff]
+                ,[PhoneCustomer])
+          VALUES ('${body.idBill}','${body.date}',N'Đã thanh toán',${body.payment},'${body.idStaff}','${body.phoneCus}')`)
+
+        let updateBook = await sequelize.query(`UPDATE Book SET StatusBook = N'Đã hoàn tất' WHERE DateBook = '${body.date}' AND IDStaff ='${body.idStaff}' AND PhoneCustomer = '${body.phoneCus}' AND StatusBook = N'Đã đặt lịch'`)
+        return res.status(200).json({
+            status: 'success',
+        })
+
     }
 }
 

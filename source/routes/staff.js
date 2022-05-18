@@ -282,6 +282,13 @@ router.post('/booking/employeeId', StaffController.getBooking_idEmployee)
 router.post('/booking/info-booking', StaffController.getInfoBooking);
 router.post('/booking/get-book-date', StaffController.getBooking_Date);
 router.post('/booking/get-shift-full', StaffController.getShiftIsFull);
+router.post('/booking/get-employee-datetime', StaffController.getEmployee_Date_Time);
+router.post('/booking/get-employee-regis-date', StaffController.getEmployeeRegis_Date);
+router.post('/booking/check-phone-customer', StaffController.checkPhoneCus_book)
+router.post('/booking/add-booking', StaffController.addBooking)
+router.post('/booking/getbooking-date-phone', StaffController.checkHaveBooking_Phone_Date);
+router.post('/booking/cancel-booking', StaffController.cancelBooking);
+router.post('/booking/create-bill', StaffController.createBill)
 router.get('/booking', StaffController.mainBooking);
 
 

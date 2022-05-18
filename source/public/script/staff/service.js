@@ -230,6 +230,9 @@
 
     categories.forEach((item, index) => {
         item.onclick = (e) => {
+            var lengthService = numberService[index].textContent.trim().split(' ')[0]
+            console.log(lengthService);
+            $('.services-list-header h5').text(`Tất Cả Dịch Vụ (${lengthService})`)
             if (!e.target.closest('.adm-actions__drop-down')) {
                 notActiveCategory();
                 item.classList.add('active');
@@ -590,6 +593,14 @@
         resetSelected_S();
         input_priceService.value = '';
         btnDelete_upload.click();
+        successInputCategory(4, "")
+        successInputCategory(5, "")
+        successInputCategory(7, "")
+        successInputCategory(8, "")
+        div_category[9].classList.add('is-success');
+        div_category[9].classList.remove('is-error');
+        err_div[10].textContent = '';
+
     }
 
     inputNameService.oninput = () => {
@@ -762,6 +773,13 @@
             `
                 haveImg = true;
                 action_uploadImg.style.display = 'flex';
+                successInputCategory(4, "")
+                successInputCategory(5, "")
+                successInputCategory(7, "")
+                successInputCategory(8, "")
+                div_category[9].classList.add('is-success');
+                div_category[9].classList.remove('is-error');
+                err_div[10].textContent = '';
 
             }
         }

@@ -579,6 +579,16 @@ btnAddDefault.addEventListener('click', (e) => {
     idStore = -1;
     idmanager = -1;
     idTypeStaff = 1;
+    successInputCategory(0, '');
+    successInputCategory(1, '');
+    successInputCategory(2, '');
+    successInputCategory(3, '');
+    successInputCategory(4, '');
+    successInputCategory(5, '');
+    successInputCategory(6, '');
+    successInputCategory(8, '');
+    successInputCategory(9, '');
+    successInputCategory(10, '');
 })
 
 const inputEditEm = document.querySelector('#idEmployeeEdit');
@@ -895,6 +905,16 @@ editEmployee.forEach((item, index) => {
                 countService = 0;
             }
         }
+        successInputCategory(0, '');
+        successInputCategory(1, '');
+        successInputCategory(2, '');
+        successInputCategory(3, '');
+        successInputCategory(4, '');
+        successInputCategory(5, '');
+        successInputCategory(6, '');
+        successInputCategory(8, '');
+        successInputCategory(9, '');
+        successInputCategory(10, '');
     }
 })
 
@@ -1151,6 +1171,10 @@ btnRegisShift.onclick = (e) => {
     inputStore_Regis.value = "";
     inputdateFrom.value = "";
     inputdateTo.value = "";
+    successInputCategory(11, '');
+    successInputCategory(12, '');
+    successInputCategory(13, '');
+    successInputCategory(14, '');
 }
 
 var indexFirstChecking_e = -1;
@@ -1261,7 +1285,7 @@ inputdateFrom.onfocusout = () => {
     datenow.setHours(0, 0, 0, 0);
     dateInputFrom.setHours(0, 0, 0, 0);
     if (datenow.getTime() > dateInputFrom.getTime()) {
-        errInputCategory(11, 'Bạn vui lòng chọn ngày lớn hơn ngày hiện tại')
+        errInputCategory(11, 'Bạn vui lòng chọn đúng ngày')
     }
     else {
         successInputCategory(11, '');

@@ -66,7 +66,7 @@
                                 <span class="adm-header__label">Lịch Hẹn</span>
                             </div>
                             <div class="align-right">
-                                <button data-toggle="modal" data-target="#add-booking"
+                                <button data-toggle="modal" data-target="#add-booking" id="add_booking"
                                     class="adm-button adm-button-service">
                                     <span class="adm-button__icon-wrapper">
                                         <i class="fa-solid fa-plus"></i>
@@ -91,7 +91,7 @@
                                     <div class="category all-categories active mb-4">
                                         <div class="category-name">
                                             <div>Tất Cả Nhân Viên</div>
-                                            <span class="num-services">{{lengthBooks}} lịch hẹn mới</span>
+                                            <span class="num-services num_all-booking"></span>
                                         </div>
                                     </div>
                                     <div>
@@ -104,7 +104,7 @@
                                             <div class="category-name overflow-ellipsis">
                                                 <div class="name-type-service" style="text-transform: capitalize;">
                                                     {{this.NameStaff}}</div>
-                                                <span class="num-bookings"></span>
+                                                <span class="num-bookings num-services"></span>
                                             </div>
 
 
@@ -226,16 +226,18 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <button id="close-btn__add" data-dismiss="modal" class="adm-button adm-button-size__medium"
-                                style="border:none;background: #d63434;margin-left:16px">
-                                <span>Hủy Lịch Hẹn</span>
-                            </button>
-                            <button id="adm-add-category"
-                                class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
-                                style="border:none">
-                                <span>Xuất Hóa Đơn</span>
-                            </button>
+                            <span class="flex action-booking">
+                                <button id="cancel-booking" data-dismiss="modal" data-toggle="modal"
+                                    data-target="#alertModalDelete" class="adm-button adm-button-size__medium"
+                                    style="border:none;background: #d63434;margin-left:16px">
+                                    <span>Hủy Lịch Hẹn</span>
+                                </button>
+                                <button id="adm-export-invoice"
+                                    class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
+                                    style="border:none">
+                                    <span>Xuất Hóa Đơn</span>
+                                </button>
+                            </span>
                         </div>
                     </div>
                     {{!-- <div class="sidebar-overlay">
@@ -438,9 +440,8 @@
                                                             <div
                                                                 class="el-input el-input__default adm-input adm-input__size-default">
                                                                 <input id="input_phone_cus" type="text"
-                                                                    autocomplete="nope" maxlength="100" iconstart
-                                                                    iconend rows="2" name="email" tags
-                                                                    class="el-input__inner"
+                                                                    autocomplete="nope" maxlength="10" iconstart iconend
+                                                                    rows="2" name="email" tags class="el-input__inner"
                                                                     placeholder="Nhập Số Điện Thoại KH Đặt Lịch">
                                                             </div>
                                                         </div>
@@ -465,10 +466,39 @@
                             class="adm-button adm-button__filled__grey adm-button-size__medium" style="border:none">
                             <span>Đóng</span>
                         </button>
-                        <button id="adm-btn-employee__add"
+                        <button id="adm-btn-booking__add"
                             class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
                             style="border:none">
-                            <span>Thêm Nhân Viên</span>
+                            <span>Thêm Lịch Hẹn</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Modal alert --}}
+        <div class="modal fade" id="alertModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border:none;padding-bottom:0">
+                        <h5 class="modal-title" id="alertModalLabel">Hủy Lịch Hẹn</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body notification-employe_delete" style="padding-bottom:5px">
+                        <p>Bạn có chắn chẳn muốn hủy lịch hẹn này?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="adm-button adm-button__filled__grey adm-button-size__medium"
+                            style="border:none;height:36px">
+                            <span>Đóng</span>
+                        </button>
+                        <button id="btn-confirm-cancel__booking"
+                            class="adm-button adm-button__filled__red adm-button-size__medium ml-3"
+                            style="border:none;height:36px">
+                            <span>Xóa</span>
                         </button>
                     </div>
                 </div>
@@ -531,14 +561,21 @@
                 </div>
             </div>
         </div>
-
+        <div id="toast">
+            <div id="img"></div>
+            <div id="desc"></div>
+        </div>
 </body>
 
 </html>
 <script>
 
+    const store = {{{ storeJs }}};
     const bookings = {{{ bookingJs }}};
    // console.log(bookings);
+</script>
+<script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+<script>
 </script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 <script src=" ../script/staff/booking.js">
