@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in & Sign up Form</title>
+    <link rel="stylesheet" href="../css/staff.css" />
+</head>
+
+<body>
+    <main>
+        <div class="box">
+            <div class="inner-box">
+                <div class="forms-wrap">
+                    <form action="/dashboard-manager" autocomplete="off" class="sign-in-form" method="get">
+                        <div class="logo">
+                            <img src="../img/logo.png" alt="" />
+                            <h4>Hair Store</h4>
+                        </div>
+
+                        <div class="heading">
+                            <h2>Đăng Nhập</h2>
+                            <h6>Đăng nhập phần mềm cho quản lý</h6>
+                            {{!-- <a href="" class="toggle">Đăng ký</a> --}}
+                        </div>
+
+                        <div class="actual-form">
+                            <div class="input-wrap">
+                                <input type="text" minlength="4" class="input-field input-acc" autocomplete="off"
+                                    required />
+                                <label>Số điện thoại</label>
+                            </div>
+
+                            <div class="input-wrap">
+                                <input type="password" minlength="4" class="input-field input-pass" autocomplete="off"
+                                    required />
+                                <label>Mật khẩu</label>
+                            </div>
+
+                            <input type="submit" value="Đăng Nhập" class="login-btn sign-btn" />
+
+                            <p class="text">
+                                Bạn đã quên mật khẩu?
+                                <a href="#">Trợ giúp</a> để lấy lại mật khẩu
+                            </p>
+                        </div>
+                    </form>
+
+                    <form action="" autocomplete="off" class="sign-up-form">
+                        <div class="logo">
+                            <img src="../img/logo.png" alt="" />
+                            <h4>Hair Store</h4>
+                        </div>
+
+                        <div class="heading">
+                            <h2>Đơn Đăng Ký</h2>
+                            <h6>Đã có tài khoản?</h6>
+                            <a href="" class="toggle">Đăng nhập</a>
+                        </div>
+
+                        <div class="actual-form">
+                            <div class="input-wrap">
+                                <input type="text" minlength="4" class="input-field" autocomplete="off" required />
+                                <label>Họ và tên</label>
+                            </div>
+
+                            <div class="input-wrap">
+                                <input type="email" class="input-field" autocomplete="off" required />
+                                <label>Email</label>
+                            </div>
+                            <div class="input-wrap">
+                                <input type="text" minlength="4" class="input-field" autocomplete="off" required />
+                                <label>Số điện thoại</label>
+                            </div>
+
+                            <div class="input-wrap">
+                                <input type="password" minlength="4" class="input-field" autocomplete="off" required />
+                                <label>Mật khẩu</label>
+                            </div>
+
+                            <input type="submit" value="Đăng Ký" class="sign-btn" />
+
+                            <p class="text">
+                                Bạn sẽ đợi từ 3-7 ngày để duyệt đơn đăng ký,
+                                <a href="#">Blog</a> và
+                                <a href="#">Câu hỏi thường gặp</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="carousel">
+                    <div class="images-wrapper">
+                        <img src="../img/image1.png" class="image img-1 show" alt="" />
+                        <img src="../img/image2.png" class="image img-2" alt="" />
+                        <img src="../img/image3.png" class="image img-3" alt="" />
+                    </div>
+
+                    <div class="text-slider">
+                        <div class="text-wrap">
+                            <div class="text-group">
+                                <h2>Làm việc linh hoạt</h2>
+                                <h2>Cơ hội thăng tiến hấp dẫn</h2>
+                                <h2>Chế độ như công ty nước ngoài</h2>
+                            </div>
+                        </div>
+
+                        <div class="bullets">
+                            <span class="active" data-value="1"></span>
+                            <span data-value="2"></span>
+                            <span data-value="3"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Javascript file -->
+
+    <script src="../script/staff/login.js"></script>
+</body>
+
+</html>

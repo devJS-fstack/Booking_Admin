@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="/css/rome.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/mainstaff.css">
+    <link rel="stylesheet" href="../css/service-dashboard.css">
+    <link rel="stylesheet" href="../css/employee.css">
+    <link rel="stylesheet" href="../font/css/all.min.css">
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="left-side">
+            <a href="dashboard-manager?idStore={{idstore}}">
+                <svg id="home" viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+                    class="active">
+                    <path
+                        d="M197.3 170.7h-160A37.4 37.4 0 010 133.3v-96A37.4 37.4 0 0137.3 0h160a37.4 37.4 0 0137.4 37.3v96a37.4 37.4 0 01-37.4 37.4zM37.3 32c-3 0-5.3 2.4-5.3 5.3v96c0 3 2.4 5.4 5.3 5.4h160c3 0 5.4-2.4 5.4-5.4v-96c0-3-2.4-5.3-5.4-5.3zm0 0M197.3 512h-160A37.4 37.4 0 010 474.7v-224a37.4 37.4 0 0137.3-37.4h160a37.4 37.4 0 0137.4 37.4v224a37.4 37.4 0 01-37.4 37.3zm-160-266.7c-3 0-5.3 2.4-5.3 5.4v224c0 3 2.4 5.3 5.3 5.3h160c3 0 5.4-2.4 5.4-5.3v-224c0-3-2.4-5.4-5.4-5.4zm0 0M474.7 512h-160a37.4 37.4 0 01-37.4-37.3v-96a37.4 37.4 0 0137.4-37.4h160a37.4 37.4 0 0137.3 37.4v96a37.4 37.4 0 01-37.3 37.3zm-160-138.7c-3 0-5.4 2.4-5.4 5.4v96c0 3 2.4 5.3 5.4 5.3h160c3 0 5.3-2.4 5.3-5.3v-96c0-3-2.4-5.4-5.3-5.4zm0 0M474.7 298.7h-160a37.4 37.4 0 01-37.4-37.4v-224A37.4 37.4 0 01314.7 0h160A37.4 37.4 0 01512 37.3v224a37.4 37.4 0 01-37.3 37.4zM314.7 32c-3 0-5.4 2.4-5.4 5.3v224c0 3 2.4 5.4 5.4 5.4h160c3 0 5.3-2.4 5.3-5.4v-224c0-3-2.4-5.3-5.3-5.3zm0 0" />
+                </svg>
+            </a>
+            <a href="service?idStore={{idstore}}">
+                <svg id=" service" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+            </a>
+            <a href="employee?idStore={{idstore}}">
+                <svg viewBox="0 1 511 512" fill="currentColor">
+                    <path
+                        d="M498.7 222.7L289.8 13.8a46.8 46.8 0 00-66.7 0L14.4 222.6l-.2.2A47.2 47.2 0 0047 303h8.3v153.7a55.2 55.2 0 0055.2 55.2h81.7a15 15 0 0015-15V376.5a25.2 25.2 0 0125.2-25.2h48.2a25.2 25.2 0 0125.1 25.2V497a15 15 0 0015 15h81.8a55.2 55.2 0 0055.1-55.2V303.1h7.7a47.2 47.2 0 0033.4-80.4zm-21.2 45.4a17 17 0 01-12.2 5h-22.7a15 15 0 00-15 15v168.7a25.2 25.2 0 01-25.1 25.2h-66.8V376.5a55.2 55.2 0 00-55.1-55.2h-48.2a55.2 55.2 0 00-55.2 55.2V482h-66.7a25.2 25.2 0 01-25.2-25.2V288.1a15 15 0 00-15-15h-23A17.2 17.2 0 0135.5 244L244.4 35a17 17 0 0124.2 0l208.8 208.8v.1a17.2 17.2 0 010 24.2zm0 0" />
+                </svg>
+            </a>
+            <a href="booking?idStore={{idstore}}">
+                <svg viewBox="0 0 512 512" fill="currentColor">
+                    <path
+                        d="M467 76H45a45 45 0 00-45 45v270a45 45 0 0045 45h422a45 45 0 0045-45V121a45 45 0 00-45-45zm-6.3 30L287.8 278a44.7 44.7 0 01-63.6 0L51.3 106h409.4zM30 384.9V127l129.6 129L30 384.9zM51.3 406L181 277.2l22 22c14.2 14.1 33 22 53.1 22 20 0 38.9-7.9 53-22l22-22L460.8 406H51.3zM482 384.9L352.4 256 482 127V385z" />
+                </svg>
+            </a>
+            <a href="">
+                <svg viewBox="0 0 512 512" fill="currentColor">
+                    <path
+                        d="M272 512h-32c-26 0-47.2-21.1-47.2-47.1V454c-11-3.5-21.8-8-32.1-13.3l-7.7 7.7a47.1 47.1 0 01-66.7 0l-22.7-22.7a47.1 47.1 0 010-66.7l7.7-7.7c-5.3-10.3-9.8-21-13.3-32.1H47.1c-26 0-47.1-21.1-47.1-47.1v-32.2c0-26 21.1-47.1 47.1-47.1H58c3.5-11 8-21.8 13.3-32.1l-7.7-7.7a47.1 47.1 0 010-66.7l22.7-22.7a47.1 47.1 0 0166.7 0l7.7 7.7c10.3-5.3 21-9.8 32.1-13.3V47.1c0-26 21.1-47.1 47.1-47.1h32.2c26 0 47.1 21.1 47.1 47.1V58c11 3.5 21.8 8 32.1 13.3l7.7-7.7a47.1 47.1 0 0166.7 0l22.7 22.7a47.1 47.1 0 010 66.7l-7.7 7.7c5.3 10.3 9.8 21 13.3 32.1h10.9c26 0 47.1 21.1 47.1 47.1v32.2c0 26-21.1 47.1-47.1 47.1H454c-3.5 11-8 21.8-13.3 32.1l7.7 7.7a47.1 47.1 0 010 66.7l-22.7 22.7a47.1 47.1 0 01-66.7 0l-7.7-7.7c-10.3 5.3-21 9.8-32.1 13.3v10.9c0 26-21.1 47.1-47.1 47.1zM165.8 409.2a176.8 176.8 0 0045.8 19 15 15 0 0111.3 14.5V465c0 9.4 7.7 17.1 17.1 17.1h32.2c9.4 0 17.1-7.7 17.1-17.1v-22.2a15 15 0 0111.3-14.5c16-4.2 31.5-10.6 45.8-19a15 15 0 0118.2 2.3l15.7 15.7a17.1 17.1 0 0024.2 0l22.8-22.8a17.1 17.1 0 000-24.2l-15.7-15.7a15 15 0 01-2.3-18.2 176.8 176.8 0 0019-45.8 15 15 0 0114.5-11.3H465c9.4 0 17.1-7.7 17.1-17.1v-32.2c0-9.4-7.7-17.1-17.1-17.1h-22.2a15 15 0 01-14.5-11.2c-4.2-16.1-10.6-31.6-19-45.9a15 15 0 012.3-18.2l15.7-15.7a17.1 17.1 0 000-24.2l-22.8-22.8a17.1 17.1 0 00-24.2 0l-15.7 15.7a15 15 0 01-18.2 2.3 176.8 176.8 0 00-45.8-19 15 15 0 01-11.3-14.5V47c0-9.4-7.7-17.1-17.1-17.1h-32.2c-9.4 0-17.1 7.7-17.1 17.1v22.2a15 15 0 01-11.3 14.5c-16 4.2-31.5 10.6-45.8 19a15 15 0 01-18.2-2.3l-15.7-15.7a17.1 17.1 0 00-24.2 0l-22.8 22.8a17.1 17.1 0 000 24.2l15.7 15.7a15 15 0 012.3 18.2 176.8 176.8 0 00-19 45.8 15 15 0 01-14.5 11.3H47c-9.4 0-17.1 7.7-17.1 17.1v32.2c0 9.4 7.7 17.1 17.1 17.1h22.2a15 15 0 0114.5 11.3c4.2 16 10.6 31.5 19 45.8a15 15 0 01-2.3 18.2l-15.7 15.7a17.1 17.1 0 000 24.2l22.8 22.8a17.1 17.1 0 0024.2 0l15.7-15.7a15 15 0 0118.2-2.3z" />
+                    <path
+                        d="M256 367.4c-61.4 0-111.4-50-111.4-111.4s50-111.4 111.4-111.4 111.4 50 111.4 111.4-50 111.4-111.4 111.4zm0-192.8a81.5 81.5 0 000 162.8 81.5 81.5 0 000-162.8z" />
+                </svg>
+            </a>
+            <a href="">
+                <svg viewBox="0 0 512 512" fill="currentColor">
+                    <path
+                        d="M255.2 468.6H63.8a21.3 21.3 0 01-21.3-21.2V64.6c0-11.7 9.6-21.2 21.3-21.2h191.4a21.2 21.2 0 100-42.5H63.8A63.9 63.9 0 000 64.6v382.8A63.9 63.9 0 0063.8 511H255a21.2 21.2 0 100-42.5z" />
+                    <path
+                        d="M505.7 240.9L376.4 113.3a21.3 21.3 0 10-29.9 30.3l92.4 91.1H191.4a21.2 21.2 0 100 42.6h247.5l-92.4 91.1a21.3 21.3 0 1029.9 30.3l129.3-127.6a21.3 21.3 0 000-30.2z" />
+                </svg>
+            </a>
+        </div>
+        <div class="main-container" style="display: block">
+            <div class="user-box third-box service-box">
+                <div class="adm-services">
+                    <div class="adm-page-header">
+                        <div class="adm-page-header__content">
+                            <div class="adm-page-header__title">
+                                <span class="adm-header__label">Nhân Viên</span>
+                            </div>
+                            <div class="align-right">
+                                <button data-toggle="modal" data-target="#add-employee_modal" class="adm-button"
+                                    id="btn-AddEmployee">
+                                    <span class="adm-button__icon-wrapper">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </span>
+                                    <span>Thêm Nhân Viên</span>
+                                </button>
+                                <button data-toggle="modal" data-target="#add-regisShift" class="adm-button ml-4"
+                                    id="btn-AddRegisShift">
+                                    <span class="adm-button__icon-wrapper">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </span>
+                                    <span>Thêm Ngày Làm Việc</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="service-and-category">
+                    <div class="services-list">
+                        <div class="mb-3 el-row is-justify-space-between is-align-middle el-row--flex">
+                            <div class="adm-input-wrapper filter-search">
+                                <div
+                                    class="el-input el-input--medium el-input--prefix adm-input adm-input__size__medium is-icon-start">
+                                    <input type="text" placeholder="Tìm kiếm" class="el-input__inner">
+                                    <span class="el-input__prefix">
+                                        <i
+                                            class="adm-icon adm-icon__medium adm-icon__primary fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="el-tooltip adm-toggle-filters">
+                                <button
+                                    class="adm-button adm-button__filled__grey adm-button__size__medium is-icon-start">
+                                    <span class="adm-button__icon-wrapper">
+                                        <i class="fa-solid fa-filter"></i>
+                                    </span>
+                                    <span>Lọc</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="services-list-header">
+                                <h5>Tất Cả Nhân Viên <span>({{lengthEmployee}})</span></h5>
+                            </div>
+                            <div class="services-list-content">
+                                <div class="service-list">
+                                    <div class="head-row">
+                                        <div class="el-row" style="margin-left: -8px; margin-right: -8px; height:32px">
+                                            <div class="el-col el-col-24 el-col-sm-7"
+                                                style="padding-left: 8px; padding-right: 8px;">
+                                                <p>Tên</p>
+                                            </div>
+                                            <div class="el-col el-col-24 el-col-sm-4"
+                                                style="padding-left: 8px; padding-right: 8px;">
+                                                <p>Trạng Thái</p>
+                                            </div>
+                                            <div class="el-col el-col-24 el-col-sm-4"
+                                                style="padding-left: 8px; padding-right: 8px;">
+                                                <p>Điện thoại</p>
+                                            </div>
+                                            <div class="el-col el-col-24 el-col-sm-4"
+                                                style="padding-left: 8px; padding-right: 8px;">
+                                                <p>Email</p>
+                                            </div>
+                                            <div class="el-col el-col-24 el-col-sm-4"
+                                                style="padding-left: 8px; padding-right: 8px;">
+                                                <p>Chi nhánh</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            {{#each employee}}
+                                            <div class="adm-service" data-employee={{this.IDStaff}}
+                                                style="border-color: rgb(192, 235, 117);background-color: #182e5b;">
+                                                <div class="adm-service__data">
+                                                    <div class="flex-center el-row is-align-middle"
+                                                        style="margin-left: -8px; margin-right: -8px;">
+                                                        <div class="service-name-col el-col el-col-24 el-col-sm-7"
+                                                            style="padding-left: 8px; padding-right: 8px;">
+                                                            <div class="overflow-ellipsis flex-center">
+                                                                <div class="adm-avatar size-40 margin-right--10 margin-left--0"
+                                                                    style="background-image: url(
+                                                                            {{this.PathImgStaff}});
+                                                                            border: 3px solid rgb(255, 255, 255); color:
+                                                                            rgb(19, 150, 110); z-index: 5;">
+                                                                </div>
+                                                                <h5 class="overflow-ellipsis mb-0"
+                                                                    style="font-size: 15px;">
+                                                                    {{this.SurName}} {{this.NameStaff}}
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="el-col el-col-24 el-col-sm-4"
+                                                            style="padding-left: 8px; padding-right: 8px;">
+                                                            <div class="status is-green">
+                                                                <svg viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path d="M20 6L9 17l-5-5"
+                                                                        data-employee={{this.IDStaff}} />
+                                                                </svg>
+                                                                <span class="status-text">{{this.Status}}</span>
+                                                            </div>
+                                                            {{!-- <div class="status is-red"
+                                                                data-employee={{this.IDStaff}}>
+                                                                <svg viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path d="M18 6L6 18M6 6l12 12" />
+                                                                </svg>
+                                                                Tạm Nghỉ
+                                                            </div> --}}
+                                                        </div>
+                                                        <div class="el-col el-col-24 el-col-sm-4"
+                                                            style="padding-left: 8px; padding-right: 8px;">
+                                                            <span>{{this.Phone}}</span>
+                                                        </div>
+                                                        <div class="el-col el-col-24 el-col-sm-4 relative"
+                                                            style="padding-left: 8px; padding-right: 8px;">
+                                                            <span>{{this.Email}}</span>
+                                                        </div>
+                                                        <div class="el-col el-col-24 el-col-sm-4 relative"
+                                                            style="padding-left: 38px; padding-right: 8px;">
+                                                            <span>{{this.IDStore}}</span>
+                                                        </div>
+                                                        <div class="el-col el-col-24 el-col-sm-2"
+                                                            style="padding-left: 8px; padding-right: 8px;">
+                                                            <div class="adm-actions__drop-down">
+                                                                <div class="el-dropdown">
+                                                                    <button aria-haspopup="true" aria-expanded="false"
+                                                                        data-toggle="dropdown" class="adm-btn"
+                                                                        id="dropdownMenuButton">
+                                                                        <span class="adm-btn__icon">
+                                                                            <i class="fa-solid fa-ellipsis"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu"
+                                                                        style="left: -50px !important; opactity: 1 !important;"
+                                                                        aria-labelledby="dropdownMenuButton">
+                                                                        <li data-employee={{this.IDStaff}}
+                                                                            class="dropdown-item el-dropdown-menu edit-employee"
+                                                                            data-target="" data-toggle="modal">
+                                                                            <div
+                                                                                class="adm-dropdown-item__wrapper is-with-icon">
+                                                                                <div class="adm-dropdown-item__icon">
+                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                                </div>
+                                                                                <div class="adm-dropdown-item__label">
+                                                                                    Chỉnh sửa
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li data-employee={{this.IDStaff}}
+                                                                            class="dropdown-item el-dropdown-menu disable-employee">
+                                                                            <div
+                                                                                class="adm-dropdown-item__wrapper is-with-icon">
+                                                                                <div class="adm-dropdown-item__icon">
+                                                                                    <i
+                                                                                        class="fa-solid fa-ban icon-disable"></i>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="adm-dropdown-item__label text-disable">
+                                                                                    Tạm nghỉ
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li data-toggle="modal"
+                                                                            data-target="#alertModalDelete"
+                                                                            data-employee={{this.IDStaff}}
+                                                                            class=" dropdown-item el-dropdown-menu delete-employee">
+                                                                            <div
+                                                                                class="adm-dropdown-item__wrapper is-red is-with-icon">
+                                                                                <div class="adm-dropdown-item__icon">
+                                                                                    <i
+                                                                                        class="fa-solid fa-trash-can"></i>
+                                                                                </div>
+                                                                                <div class="adm-dropdown-item__label">
+                                                                                    Xóa
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Modal add employee --}}
+        <div class="modal fade" id="add-employee_modal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document"
+                style="margin-top: 70px; width: 1200px ; max-width:1200px">
+                <div class="modal-content">
+                    <div class="el-dialog__header">
+                        <span class="adm-modal-title tittle-employee">
+                            Tạo Nhân Viên
+                        </span>
+                        <button id="close-add__employee" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close" style="outline: none;">
+                            <span aria-hidden="true">&times;</span>
+                    </div>
+                    <div class="el-dialog__body">
+                        <form class="el-form" id="addEmployeeForm" action="employee/add-employee" method="post"
+                            enctype="multipart/form-data">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <div class="adm-form-item">
+                                        <div class="el-form-item">
+                                            <div class="el-form-item__content">
+                                                <div class="avatar-uploader">
+                                                    <div class="el-upload-available">
+                                                        <div class="el-upload el-upload--picture">
+                                                            <div class="el-upload-dragger">
+                                                                <div class="el-upload-dragger__upload">
+                                                                    <div>
+                                                                        <i
+                                                                            class="el-icon-upload fa-solid fa-cloud-arrow-up"></i>
+                                                                        <div class="el-upload__text mt-2">
+                                                                            Nhấn vào để tải ảnh lên
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="file" name="file"
+                                                                accept="image/png, image/jpeg" class="el-upload__input">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" svg-inline
+                                                    class="avatar-uploader__trash">
+                                                    <path
+                                                        d="M19.5 7h-4.167V5.608a2.017 2.017 0 00-2.083-1.941h-2.5a2.017 2.017 0 00-2.083 1.941V7H4.5a.833.833 0 000 1.667h.833v9.166a2.5 2.5 0 002.5 2.5h8.334a2.5 2.5 0 002.5-2.5V8.667h.833A.833.833 0 0019.5 7zm-9.167-1.392c0-.133.175-.275.417-.275h2.5c.242 0 .417.142.417.275V7h-3.334V5.608zM17 17.833a.833.833 0 01-.833.834H7.833A.833.833 0 017 17.833V8.667h10v9.166z"
+                                                        fill="#005AEE" class="customize-fill"></path>
+                                                    <path
+                                                        d="M9.5 16.167a.833.833 0 00.833-.834V12a.834.834 0 00-1.666 0v3.333a.833.833 0 00.833.834zM14.5 16.167a.833.833 0 00.833-.834V12a.834.834 0 00-1.666 0v3.333a.834.834 0 00.833.834z"
+                                                        fill="#005AEE" class="customize-fill"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="adm-form-item__error mt-3"
+                                            style="display: flex;justify-content: center;">
+
+                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Họ Nhân Viên
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-surname-employee__add" type="text"
+                                                                    autocomplete="nope" maxlength="50" iconstart iconend
+                                                                    rows="2" name="surname" tags class="el-input__inner"
+                                                                    placeholder="Nhập họ của nhân viên">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Tên Nhân Viên
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-name-employee__add" type="text"
+                                                                    autocomplete="nope" maxlength="50" iconstart iconend
+                                                                    rows="2" name="name_employee" tags
+                                                                    class="el-input__inner"
+                                                                    placeholder="Nhập tên của nhân viên">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-24"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Chọn Dịch Vụ Cho Phép
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-select-wrapper">
+                                                            <div
+                                                                class="el-select el-select__default adm-select adm-select__size-default">
+                                                                <div class="el-select__tags"
+                                                                    style="width: 100%; max-width: 400px;">
+                                                                    <span>
+                                                                        {{!-- <span
+                                                                            class="el-tag el-tag--info el-tag--small el-tag--light">
+                                                                            <span class="el-select__tags-text">
+                                                                                Nguyễn Bảo Trung
+                                                                            </span>
+                                                                            <i class="el-tag__close el-icon-close">
+                                                                            </i>
+                                                                        </span> --}}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="el-input" id="input-employee__service">
+                                                                    <input id="input-service_assign__add" type="text"
+                                                                        readonly="readonly" autocomplete="off"
+                                                                        class="el-input__inner pointer"
+                                                                        placeholder="Chọn Dịch Vụ Cho Phép">
+                                                                    <span class="el-input__suffix">
+                                                                        <span class="el-input__suffix__inner">
+                                                                            <i style="display:flex;align-items: center;justify-content: center;"
+                                                                                class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                                        </span>
+                                                                    </span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Cửa Hàng
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-store-employee__add" type="text"
+                                                                    readonly="readonly" autocomplete="off"
+                                                                    class="el-input__inner pointer"
+                                                                    placeholder="Chọn Cửa Hàng" name="store_id"
+                                                                    style="text-overflow: ellipsis;padding: 0px 40px 0px 12px;"
+                                                                    ;>
+                                                                <span class="el-input__suffix">
+                                                                    <span class="el-input__suffix__inner">
+                                                                        <i style="display:flex;align-items: center;justify-content: center;"
+                                                                            class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Quản Lý
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-manager-employee__add" type="text"
+                                                                    readonly="readonly" autocomplete="off"
+                                                                    class="el-input__inner pointer"
+                                                                    placeholder="Chọn Người Quản Lý"
+                                                                    name="manager_name">
+                                                                <span class="el-input__suffix">
+                                                                    <span class="el-input__suffix__inner">
+                                                                        <i style="display:flex;align-items: center;justify-content: center;"
+                                                                            class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        CCCD/CMND
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input maxlength="12" id="input-cccd-employee__add"
+                                                                    type="text" autocomplete="off"
+                                                                    class="el-input__inner"
+                                                                    placeholder="Nhập Căn Cước Công Dân" name="cccd">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-25"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Loại Nhân Viên
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-type-employee__add" type="text"
+                                                                    readonly="readonly" autocomplete="off"
+                                                                    class="el-input__inner pointer"
+                                                                    placeholder="Chọn Loại Nhân Viên" name="type_staff">
+                                                                <span class="el-input__suffix">
+                                                                    <span class="el-input__suffix__inner">
+                                                                        <i style="display:flex;align-items: center;justify-content: center;"
+                                                                            class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-25"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Giới Tính
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-sex-employee__add" type="text"
+                                                                    readonly="readonly" autocomplete="off"
+                                                                    class="el-input__inner pointer"
+                                                                    placeholder="Chọn Giới Tính" name="sex">
+                                                                <span class="el-input__suffix">
+                                                                    <span class="el-input__suffix__inner">
+                                                                        <i style="display:flex;align-items: center;justify-content: center;"
+                                                                            class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Email
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-email-employee__add" type="text"
+                                                                    autocomplete="nope" maxlength="100" iconstart
+                                                                    iconend rows="2" name="email" tags
+                                                                    class="el-input__inner"
+                                                                    placeholder="nhanvien@abcxyz.com">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Số Điện Thoại
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-phone-employee__add" type="text"
+                                                                    autocomplete="nope" maxlength="10" iconstart iconend
+                                                                    rows="2" name="phone" tags class="el-input__inner"
+                                                                    placeholder="Số Điện Thoại">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="text" id="arrServiceAssign" name="arrServices" style="display:none">
+                            <input type="text" id="idEmployeeEdit" name="idStaff" style="display:none">
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="justify-content: flex-end !important">
+                        <button id="adm-btn-employee__close" data-dismiss="modal"
+                            class="adm-button adm-button__filled__grey adm-button-size__medium" style="border:none">
+                            <span>Đóng</span>
+                        </button>
+                        <button id="adm-btn-employee__add"
+                            class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
+                            style="border:none">
+                            <span>Thêm Nhân Viên</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Modal alert --}}
+        {{!-- alert confirm delete employee --}}
+        <div class="modal fade" id="alertModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border:none;padding-bottom:0">
+                        <h5 class="modal-title" id="alertModalLabel">Xóa Nhân Viên</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body notification-employe_delete" style="padding-bottom:5px">
+                        <p>Bạn có chắc chắn muốn xóa nhân viên này? Hành động này sẽ làm mất vĩnh viễn dữ liệu liên quan
+                            của
+                            nhân viên này.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="adm-button adm-button__filled__grey adm-button-size__medium"
+                            style="border:none;height:36px">
+                            <span>Đóng</span>
+                        </button>
+                        <button id="btn-delete__employee"
+                            class="adm-button adm-button__filled__red adm-button-size__medium ml-3"
+                            style="border:none;height:36px">
+                            <span>Xóa</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Modal regis shift --}}
+        <div class="modal fade" id="add-regisShift" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="el-dialog__header">
+                        <span class="adm-modal-title">
+                            Đăng Ký Thời Gian Làm Việc
+                        </span>
+                        <button id="close-add__category" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close" style="outline: none;">
+                            <span aria-hidden="true">&times;</span>
+                    </div>
+                    <div class="el-dialog__body">
+                        <form class="el-form" id="addCategory">
+                            <div class="el-row" style="margin-left: -8px; margin-right: -8px;">
+                                <div class="el-col el-col-24 el-col-sm-24"
+                                    style="padding-left: 8px; padding-right: 8px;">
+                                    <div class="adm-form-item">
+                                        <div class="el-form-item is-success is-required">
+                                            <label for="name" class="el-form-item__label">
+                                                Ngày Bắt Đầu
+                                            </label>
+                                            <div class="el-form-item__content">
+                                                <div class="adm-input-wrapper">
+                                                    <div
+                                                        class="el-input el-input__default adm-input adm-input__size-default">
+                                                        <input readonly="readonly" id="input_from" type="text"
+                                                            autocomplete="nope" maxlength="200" iconstart iconend
+                                                            rows="2" name tags class="el-input__inner pointer"
+                                                            placeholder="Chọn Ngày Bắt Đầu">
+                                                    </div>
+                                                </div>
+                                                <div class="adm-form-item__error">
+                                                    {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="adm-form-item">
+                                        <div class="el-form-item is-success is-required">
+                                            <label for="name" class="el-form-item__label">
+                                                Ngày Kết Thúc
+                                            </label>
+                                            <div class="el-form-item__content">
+                                                <div class="adm-input-wrapper">
+                                                    <div
+                                                        class="el-input el-input__default adm-input adm-input__size-default">
+                                                        <input readonly="readonly" id="input_to" type="text"
+                                                            autocomplete="nope" maxlength="300" iconstart iconend
+                                                            rows="2" name tags class="el-input__inner pointer"
+                                                            placeholder="Chọn Ngày Kết Thúc">
+                                                    </div>
+                                                </div>
+                                                <div class="adm-form-item__error">
+                                                    {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="adm-form-item">
+                                        <div class="el-form-item is-success is-required">
+                                            <label for="name" class="el-form-item__label">
+                                                Cửa Hàng
+                                            </label>
+                                            <div class="el-form-item__content">
+                                                <div class="adm-input-wrapper">
+                                                    <div
+                                                        class="el-input el-input__default adm-input adm-input__size-default">
+                                                        <input id="input-store-regis-shift" type="text"
+                                                            readonly="readonly" autocomplete="off"
+                                                            class="el-input__inner pointer" placeholder="Chọn Cửa Hàng"
+                                                            name="store_id"
+                                                            style="text-overflow: ellipsis;padding: 0px 40px 0px 12px;"
+                                                            ;>
+                                                        <span class="el-input__suffix">
+                                                            <span class="el-input__suffix__inner">
+                                                                <i style="display:flex;align-items: center;justify-content: center;"
+                                                                    class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="adm-form-item__error">
+                                                    {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="adm-form-item">
+                                        <div class="el-form-item is-success is-required">
+                                            <label for="name" class="el-form-item__label">
+                                                Chọn Nhân Viên Đăng Ký
+                                            </label>
+                                            <div class="el-form-item__content">
+                                                <div class="adm-select-wrapper">
+                                                    <div
+                                                        class="el-select el-select__default adm-select adm-select__size-default">
+                                                        <div class="el-select__tags"
+                                                            style="width: 50%; max-width: 400px;">
+                                                            <span>
+                                                                {{!-- <span
+                                                                    class="el-tag el-tag--info el-tag--small el-tag--light">
+                                                                    <span class="el-select__tags-text">
+                                                                        Nguyễn Bảo Trung
+                                                                    </span>
+                                                                    <i class="el-tag__close el-icon-close">
+                                                                    </i>
+                                                                </span> --}}
+                                                            </span>
+                                                        </div>
+                                                        <div class="el-input" id="employee-regis__shift">
+                                                            <input id="input-employee-regis__shift" type="text"
+                                                                readonly="readonly" autocomplete="off"
+                                                                class="el-input__inner pointer"
+                                                                placeholder="Chọn Nhân Viên">
+                                                            <span class="el-input__suffix">
+                                                                <span class="el-input__suffix__inner">
+                                                                    <i style="display:flex;align-items: center;justify-content: center;"
+                                                                        class="fa-solid fa-angle-up el-select__caret el-input__icon"></i>
+                                                                </span>
+                                                            </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="adm-form-item__error">
+                                                    {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close-btn__addRegis" data-dismiss="modal"
+                            class="adm-button adm-button__filled__grey adm-button-size__medium" style="border:none">
+                            <span>Đóng</span>
+                        </button>
+                        <button id="adm-add-regis_shift"
+                            class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
+                            style="border:none">
+                            <span>Hoàn Tất</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!-- Drop down --}}
+
+        {{!-- Dropdown Store --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-store__employee"
+            style="min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list list-dropdown__store">
+                        {{#each store}}
+                        <li data-store={{this.IDStore}}
+                            class="el-select-dropdown__item adm-select-option item-store__dropdown">
+                            <span>{{this.Street}}</span>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Dropdown StoreRegis --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-store__regis"
+            style="min-width: 400px; transform-origin: center top; z-index: 2026; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list list-dropdown__store_regis">
+                        {{#each store}}
+                        <li data-store={{this.IDStore}}
+                            class="el-select-dropdown__item adm-select-option item-store__dropdown_regis">
+                            <span>{{this.Street}}</span>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{!-- Dropdown Manager --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-managers__employee"
+            style="min-width: 450px; transform-origin: center bottom; z-index: 2026; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list">
+                        {{#each managers}}
+                        <li data-manager={{this.IDStaff}} data-store="{{this.IDStore}}"
+                            class="el-select-dropdown__item adm-select-option item-managers__dropdown">
+                            <span>{{this.SurName}} {{this.NameStaff}}</span>
+                        </li>
+                        {{/each}}
+                        <li class="el-select-dropdown__item adm-select-option no-data no-data__manager"
+                            style="display:none; justify-content: center;cursor:default">
+                            <span>Không có dữ liệu</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{!-- Dropdown sex --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-sex__employee"
+            style="min-width: 220px; transform-origin: center bottom; z-index: 2030; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list">
+                        <li data-sex="Nam" class="el-select-dropdown__item adm-select-option item-sex__dropdown">
+                            <span>Nam</span>
+                        </li>
+                        <li data-sex="Nữ" class="el-select-dropdown__item adm-select-option item-sex__dropdown">
+                            <span>Nữ</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        {{!-- Dropdown service --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-services__employee"
+            style="min-width: 920px; transform-origin: center bottom; z-index: 2026; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list">
+                        {{#each services}}
+                        <li data-service={{this.IDService}}
+                            class="el-select-dropdown__item adm-select-option item-service__dropdown">
+                            <span>{{this.NameService}}</span>
+                        </li>
+                        {{/each}}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Dropdown TypeEmployee --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-type__employee"
+            style="min-width: 220px; transform-origin: center bottom; z-index: 2030; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list">
+                        {{#each typeEmployee}}
+                        <li data-type={{this.IDTypeStaff}}
+                            class="el-select-dropdown__item adm-select-option item-type-employee__dropdown">
+                            <span>{{this.NameType}}</span>
+                        </li>
+                        {{/each}}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Dropdown Employee Regis --}}
+        <div class="el-select-dropdown el-popper adm-select-popper" id="dropdown-employee__service"
+            style="min-width: 450px; transform-origin: center bottom; z-index: 2003; display: none;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap"
+                    style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list">
+                        {{#each employeesIsActive}}
+                        <li data-employee={{this.IDStaff}} data-store={{this.IDStore}}
+                            class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                            <span>{{this.SurName}} {{this.NameStaff}}</span>
+                        </li>
+                        {{/each}}
+                        <li class="el-select-dropdown__item adm-select-option no-data no-data__employee"
+                            style="display:none; justify-content: center;cursor:default">
+                            <span>Không có dữ liệu</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{!-- toast --}}
+        <div id="toast">
+            <div id="img"></div>
+            <div id="desc"></div>
+        </div>
+
+</body>
+
+</html>
+<script src="../script/staff/employee.js">
+
+    <script src="../script/js-calendar/popper.min.js"></script>
+<script src="../script/js-calendar/rome.js"></script>
+<script src="../script/js-calendar/main.js"></script>
+</script>

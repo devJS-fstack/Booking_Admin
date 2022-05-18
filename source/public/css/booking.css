@@ -1,0 +1,185 @@
+.sidebar {
+  background-color: #fff;
+  bottom: 0;
+  min-height: calc(100vh - 60px);
+  overflow-y: hidden;
+  position: fixed;
+  right: -768px;
+  top: 0;
+  transition: all .3s ease-in-out;
+  width: 375px;
+  z-index: 8; }
+
+.sidebar.active {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  right: 0; }
+
+.sidebar-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1; }
+
+.sidebar__header {
+  display: flex;
+  padding: 14px 20px 4px;
+  color: #00143c; }
+
+.sidebar__content {
+  height: calc(100vh - 110px);
+  overflow: auto;
+  padding: 0 1.25rem; }
+
+.sidebar__header__title {
+  font-size: 18px;
+  line-height: 28px; }
+
+.sidebar__header__actions {
+  align-items: center;
+  display: flex;
+  margin: 0 0 0 auto; }
+
+.sidebar__header__actions__close {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 32px;
+  justify-content: center;
+  width: 32px; }
+
+.sidebar__header__actions__close .el-icon-close {
+  color: #00143c;
+  font-size: 20px;
+  font-weight: 600; }
+
+button.adm-button__size__small {
+  --spinner-container-width: 20px;
+  --spinner-container-height: 20px;
+  font-size: 14px;
+  height: 32px;
+  line-height: 20px;
+  padding: 0 16px; }
+
+button.adm-button__size__small i {
+  font-size: 20px; }
+
+button.adm-button__size__small.is-icon-only {
+  height: 32px;
+  padding: 0;
+  width: 32px; }
+
+.sidebar__header__actions__close i:hover {
+  color: #005aee; }
+
+.sidebar__content {
+  height: calc(100vh - 110px);
+  overflow: auto;
+  padding: 0 1.25rem;
+  color: #00143c; }
+
+.sidebar__content > div {
+  display: flex;
+  flex-direction: column; }
+
+.status {
+  text-transform: capitalize; }
+
+.status span.status-symbol {
+  border: 2px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  height: 100%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  width: 100%; }
+
+status span.status-symbol.approved,
+#app .status span.status-symbol.available {
+  border-color: #18ca75; }
+
+.adm-appointment-info-section {
+  border-bottom: 1px solid #dee1e6;
+  padding: 1.25rem 0; }
+
+.adm-appointment-info-section__header {
+  align-items: center;
+  display: flex; }
+
+.adm-appointment-info-section__content {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  margin-left: 32px; }
+
+.adm-appointment-info-section__header__title {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-left: 8px; }
+
+.adm-appointment-info-section-customers__item__name,
+.adm-appointment-info-section-datetime__date,
+.adm-appointment-info-section-datetime__time {
+  align-items: center;
+  display: flex;
+  height: 24px; }
+
+.adm-appointment-info-section-employee {
+  border-bottom: 1px solid #dee1e6;
+  display: flex;
+  padding: 20px 0; }
+
+.adm-appointment-info-section-employee__text {
+  margin-left: 12px; }
+
+.adm-appointment-info-section-employee__text__title {
+  font-size: 13px; }
+
+.adm-appointment-info-section-employee__text__name {
+  align-items: center;
+  display: flex;
+  font-weight: 500;
+  height: 24px; }
+
+.sidebar .section:last-child {
+  border: none; }
+
+.sidebar .section {
+  border-bottom: 1px solid #dee1e6;
+  padding: 1.25rem 0 1.25rem 2rem; }
+
+.sidebar .section-title,
+.sidebar .small-text {
+  color: #00143c;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  vertical-align: middle; }
+
+.sidebar .section-title {
+  align-items: center;
+  display: flex;
+  text-align: center; }
+
+.sidebar .section-title {
+  margin-bottom: 8px;
+  margin-left: -31px; }
+
+.sidebar .section-title span {
+  margin-left: 0.5rem; }
+
+.fc-daygrid-event {
+  cursor: pointer !important; }
+
+.adm-appointment-info-section-service {
+  display: flex;
+  justify-content: space-between; }
+
+.fc-day-today {
+  background-color: #ddd !important; }
+
+.category:not(.active):hover {
+  background-color: #1f233d; }

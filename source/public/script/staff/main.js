@@ -1,0 +1,2 @@
+navheader.style.display = 'none'
+

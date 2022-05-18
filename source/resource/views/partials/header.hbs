@@ -1,0 +1,135 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Hair Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="user-avatar" src="" alt="">
+                        <span class="name-user">
+                            Khách hàng
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#modalLogin">Đăng
+                            nhập</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#regisModal">Đăng ký</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Modal -->
+<form method="get" action="" id="formLogin">
+    <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-login" id="exampleModalLabel">Đăng Nhập</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="heading-login"> Nhập tài khoản và mật khẩu của anh chị.</h5>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                        </div>
+                        <input type="text" class="form-control" aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm" placeholder="Ví dụ: 0921.xxx.xxx"
+                            name="inputAccount">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                        </div>
+                        <input type="password" class="form-control" aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm" placeholder="Mật khẩu" name="inputPassword">
+                    </div>
+                </div>
+                <div class="err-login">
+                    <span>Tài khoản hoặc mật khẩu không đúng. Mời anh kiểm tra lại!</span>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnLogin" type="submit" class="btn btn-primary">Tiếp tục</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form method="post" id="formRegis">
+    <div class="modal fade" id="regisModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-login" id="exampleModalLabel">Đăng Ký</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="heading-login"> Đăng ký tài khoản nhanh chóng và dễ dàng</h5>
+                    <div class="relative input-group input-group-sm mb-4">
+                        <div class="input-group-prepend">
+                        </div>
+                        <input type="text" class="form-control" aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm" placeholder="Họ Và Tên" name="inputName">
+                        <span class="span-err__regis err-name">Tài khoản hoặc mật khẩu không đúng. Mời anh kiểm tra
+                            lại!</span>
+                    </div>
+                    <div class="relative input-group input-group-sm mb-4">
+                        <div class="input-group-prepend">
+                        </div>
+                        <input type="number" pattern="((09|03|07|08|05)+([0-9]{8})\b)" required class="form-control"
+                            aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Số di động"
+                            name="inputPhone">
+                        <span class="span-err__regis err-phone">Tài khoản hoặc mật khẩu không đúng. Mời anh kiểm tra
+                            lại!</span>
+                    </div>
+                    <div class="relative input-group input-group-sm mb-4">
+                        <div class="input-group-prepend">
+                        </div>
+                        <input type="email" class="form-control" aria-label="Small"
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" aria-describedby="inputGroup-sizing-sm"
+                            placeholder="Email" name="inputEmail">
+                        <span class="span-err__regis err-email">Tài khoản hoặc mật khẩu không đúng. Mời anh kiểm tra
+                            lại!</span>
+                    </div>
+                    <div class="relative input-group input-group-sm mb-4">
+                        <div class="input-group-prepend">
+                        </div>
+                        <input type="password" class="form-control" aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm" placeholder="Nhập mật khẩu mới"
+                            name="inputPasswordNew">
+                        <span class="span-err__regis err-pass">Tài khoản hoặc mật khẩu không đúng. Mời anh kiểm tra
+                            lại!</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-regis" type="submit" class="btn btn-success">Đăng Ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form method="post" action="/regis/verify-email" id="verifyEmail" style="display:none">
+    <input id="verify-input" type="text" name="email">
+</form>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="/script/header.js"></script>

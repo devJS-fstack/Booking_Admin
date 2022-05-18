@@ -1,0 +1,57 @@
+.el-row--flex {
+    display: flex;
+}
+
+.el-row {
+    box-sizing: border-box;
+}
+
+.el-row--flex.is-align-middle {
+    align-items: center;
+}
+
+.el-row--flex.is-justify-space-between {
+    justify-content: space-between;
+}
+
+.filter-search {
+    margin-right: 0.75rem;
+    width: 100%;
+}
+
+.filter-search.adm-input-wrapper .adm-input input {
+    background-color: #f4f6fa;
+    border: none;
+    border-radius: 4px;
+    color: #00143c;
+    font-size: 14px;
+    line-height: 20px;
+    padding-left: 40px;
+    transition: all .3s ease;
+    width: 100%;
+}
+
+.adm-input-wrapper .adm-input__size__medium.is-icon-start .el-input__prefix {
+    left: 14px;
+}
+
+.adm-input-wrapper .adm-input.is-icon-start .el-input__prefix {
+    align-items: center;
+    display: flex;
+}
+
+.adm-input-wrapper .adm-input__size__medium.is-icon-start i {
+    font-size: 24px;
+    height: 18px;
+    width: 18px;
+}
+
+.filter-search.adm-input-wrapper .adm-input__size__medium.is-icon-start i {
+    font-size: 17px;
+    color: #b5bbcc;
+}
+
+.adm-toggle-filters {
+    position: relative;
+    width: auto;
+}

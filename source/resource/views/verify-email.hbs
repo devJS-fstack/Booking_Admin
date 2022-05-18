@@ -1,0 +1,14 @@
+<div class="container mt-4">
+    <h1 style="text-align: center">Verify Email</h1>
+    <form method="post" action="./confirm-verify">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Mã xác nhận email cho <span style="color:red">{{email}}</span></label>
+            <input type="number" class="form-control" id="verify-number" name="verifyNumber"
+                aria-describedby="emailHelp" placeholder="Nhập mã xác nhận">
+            <small id="verify-noti" class="form-text text-muted">Mã sẽ tự động xóa sau 2 phút.</small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-verify-number">Xác nhận</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../script/verifyEmail.js"></script>

@@ -1,0 +1,45 @@
+{
+  "name": "project-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "nodemon --inspect source/main.js",
+    "watch": "node-sass --watch source/resource/scss/ --output source/public/css/ ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git remote add origin https://github.com/vantinh728/Project-Node.git"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "devnguyen",
+  "license": "ISC",
+  "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "axios": "^0.26.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "express-handlebars": "^5.3.5",
+    "express-session": "^1.17.2",
+    "fs": "^0.0.1-security",
+    "googleapis": "^100.0.0",
+    "handlebars": "^4.7.7",
+    "jsonwebtoken": "^8.5.1",
+    "local-storage": "^2.0.0",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.0",
+    "mssql": "^7.3.0",
+    "multer": "^1.4.4",
+    "node-sass": "^7.0.1",
+    "nodemailer": "^6.7.5",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "sass": "^1.47.0",
+    "sequelize": "^6.13.0",
+    "tedious": "^11.0.8"
+  }
+}

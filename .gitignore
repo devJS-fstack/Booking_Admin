@@ -1,0 +1,6 @@
+node_modules
+.env
+.sql
+source/public/fonts
+source/public/font
+source/public/icomoon
