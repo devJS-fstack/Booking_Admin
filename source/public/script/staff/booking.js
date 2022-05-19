@@ -94,7 +94,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             }
 
         }
-    }
+    },
 });
 function formatPayment(payment) {
     var paymentString = payment.toString().split('');
@@ -117,15 +117,19 @@ function formatPayment(payment) {
     return result;
 
 }
+
+
 calendar.render();
 bookings.forEach(obj => {
     var hour = obj.HourStart > 9 ? obj.HourStart : `0${obj.HourStart}`;
     var minute = obj.MinuteStart > 9 ? obj.MinuteStart : `0${obj.MinuteStart}`;
     addEvent({
         title: obj.PhoneCustomer,
-        start: `${obj.DateBook}T${hour}:${minute}:00`
+        start: `${obj.DateBook}T${hour}:${minute}:00`,
     })
 })
+
+
 function addEvent(data) {
     calendar.addEvent(data);
     calendar.render();
@@ -164,7 +168,7 @@ itemEmployee.forEach((item, index) => {
                     var minute = obj.MinuteStart > 9 ? obj.MinuteStart : `0${obj.MinuteStart}`;
                     addEvent({
                         title: obj.PhoneCustomer,
-                        start: `${obj.DateBook}T${hour}:${minute}:00`
+                        start: `${obj.DateBook}T${hour}:${minute}:00`,
                     })
                 })
 
@@ -173,7 +177,6 @@ itemEmployee.forEach((item, index) => {
 
     }
 })
-
 const numServiceText = document.querySelectorAll('.num-bookings')
 const numAllBooking = document.querySelectorAll('.num_all-booking');
 async function renderNumBooking_idEmployee() {

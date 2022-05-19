@@ -40,6 +40,23 @@ app.engine('hbs', handlebars({
         convertTime: (number) => {
             if (number > 9) return number;
             return `0${number}`
+        },
+        textAvt: (name) => {
+            var arrName = name.split(' ');
+            var first = arrName[0].split('')[0];
+            var last = arrName[arrName.length - 1].split('')[0];
+            return `${first}${last}`;
+        },
+        randomColor: () => {
+            var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+
+            return randomColor;
+        },
+        formatDate: (date) => {
+            var result = new Date(`${date}`);
+            var day = result.getDate() > 9 ? result.getDate() : `0${result.getDate()}`;
+            var month = result.getMonth() + 1 > 9 ? result.getMonth() + 1 : `0${result.getMonth() + 1}`;
+            return `${day}-${month}-${result.getFullYear()}`
         }
     }
 }))

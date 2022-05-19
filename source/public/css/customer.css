@@ -1,0 +1,34 @@
+.el-col-lg-10 {
+  width: 41.66667%; }
+
+.el-col-lg-4 {
+  width: 16.66667%; }
+
+.name-phone div {
+  color: #99a1b1;
+  margin-right: 0.5rem; }
+
+.adm-service:hover {
+  background-color: #0e2c6a !important;
+  border-radius: 4px;
+  transition: all 0.2s linear; }
+
+.sidebar .section {
+  border-bottom: 1px solid #dee1e6;
+  padding: 1.25rem 0 1.25rem 2rem; }
+
+.sidebar-customer__most-appointments {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem; }
+
+.content-empty p {
+  font-size: 14px;
+  line-height: 20px;
+  margin-top: 14px;
+  opacity: .6;
+  text-align: center; }
+
+.content-empty svg {
+  width: 100%; }

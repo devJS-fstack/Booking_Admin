@@ -292,6 +292,16 @@ router.post('/booking/create-bill', StaffController.createBill)
 router.get('/booking', StaffController.mainBooking);
 
 
+// Customer
+
+router.post('/customer/last-book', StaffController.lastBook)
+router.post('/customer/create', StaffController.createCustomer)
+router.post('/customer/info', StaffController.getInfoCustomer)
+router.post('/customer/edit', StaffController.editCustomer)
+router.post('/customer/delete', StaffController.deleteCustomer)
+router.post('/customer/render-booked', StaffController.renderInfoBooked)
+router.get('/customer', StaffController.mainCustomer)
+
 // employee
 router.post('/employee/regis-shift', StaffController.regisShift);
 router.post('/employee/check-regis-shift', StaffController.checkEmployeeRegis);

@@ -1,4 +1,5 @@
 (() => {
+    const idStore = location.href.split('?idStore=')[1];
     navheader.style.display = 'none'
     const btn_addCategory = document.getElementById('adm-add-category');
     const input_category = document.getElementById('input-category');
@@ -119,7 +120,7 @@
 
     const member_thumbs = document.querySelectorAll('.member-thumbs');
     window.addEventListener('load', async (e) => {
-        const { status, employee_service } = await getEmployee_Service();
+        const { status, employee_service } = await getEmployee_Service(idStore);
         if (status == 'success') {
             member_thumbs.forEach((item, index) => {
                 let html = ''
@@ -905,6 +906,7 @@
     async function getInfoEmployee(idService) {
         return (await instance.post('service/info-employee', {
             idService,
+            idStore: idStore,
         })).data
     }
 
@@ -920,14 +922,16 @@
         })).data;
     }
 
-    async function getEmployee_Service() {
+    async function getEmployee_Service(idStore) {
         return (await instance.post('service/employee-service', {
+            idStore
         })).data;
     }
 
     async function getEmployee_Service_id(idService) {
         return (await instance.post('service/employee-service-id', {
-            idService
+            idService,
+            idStore: idStore,
         })).data;
     }
 

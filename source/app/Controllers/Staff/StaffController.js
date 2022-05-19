@@ -6,6 +6,8 @@ const path = require('path');
 const easyinvoice = require('easyinvoice');
 require('dotenv').config();
 const fs = require('fs');
+const nodemailer = require("nodemailer");
+
 
 class StaffController {
     main(req, res) {
@@ -40,7 +42,7 @@ class StaffController {
         let categories = await sequelize.query(`Select  * from TypeService`);
         let allService = await sequelize.query(`Select sum(AmountService) as Sum from TypeService`);
         let services = await sequelize.query(`Select * from Service WHERE Status = N'Hoạt Động'`);
-        let employee = await sequelize.query(`Select * from Staff WHERE TypeStaff = 1 AND Status = N'Hoạt Động'`);
+        let employee = await sequelize.query(`Select * from Staff WHERE TypeStaff = 1 AND Status = N'Hoạt Động' AND IDStore = ${req.query.idStore}`);
         res.render('staff/service', {
             categories: categories[0],
             lengthCategory: categories[0].length,
@@ -52,7 +54,9 @@ class StaffController {
     }
 
     async employService(req, res) {
-        let employee_service = await sequelize.query(`select st_s.IDService,PathImgStaff,TypeService from Staff_Service as st_s,Staff as s,Service as sv WHERE st_s.IDStaff = s.IDStaff and sv.IDService = st_s.IDService AND s.Status = N'Hoạt Động'`)
+        let employee_service = await sequelize.query(`select st_s.IDService,PathImgStaff,TypeService 
+        from Staff_Service as st_s,Staff as s,Service as sv WHERE st_s.IDStaff = s.IDStaff
+         and sv.IDService = st_s.IDService AND s.Status = N'Hoạt Động' AND s.IDStore = ${req.body.idStore}`)
         if (employee_service[0].length > 0) {
             return res.status(200).json({
                 status: 'success',
@@ -67,7 +71,8 @@ class StaffController {
     }
 
     async employService_id(req, res) {
-        let employee_service = await sequelize.query(`select IDStaff from Staff_Service where IDService = ${req.body.idService}`)
+        let employee_service = await sequelize.query(`select sv.IDStaff from Staff_Service as sv,Staff as s
+         where IDService = ${req.body.idService} AND s.IDStaff = sv.IDStaff AND s.IDStore = ${req.body.idStore}`)
         if (employee_service[0].length > 0) {
             return res.status(200).json({
                 statusE: 'success',
@@ -162,7 +167,11 @@ class StaffController {
         })
     }
     async getInfoEmployee_service(req, res) {
-        let info = await sequelize.query(`select SurName,NameStaff,PathImgStaff from Staff_Service as st_s,Staff as s,Service as sv WHERE st_s.IDStaff = s.IDStaff and sv.IDService = st_s.IDService and st_s.IDService = ${req.body.idService} AND s.Status = N'Hoạt Động' `)
+        let info = await sequelize.query(`select SurName,NameStaff,PathImgStaff
+         from Staff_Service as st_s,Staff as s,Service as sv
+          WHERE st_s.IDStaff = s.IDStaff and sv.IDService = st_s.IDService 
+          and st_s.IDService = ${req.body.idService} AND s.Status = N'Hoạt Động'
+          and s.IDStore = ${req.body.idStore} `)
         return res.status(200).json({
             status: 'success',
             info: info[0],
@@ -562,6 +571,140 @@ class StaffController {
             status: 'success',
         })
 
+    }
+
+    // Customer 
+    async mainCustomer(req, res) {
+        let customers = await sequelize.query(`SELECT * FROM Customer`);
+        let bookings = await sequelize.query(`SELECT * FROM Book WHERE IDStore = ${req.query.idStore}`);
+        let lengthAll = customers[0].length;
+        res.render('staff/customer', {
+            customers: customers[0],
+            bookings: JSON.stringify(bookings[0]),
+            idstore: req.query.idStore,
+            lengthAll
+        })
+    }
+
+    async lastBook(req, res) {
+        let customers = await sequelize.query(`SELECT * FROM Customer`);
+        var arrLastBook = [];
+        var isDone = false;
+        customers[0].forEach(async (item, index) => {
+            let maxDate = await sequelize.query(`SELECT Max(DateBook) as max,PhoneCustomer FROM Book WHERE PhoneCustomer = '${item.PhoneCustomer}'
+              AND IDStore = ${req.body.idStore}   GROUP BY PhoneCustomer`)
+            if (maxDate[0].length > 0) {
+                arrLastBook.push(maxDate[0]);
+            }
+            if (index == customers[0].length - 1) {
+                return res.status(200).json({
+                    status: 'success',
+                    arrLastBook: arrLastBook,
+                })
+            };
+        })
+    }
+
+    async createCustomer(req, res) {
+        var phone = req.body.phone;
+        var email = req.body.email;
+        var name = req.body.name;
+        var date = new Date();
+        var passwordNew = Date.now();
+        let dateInsert = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+        let inserAccount = await sequelize.query(`INSERT INTO TaiKhoan(Account,Password,Status,IDRole) 
+            VALUES('${phone}','${passwordNew}','Active',1)`)
+        let insertCustomer = await sequelize.query(`
+        INSERT INTO Customer(PhoneCustomer,NameCustomer,EmailCustomer,DateCreate)
+         VALUES('${phone}',N'${name}','${email}','${dateInsert}')
+        `)
+
+        let transporter = nodemailer.createTransport({
+            type: 'SMTP',
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.EMAIL_ACCOUNT_AUTHOR,
+                pass: process.env.EMAIL_PASSWORD_AUTHOR,
+            },
+        })
+        let info = await transporter.sendMail({
+            from: 'vantinhnguyen728@gmail.com', // sender address
+            to: `${email}`, // list of receivers
+            subject: "Mật khẩu tài khoản TheBaberShop", // Subject line
+            text: "Chào anh, đây là mật khẩu mới của anh. Anh vui lòng không để lộ, dùng tài khoản đặt lịch online sẽ có nhiều ưu đãi hấp dẫn ", // plain text body
+            html: `<p>Chào anh, đây là mật khẩu mới của anh. Anh vui lòng không để lộ, dùng tài khoản đặt lịch online sẽ có nhiều ưu đãi hấp dẫn</p>
+            <h1 style="display:flex">${passwordNew}</h1>`, // html body
+        }).catch(err => { console.log(err) })
+        console.log("Message sent: %s", info.messageId);
+        return res.status(200).json({
+            status: 'success',
+        })
+    }
+
+    async getInfoCustomer(req, res) {
+        var phone = req.body.phone;
+        let customer = await sequelize.query(`SELECT * FROM Customer WHERE PhoneCustomer = '${phone}'`)
+        return res.status(200).json({
+            status: 'success',
+            customer: customer[0][0],
+        })
+    }
+
+    async editCustomer(req, res) {
+        let phoneOld = req.body.phoneOld;
+        let phone = req.body.phone;
+        let email = req.body.email;
+        let name = req.body.name;
+        let passwordSQL = await sequelize.query(`SELECT * FROM TaiKhoan WHERE Account = '${phoneOld}'`)
+        let passwordOld = passwordSQL[0][0].Password;
+        let dateCreateSQL = await sequelize.query(`SELECT * FROM Customer WHERE PhoneCustomer = '${phoneOld}'`)
+        let dateCreateOld = dateCreateSQL[0][0].DateCreate;
+        let sqlDeleteCus = `DELETE Customer WHERE PhoneCustomer = '${phoneOld}'`;
+        let sqlDeleteAcc = `DELETE TaiKhoan WHERE Account = '${phoneOld}'`;
+        let sqlInsertAcc = `INSERT INTO TaiKhoan(Account,Password,Status,IDRole) 
+        VALUES('${phone}','${passwordOld}','Active',1)`
+        let sqlInsertCus = `INSERT INTO Customer(PhoneCustomer,NameCustomer,EmailCustomer,DateCreate)
+      VALUES('${phone}',N'${name}','${email}','${dateCreateOld}')`
+        await sequelize.query(sqlDeleteCus);
+        await sequelize.query(sqlDeleteAcc);
+        await sequelize.query(sqlInsertAcc);
+        await sequelize.query(sqlInsertCus);
+        return res.status(200).json({
+            status: 'success',
+        })
+    }
+
+    async deleteCustomer(req, res) {
+        var phone = req.body.phone
+        let sqlDeleteCus = `DELETE Customer WHERE PhoneCustomer = '${phone}'`;
+        let sqlDeleteAcc = `DELETE TaiKhoan WHERE Account = '${phone}'`;
+        await sequelize.query(sqlDeleteCus);
+        await sequelize.query(sqlDeleteAcc);
+        return res.status(200).json({
+            status: 'success',
+        })
+    }
+
+    async renderInfoBooked(req, res) {
+        var store = req.body.idStore
+        var phone = req.body.phone
+        let arrBook = await sequelize.query(`select MIN(PhoneCustomer),Count(b.IDStaff) as count,b.IDStaff,s.NameStaff,s.SurName,s.PathImgStaff
+        FROM Book as b,Staff as s WHERE PhoneCustomer ='${phone}' 
+        AND b.IDStaff = s.IDStaff AND s.IDStore = ${store} GROUP BY b.IDStaff,s.NameStaff,s.SurName,s.PathImgStaff`)
+        let arrService = await sequelize.query(`select MIN(PhoneCustomer),Count(bi.IDService) as count,NameService from Book as b,Service as s, BookItem as bi
+        WHERE b.DateBook = bi.DateBook
+        AND b.IDShiftBook = bi.IDShiftBook AND b.IDStaff = bi.IDStaff AND b.PhoneCustomer = '${phone}'
+        AND s.IDService = bi.IDService AND b.IDStore = ${store} 
+        GROUP BY bi.IDService,NameService`)
+        let payment = await sequelize.query(`select SUM(Payment) as sum FROM Book WHERE PhoneCustomer = '${phone}' AND IDStore = '${store}'`)
+        return res.status(200).json({
+            status: 'success',
+            arrBook: arrBook[0],
+            arrService: arrService[0],
+            payment: payment[0][0].sum,
+        })
     }
 }
 
