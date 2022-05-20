@@ -103,7 +103,8 @@
                             <div class="adm-input-wrapper filter-search">
                                 <div
                                     class="el-input el-input--medium el-input--prefix adm-input adm-input__size__medium is-icon-start">
-                                    <input type="text" placeholder="Tìm kiếm" class="el-input__inner">
+                                    <input id="search_employee" type="text" placeholder="Tìm kiếm"
+                                        class="el-input__inner">
                                     <span class="el-input__prefix">
                                         <i
                                             class="adm-icon adm-icon__medium adm-icon__primary fa-solid fa-magnifying-glass"></i>
@@ -167,7 +168,7 @@
                                                                             border: 3px solid rgb(255, 255, 255); color:
                                                                             rgb(19, 150, 110); z-index: 5;">
                                                                 </div>
-                                                                <h5 class="overflow-ellipsis mb-0"
+                                                                <h5 class="overflow-ellipsis mb-0 name_employee"
                                                                     style="font-size: 15px;">
                                                                     {{this.SurName}} {{this.NameStaff}}
                                                                 </h5>
@@ -197,7 +198,7 @@
                                                         </div>
                                                         <div class="el-col el-col-24 el-col-sm-4"
                                                             style="padding-left: 8px; padding-right: 8px;">
-                                                            <span>{{this.Phone}}</span>
+                                                            <span class="employee_phone">{{this.Phone}}</span>
                                                         </div>
                                                         <div class="el-col el-col-24 el-col-sm-4 relative"
                                                             style="padding-left: 8px; padding-right: 8px;">

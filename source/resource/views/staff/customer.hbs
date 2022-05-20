@@ -88,21 +88,13 @@
                             <div class="adm-input-wrapper filter-search">
                                 <div
                                     class="el-input el-input--medium el-input--prefix adm-input adm-input__size__medium is-icon-start">
-                                    <input type="text" placeholder="Tìm kiếm" class="el-input__inner">
+                                    <input id="search_customer" type="text" placeholder="Tìm kiếm"
+                                        class="el-input__inner">
                                     <span class="el-input__prefix">
                                         <i
                                             class="adm-icon adm-icon__medium adm-icon__primary fa-solid fa-magnifying-glass"></i>
                                     </span>
                                 </div>
-                            </div>
-                            <div class="el-tooltip adm-toggle-filters">
-                                <button
-                                    class="adm-button adm-button__filled__grey adm-button__size__medium is-icon-start">
-                                    <span class="adm-button__icon-wrapper">
-                                        <i class="fa-solid fa-filter"></i>
-                                    </span>
-                                    <span>Lọc</span>
-                                </button>
                             </div>
                         </div>
                         <div>
@@ -602,6 +594,26 @@
 </html>
 <script>
     const bookings = {{{ bookings }}}
+
+
+    // current week
+    function currentWeek() {
+        var curr = new Date; // get current date
+        var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+        var last = first + 6; // last day is the first day + 6
+
+        var firstday = new Date(curr.setDate(first + 1)).toUTCString();
+        var lastday = new Date(curr.setDate(last + 1)).toUTCString();
+    }
+    // last week
+    function lastweek() {
+        var curr = new Date; // get current date
+        var first = curr.getDate() - curr.getDay() - 7; // First day is the day of the month - the day of the week
+        var last = first + 6; // last day is the first day + 6
+
+        var firstday = new Date(curr.setDate(first + 1)).toUTCString();
+        var lastday = new Date(curr.setDate(last + 1)).toUTCString();
+    }
 </script>
 <script src="../script/staff/customer.js">
 </script>

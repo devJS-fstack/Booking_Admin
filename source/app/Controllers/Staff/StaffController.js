@@ -214,6 +214,7 @@ class StaffController {
             typeEmployee: typeEmployee[0],
             employeesIsActive: employeesIsActive[0],
             idstore: req.query.idStore,
+            lengthEmployee,
         });
     }
 

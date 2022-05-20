@@ -1,0 +1,314 @@
+.adm-dashboard__container__wrapper {
+    background-size: 100% auto;
+    margin: 60px auto 0;
+    padding: 1.5rem 2.5rem 2.5rem;
+    position: relative;
+    width: 100%;
+}
+
+.adm-dashboard__container__wrapper {
+    background: url('https://babershop.admin.trafft.com/dist-admin/img/hero.db0dd8c7.svg')
+}
+
+.dashboard-page {
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.dashboard-header-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.dashboard-line-chart {
+    background-color: #fff;
+    border: 1px solid #dee1e6;
+    border-radius: 8px;
+    color: #00143c;
+    min-height: 152px;
+    padding: 16px;
+    position: relative;
+}
+
+.dashboard-line-chart {
+    min-height: 160px;
+    padding: 20px;
+}
+
+.dashboard-header-stats>div {
+    flex-grow: 1;
+    min-width: 259px;
+    width: 32%;
+}
+
+.dashboard-line-chart__header {
+    font-size: 18px;
+    font-weight: 500;
+    justify-content: space-between;
+    line-height: 24px;
+    margin-bottom: 8px;
+}
+
+.dashboard-line-chart__header,
+.dashboard-line-chart__header__right {
+    align-items: center;
+    display: flex;
+}
+
+.dashboard-line-chart__container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dashboard-line-chart__container__content {
+    display: flex;
+    flex: 50%;
+    flex-direction: column;
+}
+
+.dashboard-line-chart__container__content__value {
+    flex: 50%;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 32px;
+}
+
+.dashboard-line-chart__footer {
+    align-items: center;
+    display: flex;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-bottom: -14px;
+}
+
+.dashboard-line-chart--increasing {
+    color: #16a862;
+}
+
+.dashboard-line-chart--decreasing {
+    color: #cf074e;
+}
+
+.dashboard-line-chart__container__chart {
+    flex: 50%;
+    margin-top: 18px;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+
+
+.apexcharts-toolbar {
+    display: none !important;
+}
+
+.apexcharts-yaxis {
+    display: none
+}
+
+.apexcharts-grid {
+    display: none !important;
+}
+
+.apexcharts-xaxis {
+    display: none !important;
+}
+
+.apexcharts-tooltip.apexcharts-active {
+    opacity: 0 !important;
+}
+
+.apexcharts-tooltip.apexcharts-active {
+    opacity: 0 !important;
+}
+
+
+
+
+
+#chart_customer,
+#chart_revenue {
+    min-height: 100px !important;
+}
+
+.dashboard-line-chart__header__right {
+    align-items: center;
+    display: flex;
+}
+
+button.adm-button__size__micro {
+    --spinner-container-width: 20px;
+    --spinner-container-height: 20px;
+    font-size: 13px;
+    height: 24px;
+    line-height: 20px;
+    padding: 0 6px;
+}
+
+button.adm-button__borderless__dark {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #00143c;
+}
+
+button.adm-button__size__micro,
+button.adm-button__size__micro {
+    padding: 0 5px;
+}
+
+button.adm-button__size__micro.is-icon-end i {
+    margin-left: 8px;
+    margin-right: -2px;
+}
+
+button.adm-button__borderless__dark:hover {
+    background-color: #edeff3;
+}
+
+.dropdown-menu.show {
+    display: block;
+    position: absolute !important;
+    transform: translate3d(0px, 24px, 0px) !important;
+    top: 4px !important;
+    left: -67px !important;
+    will-change: transform !important;
+    animation: fadeIn 0.5s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 7px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.dashboard-page__central-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.dashboard-page__central-stats {
+    gap: 20px;
+}
+
+@media (min-width: 1365px) {
+    .dashboard-page__central-stats {
+        display: inline-flex;
+    }
+
+    .dashboard-page__central-stats__appointments {
+        order: 1;
+        width: 1200px;
+    }
+}
+
+.dashboard-appointments-stats {
+    background-color: #fff;
+    border: 1px solid #dee1e6;
+    border-radius: 8px;
+    max-width: 100%;
+    min-height: 480px;
+    padding: 16px;
+}
+
+.dashboard-appointments-stats {
+    padding: 20px;
+}
+
+.dashboard-appointments-stats__header {
+    border-bottom: 1px solid #edeff3;
+    display: flex;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+}
+
+.dashboard-appointments-stats__header__content {
+    color: #00143c;
+    display: block;
+}
+
+@media (min-width: 769px) {
+    .dashboard-appointments-stats__header__content {
+        display: flex;
+    }
+
+    .dashboard-appointments-stats__header__content__appointments {
+        border-bottom: none;
+        border-right: 1px solid #edeff3;
+        margin-bottom: 0;
+        margin-right: 32px;
+        padding-bottom: 0;
+        padding-right: 32px;
+    }
+
+    .dashboard-appointments-stats__header__content__stats {
+        display: block;
+    }
+
+    .dashboard-appointments-stats__header__content__title {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 24px;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-appointments-stats__header__content__value {
+        font-size: 28px;
+        margin-bottom: 12px;
+        margin-right: 0;
+    }
+
+    .dashboard-appointments-stats__header__content {
+        display: flex;
+    }
+}
+
+.dashboard-appointments-stats__header__content__value {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 32px;
+    margin-right: 4px;
+}
+
+.dashboard-appointments-stats__header__content__percentage {
+    align-items: center;
+    display: flex;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.dashboard-appointments-stats__header__content__percentage--increasing {
+    color: #16a862;
+}
+
+.dashboard-appointments-stats__header__content__percentage--decreasing {
+    color: #cf074e;
+}
+
+.dashboard-appointments-stats__header__content {
+    color: #00143c;
+    display: flex;
+}
+
+.dashboard-appointments-stats__header__dropdown {
+    display: block;
+    margin-left: auto;
+}
+
+.dashboard-appointments-stats__content {
+    border-bottom: 1px solid #edeff3;
+    margin-bottom: 12px;
+}

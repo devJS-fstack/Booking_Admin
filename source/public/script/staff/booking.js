@@ -8,6 +8,8 @@ $('.sidebar__header__actions__close').click(function () {
     $('.sidebar-overlay').remove();
 })
 
+var idEvent;
+
 const dateBook_info = document.querySelector('.adm-appointment-info-section-datetime__date span')
 const timeBook_info = document.querySelector('.adm-appointment-info-section-datetime__time span')
 const avatar_info = document.querySelector('.avatar-employe_book');
@@ -37,6 +39,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     },
     events: [],
     eventClick: async (info) => {
+        idEvent = info.event._def.defId;
         let date = info.event.start;
         let hourStart = date.getHours();
         let minuteStart = date.getMinutes();
@@ -750,7 +753,7 @@ btnConfirmCancel.addEventListener('click', async () => {
         launch_toast("Hủy lịch hẹn thành công");
         var arrEvent = calendar.getEvents();
         arrEvent.forEach(item => {
-            if (item.title == phoneCancelBook) {
+            if (item._def.defId == idEvent) {
                 item.remove();
                 renderNumBooking_idEmployee();
                 // var lengthAll = numAllBooking[0].textContent.trim().split(' ')[0];
