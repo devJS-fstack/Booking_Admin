@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/service-dashboard.css">
     <link rel="stylesheet" href="../css/employee.css">
-    <link rel="stylesheet" href="../css/booking.css">
-    <link rel="stylesheet" href="../css/customer.css">
+    {{!--
+    <link rel="stylesheet" href="../css/booking.css"> --}}
+    {{!--
+    <link rel="stylesheet" href="../css/customer.css"> --}}
     <link rel="stylesheet" href="../css/mainstaff.css">
     <link rel="stylesheet" href="../font/css/all.min.css">
     <link rel="stylesheet" href="../css/dashboard-main.css">
@@ -60,24 +62,24 @@
                 </svg>
             </a>
         </div>
-        <div class="main-container" style="display: block">
-            <div class="user-box third-box service-box">
-                <div class="adm-services">
-                    <div class="adm-page-header">
-                        <div class="adm-page-header__content">
-                            <div class="adm-page-header__title">
-                                <span class="adm-header__label">Khách Hàng</span>
-                            </div>
-                            <div class="align-right">
-                                <button data-toggle="modal" data-target="#add-customer_modal" class="adm-button"
-                                    id="btn-AddCustomer">
-                                    <span class="adm-button__icon-wrapper">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </span>
-                                    <span>Thêm Khách Hàng</span>
-                                </button>
-                            </div>
+        <div class="main-container pt-2"
+            style="display: block;background-color: #f4f6fa;min-height: 100vh;width: 100%;">
+            <div class="main-header is-main-navigation-bar-expanded">
+                <div class="main-header__account el-dropdown">
+                    <div class="main-header__account__slot el-dropdown-selfdefine">
+                        <div class="adm-avatar size-36 mr-0 ml-0"
+                            style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);">
                         </div>
+                        <div class="main-header__account__slot__name tablet-hidden">
+                            Nguyễn Văn Tình
+                        </div>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            svg-inline="" role="presentation" focusable="false" tabindex="-1"
+                            class="main-header__account__slot__arrow tablet-hidden">
+                            <path
+                                d="M12 15a.75.75 0 01-.48-.172l-4.5-3.75a.75.75 0 11.96-1.155l4.02 3.36 4.02-3.24a.75.75 0 011.058.112.75.75 0 01-.105 1.095l-4.5 3.623A.75.75 0 0112 15z"
+                                fill="#005AEE" class="customize-fill"></path>
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -282,16 +284,282 @@
                             </div>
 
                             <div class="dashboard-appointments-stats__content">
-                                <div style="min-height: 250px;"></div>
+                                <div style="min-height: 250px;">
+                                    <div id="chart_book"></div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-appointments-stats__footer">
+                                <div class="dashboard-appointments-stats__footer__element">
+                                    <div style="min-height: 60.7px;">
+                                        <div id="chart_bar"></div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="dashboard-appointments-stats__footer__element dashboard-appointments-stats__footer__element--new-customer">
+                                    <div class="dashboard-appointments-stats__footer__element__title">Khách hàng mới
+                                    </div>
+                                    <div class="dashboard-appointments-stats__footer__element__value">
+                                        44
+                                        <span
+                                            class="dashboard-appointments-stats__footer__element__value__blue">66.7%</span>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-appointments-stats__footer__element">
+                                    <div class="dashboard-appointments-stats__footer__element__title">Khách hàng cũ
+                                    </div>
+                                    <div class="dashboard-appointments-stats__footer__element__value">
+                                        13
+                                        <span
+                                            class="dashboard-appointments-stats__footer__element__value__green">34.3%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="dashboard-appointments-table-stats dashboard-page__central-stats__table">
+                            <div class="dashboard-appointments-table-stats__header">
+                                <div class="dashboard-appointments-table-stats__header__title">Lịch sử đặt lịch</div>
+                            </div>
+                            <div class="dashboard-appointments-table-stats__table custom-scrollbar">
+                                <div>
+                                    <div class="adm-appointments-last-booked">
+                                        <div class="adm-appointments-last-booked__row loaded">
+                                            <div class="el-row is-align-middle el-row--flex"
+                                                style="margin-left: -8px; margin-right: -8px;">
+                                                <div class="adm-appointments-last-booked__time el-col el-col-5">
+                                                    <div class="el-row is-align-middle el-row--flex">
+                                                        <span>May 23, 2022 10:00 am</span>
+                                                    </div>
+                                                </div>
+                                                <div class="el-col el-col-7"
+                                                    style="padding-left: 8px; padding-right: 8px;">
+                                                    <div class="el-row is-align-middle el-row--flex">
+                                                        <span>Cắt gội massage</span>
+                                                    </div>
+                                                </div>
+                                                <div class="el-col el-col-5"
+                                                    style="padding-left: 8px; padding-right: 8px;">
+                                                    <p class="flex-center">
+                                                        <span class="overflow-ellipsis semi-bold">Văn Tình</span>
+                                                    </p>
+                                                </div>
+                                                <div class="el-col el-col-7"
+                                                    style="padding-left: 8px; padding-right: 8px;">
+                                                    <p class="flex-center">
+                                                        <span class="overflow-ellipsis semi-bold">Đã thanh toán</span>
+                                                    </p>
+                                                </div>
+                                                <div class="el-col el-col-2"
+                                                    style="padding-left: 8px; padding-right: 8px;">
+                                                    <div class="el-row el-row--flex">
+                                                        <div class="el-tooltip">
+                                                            <div
+                                                                class="el-row is-justify-center is-align-middle el-row--flex">
+                                                                <div style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);"
+                                                                    class="adm-avatar size-32 mt-0 ml-0">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="adm-pagination" style="padding: 16px 24px;">
+                                    <div class="adm-pagination__page el-pagination">
+                                        <slot>
+                                            Trang 1 trên 2
+                                        </slot>
+                                    </div>
+                                    <div class="el-pagination">
+                                        <button class="btn-prev">
+                                            <i class="fa-solid fa-angle-left el-icon"></i>
+                                        </button>
+                                        <ul class="el-pager">
+                                            <li class="number active">
+                                                1
+                                            </li>
+                                            <li class="number">
+                                                2
+                                            </li>
+                                        </ul>
+                                        <button class="btn-next">
+                                            <i class="fa-solid fa-angle-right el-icon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="dashboard-performance-stats dashboard-page__central-stats__performance">
+                            <div class="dashboard-performance-stats__header">
+                                <div>Thành Tích</div>
+                                <div class="dashboard-performance-stats__header__right">
+                                    <div class="el-dropdown">
+                                        <button aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
+                                            class="adm-button adm-button__borderless__dark adm-button__size__micro is-icon-end el-dropdown-selfdefine"
+                                            id="dropdownMenuButton">
+                                            Tuần hiện tại
+                                            <i class="fa-solid fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu el-scrollbar__view el-select-dropdown__list"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <li style="padding-left:20px ;"
+                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                <span>Tuần hiện tại</span>
+                                            </li>
+                                            <li style="padding-left:20px ;"
+                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                <span>Tuần trước</span>
+                                            </li>
+                                            <li style="padding-left:20px ;"
+                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                <span>Tháng hiện tại</span>
+                                            </li>
+                                            <li style="padding-left:20px ;"
+                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                <span>Ba tháng trước</span>
+                                            </li>
+                                            <li style="padding-left:20px ;"
+                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                <span>Sáu tháng trước</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="dashboard-performance-stats__menu">
+                                    <div class="adm-menu adm-menu--horizontal">
+                                        <ul class="el-menu--horizontal el-menu">
+                                            <li
+                                                class="el-menu-item adm-menu-item dashboard-performance-stats__menu__item is-active">
+                                                Nhân Viên
+                                            </li>
+                                            <li class="el-menu-item adm-menu-item dashboard-performance-stats__menu__item"
+                                                style="border-bottom-color: transparent;">
+                                                Dịch Vụ
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="dashboard-employee-performance-card dashboard-performance-stats__card">
+                                        <div class="dashboard-employee-performance-card__header">
+                                            <div style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);"
+                                                class="adm-avatar size-32 mr-3 ml-0">
+                                            </div>
+                                            Thắng Võ
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__content">
+                                            <div class="dashboard-employee-performance-card__content__item">
+                                                Cuộc Hẹn
+                                                <div class="dashboard-employee-performance-card__content__item__value">
+                                                    3
+                                                </div>
+                                            </div>
+                                            <div class="dashboard-employee-performance-card__content__item">
+                                                Doanh Thu
+                                                <div class="dashboard-employee-performance-card__content__item__value">
+                                                    400.000đ
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__chart">
+                                            <div style="width:11.26%"></div>
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__occupancy-percentage">
+                                            <div
+                                                class="dashboard-employee-performance-card__occupancy-percentage__title">
+                                                Tỉ lệ số lịch hẹn</div>
+                                            <div
+                                                class="dashboard-employee-performance-card__occupancy-percentage__value">
+                                                11.26%</div>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-employee-performance-card dashboard-performance-stats__card">
+                                        <div class="dashboard-employee-performance-card__header">
+                                            <div style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);"
+                                                class="adm-avatar size-32 mr-3 ml-0">
+                                            </div>
+                                            Thắng Võ
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__content">
+                                            <div class="dashboard-employee-performance-card__content__item">
+                                                Cuộc Hẹn
+                                                <div class="dashboard-employee-performance-card__content__item__value">
+                                                    3
+                                                </div>
+                                            </div>
+                                            <div class="dashboard-employee-performance-card__content__item">
+                                                Doanh Thu
+                                                <div class="dashboard-employee-performance-card__content__item__value">
+                                                    400.000đ
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__chart">
+                                            <div style="width:11.26%"></div>
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__occupancy-percentage">
+                                            <div
+                                                class="dashboard-employee-performance-card__occupancy-percentage__title">
+                                                Tỉ lệ số lịch hẹn</div>
+                                            <div
+                                                class="dashboard-employee-performance-card__occupancy-percentage__value">
+                                                11.26%</div>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-employee-performance-card dashboard-performance-stats__card">
+                                        <div class="dashboard-employee-performance-card__header">
+                                            <div style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);"
+                                                class="adm-avatar size-32 mr-3 ml-0">
+                                            </div>
+                                            Văn Tình
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__content">
+                                            <div class="dashboard-employee-performance-card__content__item">
+                                                Cuộc Hẹn
+                                                <div class="dashboard-employee-performance-card__content__item__value">
+                                                    3
+                                                </div>
+                                            </div>
+                                            <div class="dashboard-employee-performance-card__content__item">
+                                                Doanh Thu
+                                                <div class="dashboard-employee-performance-card__content__item__value">
+                                                    4.500.000đ
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__chart">
+                                            <div style="width:80.74%"></div>
+                                        </div>
+                                        <div class="dashboard-employee-performance-card__occupancy-percentage">
+                                            <div
+                                                class="dashboard-employee-performance-card__occupancy-percentage__title">
+                                                Tỉ lệ số lịch hẹn</div>
+                                            <div
+                                                class="dashboard-employee-performance-card__occupancy-percentage__value">
+                                                80.74%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
 
                 </div>
             </div>
 
         </div>
-
 
 
 

@@ -1,4 +1,50 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
+*,
+p {
+  margin: 0;
+  padding: 0; }
+
+.main-header {
+  align-items: center;
+  background-color: #fbfbfc;
+  display: flex;
+  height: 68px;
+  padding: 0 0 0 1.25rem;
+  position: fixed;
+  width: calc(100% - 72px);
+  z-index: 100;
+  top: 0; }
+
+.main-header.is-main-navigation-bar-expanded {
+  width: calc(100% - 84px); }
+
+.main-header__account {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 100%;
+  order: 4; }
+
+.main-header__account__slot {
+  align-items: center;
+  border-right: 1px solid transparent;
+  display: flex;
+  height: 100%;
+  outline: none;
+  padding: 0 1rem;
+  width: 100%; }
+
+.main-header__account__slot__name {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0 4px 0 12px; }
+
+.adm-avatar.size-36 {
+  font-size: 13.8461538462px;
+  height: 36px;
+  width: 36px; }
+
 .adm-dashboard__container__wrapper {
   background-size: 100% auto;
   margin: 60px auto 0;
@@ -83,23 +129,14 @@
   flex: 50%;
   margin-top: 18px; }
 
-.apexcharts-toolbar {
-  display: none !important; }
-
 .apexcharts-yaxis {
   display: none; }
 
 .apexcharts-grid {
   display: none !important; }
 
-.apexcharts-xaxis {
-  display: none !important; }
-
-.apexcharts-tooltip.apexcharts-active {
-  opacity: 0 !important; }
-
-.apexcharts-tooltip.apexcharts-active {
-  opacity: 0 !important; }
+line {
+  stroke: none !important; }
 
 #chart_customer,
 #chart_revenue {
@@ -188,30 +225,6 @@ button.adm-button__borderless__dark:hover {
   color: #00143c;
   display: block; }
 
-@media (min-width: 769px) {
-  .dashboard-appointments-stats__header__content {
-    display: flex; }
-  .dashboard-appointments-stats__header__content__appointments {
-    border-bottom: none;
-    border-right: 1px solid #edeff3;
-    margin-bottom: 0;
-    margin-right: 32px;
-    padding-bottom: 0;
-    padding-right: 32px; }
-  .dashboard-appointments-stats__header__content__stats {
-    display: block; }
-  .dashboard-appointments-stats__header__content__title {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 24px;
-    margin-bottom: 8px; }
-  .dashboard-appointments-stats__header__content__value {
-    font-size: 28px;
-    margin-bottom: 12px;
-    margin-right: 0; }
-  .dashboard-appointments-stats__header__content {
-    display: flex; } }
-
 .dashboard-appointments-stats__header__content__value {
   font-size: 20px;
   font-weight: 600;
@@ -242,3 +255,470 @@ button.adm-button__borderless__dark:hover {
 .dashboard-appointments-stats__content {
   border-bottom: 1px solid #edeff3;
   margin-bottom: 12px; }
+
+.dashboard-appointments-stats__footer {
+  color: #00143c;
+  display: block; }
+
+.dashboard-appointments-stats__footer__element {
+  align-items: center;
+  display: flex;
+  justify-content: space-between; }
+
+.dashboard-appointments-stats__footer__element__title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  margin-right: 10px; }
+
+.dashboard-appointments-stats__footer__element__value {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 28px; }
+
+.dashboard-appointments-stats__footer__element__value__blue {
+  color: #005aee;
+  display: inline-block;
+  margin-left: 8px;
+  min-width: 39px;
+  text-align: right; }
+
+.dashboard-appointments-stats__footer__element__value__green {
+  color: #52d797;
+  display: inline-block;
+  margin-left: 8px;
+  min-width: 39px;
+  text-align: right; }
+
+.dashboard-appointments-stats__tooltip {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  padding: 8px 12px; }
+
+.dashboard-appointments-stats__tooltip__top {
+  border-bottom: 1px solid #dee1e6;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  margin-bottom: 4px; }
+
+.dashboard-appointments-stats__tooltip__top__blue {
+  color: #005aee;
+  margin-left: 12px; }
+
+.dashboard-appointments-stats__tooltip__bottom {
+  color: #000d27;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px; }
+
+.dashboard-appointments-table-stats {
+  background-color: #fff;
+  border: 1px solid #dee1e6;
+  border-radius: 8px;
+  height: 100%;
+  max-width: 100%;
+  padding: 16px;
+  position: relative; }
+
+.dashboard-appointments-table-stats__header {
+  border-bottom: 1px solid #edeff3;
+  display: flex;
+  padding-bottom: 16px; }
+
+.dashboard-appointments-table-stats__header__title {
+  color: #00143c;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 24px; }
+
+.dashboard-appointments-table-stats__table {
+  height: calc(100% - 100px);
+  margin-bottom: 60px;
+  overflow: auto;
+  overflow-x: hidden; }
+
+.adm-appointments-last-booked {
+  min-width: 705px; }
+
+.adm-appointments-last-booked__row {
+  border-bottom: 1px solid #f4f6fa;
+  padding: 12px 8px;
+  color: #00143c; }
+
+.el-col-5 {
+  width: 20.83333%; }
+
+.adm-appointments-last-booked__time {
+  padding-left: 8px;
+  padding-right: 8px; }
+
+.el-row--flex.is-justify-center {
+  justify-content: center; }
+
+.el-col-7 {
+  width: 29.16667%; }
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+  background: transparent; }
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: #ccd0d8;
+  border-radius: 3px; }
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #929bae; }
+
+.custom-scrollbar::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  height: 5px;
+  position: absolute;
+  right: 1px;
+  width: 5px; }
+
+.adm-appointments-last-booked__row.loaded:hover {
+  background-color: #f4f6fa;
+  border-radius: 4px;
+  cursor: pointer; }
+
+.adm-pagination {
+  align-items: center;
+  border-top: 1px solid #dee1e6;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  width: 100%; }
+
+.el-pagination {
+  color: #00143c;
+  font-weight: 700;
+  padding: 2px 5px;
+  white-space: nowrap; }
+
+.el-pagination button,
+.el-pagination span:not([class*=suffix]) {
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 13px;
+  height: 28px;
+  line-height: 28px;
+  min-width: 35.5px;
+  vertical-align: top; }
+
+.el-pagination button {
+  background: 0 0;
+  border: none;
+  padding: 0 6px; }
+
+.el-pagination .btn-next,
+.el-pagination .btn-prev {
+  background: 50% no-repeat #fff;
+  background-size: 16px;
+  color: #00143c;
+  cursor: pointer;
+  margin: 0; }
+
+.el-pagination .btn-prev {
+  padding-right: 12px; }
+
+.el-pagination button:disabled {
+  background-color: #fff;
+  color: #c0c4cc;
+  cursor: not-allowed; }
+
+.adm-pagination .el-pagination button {
+  height: 28px; }
+
+.adm-pagination .el-pagination .btn-next,
+.adm-pagination .el-pagination .btn-prev {
+  border-radius: 4px;
+  min-width: unset;
+  padding: 0; }
+
+.el-pager,
+.el-pager li {
+  display: inline-block;
+  margin: 0;
+  vertical-align: top; }
+
+.el-pager {
+  font-size: 0;
+  list-style: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none; }
+
+.el-pager li.active {
+  color: #005aee;
+  cursor: default; }
+
+.adm-pagination .el-pagination .el-pager li {
+  align-items: center;
+  border-radius: 4px;
+  color: #66728a;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 500;
+  height: 28px;
+  justify-content: center;
+  line-height: 20px;
+  min-width: unset;
+  padding: 0;
+  width: 28px; }
+
+.adm-pagination .el-pagination .el-pager li.active {
+  background: #f2f6fe;
+  color: #005aee;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px; }
+
+.el-pagination .btn-next .el-icon,
+.el-pagination .btn-prev .el-icon {
+  display: block;
+  font-size: 12px;
+  font-weight: 700; }
+
+.adm-pagination .el-pagination .btn-next i,
+.adm-pagination .el-pagination .btn-prev i {
+  align-items: center;
+  display: flex;
+  height: 28px;
+  justify-content: center;
+  width: 28px; }
+
+.dashboard-performance-stats {
+  background-color: #fff;
+  border: 1px solid #dee1e6;
+  border-radius: 8px;
+  min-height: 311px;
+  padding: 16px; }
+
+.dashboard-performance-stats__header {
+  align-items: center;
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: space-between;
+  line-height: 24px;
+  margin-bottom: 8px;
+  color: #00143c; }
+
+.dashboard-performance-stats__header__right {
+  display: flex; }
+
+.dashboard-performance-stats__menu {
+  margin-bottom: 20px; }
+
+.adm-menu--horizontal {
+  border-bottom: 1px solid #dee1e6;
+  border-right: none;
+  height: 44px;
+  margin-right: 0;
+  padding-right: 0; }
+
+.adm-menu .el-menu {
+  border: none; }
+
+.el-menu-item,
+.el-submenu__title {
+  -webkit-box-sizing: border-box;
+  height: 56px;
+  line-height: 56px;
+  list-style: none;
+  position: relative;
+  white-space: nowrap; }
+
+.el-menu-item {
+  box-sizing: border-box;
+  color: #00143c;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 20px;
+  transition: border-color .3s, background-color .3s, color .3s; }
+
+.el-menu--horizontal > .el-menu-item {
+  border-bottom: 2px solid transparent;
+  color: #909399;
+  float: left;
+  height: 60px;
+  line-height: 60px;
+  margin: 0; }
+
+.el-menu-item.is-active {
+  color: #005aee; }
+
+.adm-menu-item.el-menu-item {
+  align-items: center;
+  border-radius: 5px;
+  color: #334363;
+  display: flex;
+  height: 48px;
+  line-height: 48px;
+  min-width: auto;
+  padding-left: 0.5rem !important; }
+
+.dashboard-performance-stats__menu__item {
+  justify-content: center;
+  width: 50%; }
+
+.el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: 2px solid #005aee;
+  color: #00143c; }
+
+.adm-menu-item.el-menu-item.is-active,
+.adm-menu-item.el-menu-item:active {
+  background-color: #f2f6fe; }
+
+.adm-menu--horizontal li.adm-menu-item.el-menu-item {
+  border-radius: 0;
+  color: #00143c;
+  font-size: 14px;
+  font-weight: 500;
+  height: unset;
+  line-height: 20px;
+  padding: 12px 1rem 10px; }
+
+.adm-menu--horizontal li.adm-menu-item.el-menu-item.is-active {
+  background-color: #fff;
+  box-shadow: none;
+  color: #005aee; }
+
+.adm-menu--horizontal li.adm-menu-item.el-menu-item:hover {
+  background-color: #e6effe;
+  color: #00143c; }
+
+.dashboard-employee-performance-card {
+  border: 1px solid #edeff3;
+  border-radius: 8px;
+  color: #00143c;
+  padding: 12px;
+  width: 100%; }
+
+.dashboard-performance-stats__card:not(:last-child) {
+  margin-bottom: 8px; }
+
+.dashboard-employee-performance-card__header {
+  align-items: center;
+  font-size: 14px;
+  line-height: 24px; }
+
+.dashboard-employee-performance-card__content,
+.dashboard-employee-performance-card__header {
+  display: flex;
+  font-weight: 500;
+  margin-bottom: 9px; }
+
+.dashboard-employee-performance-card__content__item {
+  font-size: 12px;
+  line-height: 24px; }
+
+.dashboard-employee-performance-card__content__item__value {
+  font-size: 16px;
+  line-height: 24px; }
+
+.dashboard-employee-performance-card__content__item:first-child {
+  margin-right: 74.5px; }
+
+.dashboard-employee-performance-card__chart {
+  background-color: #e6effe;
+  border-radius: 16px;
+  height: 4px;
+  margin-bottom: 4px; }
+
+.dashboard-employee-performance-card__chart > div {
+  background: #005aee;
+  border-radius: 16px;
+  height: 4px; }
+
+.dashboard-employee-performance-card__occupancy-percentage {
+  color: #00143c;
+  display: flex;
+  font-weight: 500;
+  justify-content: space-between; }
+
+.dashboard-employee-performance-card__occupancy-percentage__title {
+  font-size: 12px;
+  line-height: 24px; }
+
+.dashboard-employee-performance-card__occupancy-percentage__value[data-v-6a9400bb] {
+  font-size: 16px;
+  line-height: 24px; }
+
+@media (min-width: 1365px) {
+  .dashboard-page__central-stats__performance {
+    flex: unset;
+    order: 4;
+    width: 386px; } }
+
+@media (min-width: 769px) {
+  .dashboard-appointments-stats__header__content {
+    display: flex; }
+  .dashboard-appointments-stats__header__content__appointments {
+    border-bottom: none;
+    border-right: 1px solid #edeff3;
+    margin-bottom: 0;
+    margin-right: 32px;
+    padding-bottom: 0;
+    padding-right: 32px; }
+  .dashboard-appointments-stats__header__content__stats {
+    display: block; }
+  .dashboard-appointments-stats__header__content__title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    margin-bottom: 8px; }
+  .dashboard-appointments-stats__header__content__value {
+    font-size: 28px;
+    margin-bottom: 12px;
+    margin-right: 0; }
+  .dashboard-appointments-stats__header__content {
+    display: flex; }
+  .dashboard-appointments-stats__footer {
+    display: flex; }
+  .dashboard-appointments-stats__footer__element {
+    display: block;
+    justify-content: left; }
+  .dashboard-appointments-stats__footer__element:first-child {
+    margin-right: 28px; }
+  .dashboard-appointments-stats__footer__element--new-customer {
+    margin-bottom: 0; }
+  .dashboard-appointments-stats__footer__element:nth-child(2) {
+    margin-right: 40px; }
+  .dashboard-appointments-stats__footer__element__title {
+    margin-bottom: 8px;
+    margin-right: 0; }
+  .dashboard-appointments-stats__footer__element__value {
+    font-size: 24px; }
+  .dashboard-appointments-table-stats {
+    height: 632px; }
+  .dashboard-appointments-table-stats__table {
+    height: 498px;
+    margin-bottom: 0; }
+  .adm-pagination {
+    justify-content: space-between; }
+  .adm-pagination__page {
+    align-items: center;
+    color: #808a9e;
+    display: flex;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 28px; }
+  .adm-pagination .el-pagination {
+    padding: 0; } }
+
+@media (min-width: 824px) {
+  .dashboard-page__central-stats__table {
+    order: 2; }
+  .dashboard-page__central-stats__performance {
+    flex: 50;
+    width: unset; } }
+
+@media (min-width: 1024px) {
+  .dashboard-appointments-table-stats {
+    padding: 20px; }
+  .dashboard-performance-stats {
+    padding: 20px; } }
