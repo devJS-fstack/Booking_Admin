@@ -322,8 +322,16 @@ router.post('/service/create-category', StaffController.createCategory)
 router.post('/service/employee-service', StaffController.employService)
 router.post('/service/employee-service-id', StaffController.employService_id)
 router.get('/service', StaffController.service)
+
+
 // dashboard
+
+router.post('/dashboard-manager/book-revenue', StaffController.getBook_Revenue)
+router.post('/dashboard-manager/customer-revenue-currentweek', StaffController.getCustomer_Revenue_CurrentWeek)
 router.get('/dashboard-manager', StaffController.dashboard)
+
+
+
 // login
 router.post('/login', StaffController.login);
 router.get('/', StaffController.main);

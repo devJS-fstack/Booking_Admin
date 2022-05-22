@@ -707,6 +707,38 @@ class StaffController {
             payment: payment[0][0].sum,
         })
     }
+
+    async getCustomer_Revenue_CurrentWeek(req, res) {
+        var sql_customer = `select * FROM CUSTOMER WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}'`
+        var sql_revenue = `select Sum(Payment) as sum, DateCreate FROM Bill  WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}' GROUP BY DateCreate`
+        let customers = await sequelize.query(sql_customer)
+        let revenue = await sequelize.query(sql_revenue)
+        return res.status(200).json({
+            status: 'success',
+            customers: customers[0],
+            revenue: revenue[0],
+        })
+    }
+
+    async getBook_Revenue(req, res) {
+        var sql = `SELECT Count(DateBook) as count,Sum(Payment) as sum,DateBook FROM Book 
+        WHERE DateBook between '${req.body.firstDate}' and '${req.body.lastDate}' GROUP BY DateBook`
+        var sql_bill = `SELECT Count(DateCreate) as count,Sum(Payment) as sum,DateCreate FROM Bill
+        WHERE DateCreate between '2022-05-01' and '2022-05-31' GROUP BY DateCreate`
+        let data = await sequelize.query(sql)
+        let data_bill = await sequelize.query(sql_bill)
+        let count_bookSuccess = await sequelize.query(` SELECT Count(DateBook) as count FROM Book
+        WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã hoàn tất' `)
+        let count_bookPending = await sequelize.query(` SELECT Count(DateBook) as count FROM Book
+        WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã đặt lịch' `)
+        return res.status(200).json({
+            status_b: 'success',
+            data: data[0],
+            data_bill: data_bill[0],
+            count_bookSuccess: count_bookSuccess[0][0].count,
+            count_bookPending: count_bookPending[0][0].count,
+        })
+    }
 }
 
 
