@@ -33,6 +33,10 @@ body {
     color: $body-color;
 }
 
+button {
+    outline: none !important;
+}
+
 .wrapper {
     max-width: 1600px;
     background-color: $main-bg;

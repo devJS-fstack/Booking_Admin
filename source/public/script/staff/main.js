@@ -196,7 +196,7 @@ var options_bar = {
     legend: {
         show: false,
     },
-    labels: ['Khách hàng mới', 'Khách hàng cũ'],
+    labels: ['Khách hàng cũ', 'Khách hàng mới'],
     responsive: [{
         breakpoint: 480,
         options: {
@@ -211,7 +211,7 @@ var options_bar = {
 }
 
 
-function nameDayOfMonth(number) {
+function nameVietOfMonth(number) {
     switch (number) {
         case 1: return 'Tháng 1';
         case 2: return 'Tháng 2';
@@ -231,7 +231,7 @@ function nameDayOfMonth(number) {
 
 function formatDateViet(date) {
     var date = new Date(date);
-    return `${date.getDate()} ${nameDayOfMonth(date.getMonth() + 1)}, ${date.getFullYear()}`
+    return `${date.getDate()} ${nameVietOfMonth(date.getMonth() + 1)}, ${date.getFullYear()}`
 }
 
 
@@ -256,6 +256,7 @@ var last;
 var firstMonth;
 var lastMonth;
 var sumRevenue = 0;
+var indexTimePre_booked;
 // current week
 function currentWeek() {
     var curr = new Date();
@@ -323,7 +324,7 @@ window.addEventListener('load', async () => {
     currentWeek();
     var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
     var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
-    const { status, customers, revenue } = await getCustomerCurrentWeek(firstDateString, lastDateString);
+    const { status, customers, revenue, start_end } = await getCustomerCurrentWeek(firstDateString, lastDateString);
     if (status == 'success') {
         chart_customer.updateOptions({
             series: [{
@@ -358,29 +359,144 @@ window.addEventListener('load', async () => {
         $('.customer_num').text(`${customers.length}`)
         var textRevenue = sumRevenue == 0 ? `${formatMoneyViet(sumRevenue)}đ` : `${formatMoneyViet(sumRevenue)}.000đ`
         $('.sum_revenue').text(textRevenue);
+        renderTimeBooked(start_end);
+        var datecurr = new Date();
+        var firstDate = new Date(datecurr.getFullYear(), datecurr.getMonth(), 1);
+        var lastDate = new Date(datecurr.getFullYear(), datecurr.getMonth() + 1, 0);
+        var dateOldCustomer = new Date(datecurr.getFullYear(), datecurr.getMonth(), 0);
+        var firstDateString_book = `${firstDate.getFullYear()}-${firstDate.getMonth() + 1}-${firstDate.getDate()}`
+        var lastDateString_book = `${lastDate.getFullYear()}-${lastDate.getMonth() + 1}-${lastDate.getDate()}`
+        var dateString_oldCustomer = `${dateOldCustomer.getFullYear()}-${dateOldCustomer.getMonth() + 1}-${dateOldCustomer.getDate()}`
+        const { status_b, data, data_bill, count_bookSuccess, count_bookPending, arrCountOldCustomer, arrCountNewCustomer } = await getBook_Revenue(firstDateString_book, lastDateString_book, dateString_oldCustomer)
+        if (checkBooked(`${datecurr.getMonth() + 1}/${datecurr.getFullYear()}`)) {
+            $('.span-btn-time__booked').text(`${datecurr.getMonth() + 1}/${datecurr.getFullYear()}`)
+            if (status_b == 'success') {
+                $('.booking_pendding').text(count_bookPending);
+                $('.booking_success').text(count_bookSuccess);
+                chart_booked.updateOptions({
+                    series: [{
+                        name: '',
+                        data: getDaysInMonth(datecurr.getMonth(), datecurr.getFullYear(), data, data_bill)
+                    },
+                    ],
+                })
+                var sum_cus = sumCustomer(arrCountOldCustomer) + sumCustomer(arrCountNewCustomer);
+                var percentOld = ((sumCustomer(arrCountOldCustomer) * 100) / sum_cus)
+                var percentNew = ((sumCustomer(arrCountNewCustomer) * 100) / sum_cus)
+                $('.old-customer').text(sumCustomer(arrCountOldCustomer))
+                $('.new-customer').text(sumCustomer(arrCountNewCustomer))
+                $('.percent-old-customer').text(`${financial(percentOld)}%`)
+                $('.percent-new-customer').text(`${financial(percentNew)}%`)
+                chart_bar.updateOptions({
+                    series: [sumCustomer(arrCountOldCustomer), sumCustomer(arrCountNewCustomer)],
+                })
+            }
+            var itemTime_booked = document.querySelectorAll('.item_time_booked');
+            clickTimeBooked(itemTime_booked)
+        } else {
+            $('.span-btn-time__booked').text(`${datecurr.getMonth() + 1}/${datecurr.getFullYear()}`)
+            var cur_end = new Date();
+            var old_start = new Date(start_end.max);
+            old_start.setMonth(old_start.getMonth());
+            cur_end.setDate(1);
+            old_start.setDate(1);
+            var html = ``;
+            while (cur_end > old_start) {
+                html += `<li data-month = ${cur_end.getMonth() + 1} data-year =${cur_end.getFullYear()} 
+                style="padding-left:20px ;"
+                class="el-select-dropdown__item adm-select-option item_time_booked">
+                <span>${(cur_end.getMonth() + 1)}/${cur_end.getFullYear()}</span>
+            </li>`
+                cur_end.setMonth(cur_end.getMonth() - 1);
+            }
+            $('.dropdown__listTimeBooked').prepend(html)
+            checkBooked(`${(datecurr.getMonth() + 1)}/${datecurr.getFullYear()}`)
+            var itemTime_booked = document.querySelectorAll('.item_time_booked');
+            clickTimeBooked(itemTime_booked)
+            $('.booking_pendding').text(0);
+            $('.booking_success').text(0);
+            chart_booked.updateOptions({
+                series: [{
+                    name: '',
+                    data: getDaysInMonth(datecurr.getMonth(), datecurr.getFullYear(), [], [])
+                },
+                ],
+            })
+
+            const { status_c, arrCountOldCustomer, arrCountNewCustomer } = await getCountCustomer(firstDateString_book, lastDateString_book, dateString_oldCustomer);
+            if (status_c == 'success') {
+                var sum_cus = sumCustomer(arrCountOldCustomer) + sumCustomer(arrCountNewCustomer);
+                var percentOld = ((sumCustomer(arrCountOldCustomer) * 100) / sum_cus)
+                var percentNew = ((sumCustomer(arrCountNewCustomer) * 100) / sum_cus)
+                $('.old-customer').text(sumCustomer(arrCountOldCustomer))
+                $('.new-customer').text(sumCustomer(arrCountNewCustomer))
+                $('.percent-old-customer').text(`${financial(percentOld)}%`)
+                $('.percent-new-customer').text(`${financial(percentNew)}%`)
+                chart_bar.updateOptions({
+                    series: [sumCustomer(arrCountOldCustomer), sumCustomer(arrCountNewCustomer)],
+                })
+            }
+
+        }
     }
 
-
-    // month-book current
-    var datecurr = new Date();
-    var firstDate = new Date(datecurr.getFullYear(), datecurr.getMonth(), 1);
-    var lastDate = new Date(datecurr.getFullYear(), datecurr.getMonth() + 1, 0);
-    var firstDateString_book = `${firstDate.getFullYear()}-${firstDate.getMonth() + 1}-${firstDate.getDate()}`
-    var lastDateString_book = `${lastDate.getFullYear()}-${lastDate.getMonth() + 1}-${lastDate.getDate()}`
-    const { status_b, data, data_bill, count_bookSuccess, count_bookPending } = await getBook_Revenue(firstDate, lastDate)
-    if (status_b == 'success') {
-        console.log(count_bookSuccess, count_bookPending)
-        $('.booking_pendding').text(count_bookPending);
-        $('.booking_success').text(count_bookSuccess);
-        chart_booked.updateOptions({
-            series: [{
-                name: '',
-                data: getDaysInMonth(4, 2022, data, data_bill)
-            },
-            ],
-        })
-    }
+    // render history booked
+    renderHistoryBook(1, 0);
 })
+
+function financial(x) {
+    return Number.parseFloat(x).toFixed(1);
+}
+
+function sumCustomer(arr) {
+    var sum = 0;
+    arr.forEach(item => {
+        sum += item.count
+    })
+    return sum;
+}
+
+function clickTimeBooked(list) {
+    var spans_timeBooked = document.querySelectorAll('.item_time_booked span');
+    list.forEach((item, index) => {
+        item.onclick = async () => {
+            list[indexTimePre_booked].classList.remove('selected')
+            item.classList.add('selected');
+            indexTimePre_booked = index;
+            $('.span-btn-time__booked').text(`${spans_timeBooked[index].textContent.trim()}`)
+            var firstDate = new Date(parseInt(item.getAttribute('data-year')), parseInt(item.getAttribute('data-month')) - 1, 1);
+            var lastDate = new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0);
+            var dateOldCustomer = new Date(firstDate.getFullYear(), firstDate.getMonth(), 0);
+            var firstDateString_book = `${firstDate.getFullYear()}-${firstDate.getMonth() + 1}-${firstDate.getDate()}`
+            var lastDateString_book = `${lastDate.getFullYear()}-${lastDate.getMonth() + 1}-${lastDate.getDate()}`
+            var dateString_oldCustomer = `${dateOldCustomer.getFullYear()}-${dateOldCustomer.getMonth() + 1}-${dateOldCustomer.getDate()}`
+            const { status_b, data, data_bill, count_bookSuccess, count_bookPending, arrCountOldCustomer, arrCountNewCustomer } = await getBook_Revenue(firstDateString_book, lastDateString_book, dateString_oldCustomer)
+            $('.span-btn-time__booked').text(`${firstDate.getMonth() + 1}/${firstDate.getFullYear()}`)
+            if (status_b == 'success') {
+                $('.booking_pendding').text(count_bookPending);
+                $('.booking_success').text(count_bookSuccess);
+                chart_booked.updateOptions({
+                    series: [{
+                        name: '',
+                        data: getDaysInMonth(firstDate.getMonth(), firstDate.getFullYear(), data, data_bill)
+                    },
+                    ],
+                })
+
+                var sum_cus = sumCustomer(arrCountOldCustomer) + sumCustomer(arrCountNewCustomer);
+                var percentOld = ((sumCustomer(arrCountOldCustomer) * 100) / sum_cus)
+                var percentNew = ((sumCustomer(arrCountNewCustomer) * 100) / sum_cus)
+                $('.old-customer').text(sumCustomer(arrCountOldCustomer))
+                $('.new-customer').text(sumCustomer(arrCountNewCustomer))
+                $('.percent-old-customer').text(`${financial(percentOld)}%`)
+                $('.percent-new-customer').text(`${financial(percentNew)}%`)
+                chart_bar.updateOptions({
+                    series: [sumCustomer(arrCountOldCustomer), sumCustomer(arrCountNewCustomer)],
+                })
+            }
+        }
+    })
+}
 
 async function renderChart_customer_currentWeek(choose) {
     var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
@@ -595,6 +711,7 @@ async function renderChart_customer_sixThreeMonth(choose) {
     }
 }
 
+const dropDown_TimeBooked = document.querySelector('.dropdown__listTimeBooked')
 const item_time_customer = document.querySelectorAll('.item_customer-chart_time');
 const item_time_revenue = document.querySelectorAll('.item_revenue-chart_time')
 const spans_time_customer = document.querySelectorAll('.item_customer-chart_time span');
@@ -792,19 +909,253 @@ function createArray(length) {
 
 
 
+function renderTimeBooked(start_end) {
+    var start = start_end.min;
+    var end = start_end.max;
+    var dateStart = new Date(start);
+    var dateEnd = new Date(end);
+    dateStart.setDate(1);
+    dateEnd.setDate(1);
+    var html = ``;
+    while (dateEnd >= dateStart) {
+        html += `<li style="padding-left:20px;" data-month = ${dateEnd.getMonth() + 1} 
+        data-year =${dateEnd.getFullYear()} 
+        class="el-select-dropdown__item adm-select-option item_time_booked">
+        <span>${(dateEnd.getMonth() + 1)}/${dateEnd.getFullYear()}</span>
+    </li>`
+        dateEnd.setMonth(dateEnd.getMonth() - 1);
+    }
+    dropDown_TimeBooked.innerHTML = html
+}
 
-
+function checkBooked(check) {
+    var item_TimeBooked = document.querySelectorAll('.item_time_booked');
+    const spans_timeBooked = document.querySelectorAll('.item_time_booked span');
+    var haveTime = false;
+    item_TimeBooked.forEach((item, index) => {
+        if (spans_timeBooked[index].textContent.trim() == check) {
+            item.classList.add('selected');
+            indexTimePre_booked = index;
+            haveTime = true
+        }
+    })
+    return haveTime;
+}
 
 
 function formatMoneyViet(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
+const elPager = document.querySelector('.el-pager')
+const btnPre = document.querySelector('.btn-prev')
+const btnNext = document.querySelector('.btn-next')
+var itemNumber;
+
+function dateFormat(date) {
+    var date = new Date(date);
+    var nameMonth = nameVietOfMonth(date.getMonth() + 1)
+    var day = date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`;
+    return `${day} ${nameMonth}, ${date.getFullYear()}`
+}
+
+function timeFormat(hour, minute) {
+    var hour = hour > 9 ? hour : `0${hour}`;
+    var minute = minute > 9 ? minute : `0${minute}`;
+    return `${hour}:${minute}`
+}
+
+function renderPager(totalPage) {
+    var html = ``;
+    var indexDots;
+    var haveDots = false;
+    for (var i = 1; i <= totalPage; i++) {
+        if (i == 1) {
+            html += `<li class="number active" data-page = ${i}>
+        ${i}</li>`
+        } else if (i < 4) {
+            html += `<li class="number" data-page = ${i}>
+            ${i}</li>`
+        }
+        else if (i == 4) {
+            html += `<li class="number" data-page = ${i}>...</li>`
+        }
+        else if (i == totalPage) html += `<li class="number" data-page = ${i}> ${i}</li>`
+    }
+    elPager.innerHTML = html;
+    itemNumber = document.querySelectorAll('.number');
+}
+
+var indexPrePage = 0;
+
+var pageCurrent = 1;
+var totalPage_var;
+
+function clickPageNumber(numberItem) {
+    numberItem.forEach((item, index) => {
+        item.onclick = async () => {
+            if (!item.classList.contains('active')) {
+                if (await renderHistoryBook(item.getAttribute('data-page'), 1) == 'success') {
+                    pageCurrent = item.getAttribute('data-page')
+                    numberItem[indexPrePage].classList.remove('active');
+                    item.classList.add('active');
+                    indexPrePage = index;
+                }
+                if (pageCurrent == totalPage_var) {
+                    btnNext.disabled = true;
+                }
+                else {
+                    btnNext.disabled = false;
+                }
+
+                if (pageCurrent == 1) {
+                    btnPre.disabled = true;
+                } else {
+                    btnPre.disabled = false;
+                }
+            }
+        }
+    })
+}
+
+btnNext.onclick = async () => {
+    itemNumber = document.querySelectorAll('.number');
+    if (pageCurrent == totalPage_var) {
+
+    }
+    else {
+        pageCurrent++;
+        renderHistoryBook(pageCurrent, 1)
+        itemNumber[indexPrePage].classList.remove('active');
+        itemNumber[pageCurrent - 1].classList.add('active');
+        indexPrePage = pageCurrent - 1;
+        if (pageCurrent == totalPage_var) {
+            btnNext.disabled = true;
+        }
+
+        if (pageCurrent == 1) {
+            btnPre.disabled = true;
+        } else {
+            btnPre.disabled = false;
+        }
+    }
+}
+
+btnPre.disabled = true;
+
+btnPre.onclick = async () => {
+    itemNumber = document.querySelectorAll('.number');
+    if (pageCurrent == 1) {
+
+    }
+    else {
+        pageCurrent--;
+        renderHistoryBook(pageCurrent, 1)
+        itemNumber[indexPrePage].classList.remove('active');
+        itemNumber[pageCurrent - 1].classList.add('active');
+        indexPrePage = pageCurrent - 1;
+        if (pageCurrent == 1) {
+            btnPre.disabled = true;
+        }
+
+        if (pageCurrent == totalPage_var) {
+            btnNext.disabled = true;
+        }
+        else {
+            btnNext.disabled = false;
+        }
+
+    }
+}
+
+const listHistoryBooked = document.querySelector('.list-history__booked')
+
+async function renderHistoryBook(page, choose) {
+    const { status, bookedArr, totalPage } = await paginationApi(page);
+    if (status == 'success') {
+        var html = ``;
+        totalPage_var = totalPage
+        $('.pagination-text').text(`Trang ${page} trên ${totalPage}`)
+        if (choose == 0) {
+            renderPager(totalPage);
+            clickPageNumber(itemNumber);
+        }
+        bookedArr.forEach((item, index) => {
+            html += `<div class="adm-appointments-last-booked">
+            <div class="adm-appointments-last-booked__row loaded">
+                <div class="el-row is-align-middle el-row--flex"
+                    style="margin-left: -8px; margin-right: -8px;">
+                    <div class="adm-appointments-last-booked__time el-col el-col-5">
+                        <div class="el-row is-align-middle el-row--flex">
+                            <span>${dateFormat(item.DateBook)} ${timeFormat(item.HourStart, item.MinuteStart)}</span>
+                        </div>
+                    </div>
+                    <div class="el-col el-col-7"
+                        style="padding-left: 8px; padding-right: 8px;">
+                        <div class="el-row is-align-middle el-row--flex">
+                            <span>${item.PhoneCustomer}</span>
+                        </div>
+                    </div>
+                    <div class="el-col el-col-5"
+                        style="padding-left: 8px; padding-right: 8px;">
+                        <p class="flex-center">
+                            <span class="overflow-ellipsis semi-bold">${item.StatusBook}</span>
+                        </p>
+                    </div>
+                    <div class="el-col el-col-7"
+                        style="padding-left: 8px; padding-right: 8px;">
+                        <p class="flex-center">
+                            <span class="overflow-ellipsis semi-bold">${formatMoneyViet(item.Payment)}.000đ</span>
+                        </p>
+                    </div>
+                    <div class="el-col el-col-2"
+                        style="padding-left: 8px; padding-right: 8px;">
+                        <div class="el-row el-row--flex">
+                            <div class="el-tooltip">
+                                <div
+                                    class="el-row is-justify-center is-align-middle el-row--flex">
+                                    <div style="background-image: url(${item.PathImgStaff});color: rgb(19, 150, 110);"
+                                        class="adm-avatar size-32 mt-0 ml-0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>`
+        })
+
+        listHistoryBooked.innerHTML = html
+
+        return `success`
+    }
+
+}
+
+
+
 
 // get API
 
-async function getBook_Revenue(firstDate, lastDate) {
+async function paginationApi(page_number) {
+    return (await instance.post('dashboard-manager/pagination', {
+        page_number
+    })).data
+}
+
+async function getCountCustomer(firstDate, lastDate, dateString_oldCustomer) {
+    return (await instance.post('dashboard-manager/count-customer', {
+        dateString_oldCustomer,
+        firstDate,
+        lastDate
+    })).data
+}
+
+async function getBook_Revenue(firstDate, lastDate, dateString_oldCustomer) {
     return (await instance.post('dashboard-manager/book-revenue', {
+        dateString_oldCustomer,
         firstDate,
         lastDate
     })).data

@@ -713,10 +713,12 @@ class StaffController {
         var sql_revenue = `select Sum(Payment) as sum, DateCreate FROM Bill  WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}' GROUP BY DateCreate`
         let customers = await sequelize.query(sql_customer)
         let revenue = await sequelize.query(sql_revenue)
+        let start_end = await sequelize.query(`SELECT Min(DateBook) as min, Max(DateBook) as max FROM Book`)
         return res.status(200).json({
             status: 'success',
             customers: customers[0],
             revenue: revenue[0],
+            start_end: start_end[0][0],
         })
     }
 
@@ -731,12 +733,42 @@ class StaffController {
         WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã hoàn tất' `)
         let count_bookPending = await sequelize.query(` SELECT Count(DateBook) as count FROM Book
         WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã đặt lịch' `)
+        let arrCountOldCustomer = await sequelize.query(`SELECT Count(PhoneCustomer) as count,DateCreate FROM Customer GROUP BY DateCreate 
+        HAVING DateCreate between Min(DateCreate) and '${req.body.dateString_oldCustomer}'`)
+        let arrCountNewCustomer = await sequelize.query(`SELECT Count(PhoneCustomer) as count,DateCreate FROM Customer GROUP BY DateCreate 
+        HAVING DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}'`)
         return res.status(200).json({
             status_b: 'success',
             data: data[0],
             data_bill: data_bill[0],
             count_bookSuccess: count_bookSuccess[0][0].count,
             count_bookPending: count_bookPending[0][0].count,
+            arrCountOldCustomer: arrCountOldCustomer[0],
+            arrCountNewCustomer: arrCountNewCustomer[0]
+        })
+    }
+
+    async CountCustomer(req, res) {
+        let arrCountOldCustomer = await sequelize.query(`SELECT Count(PhoneCustomer) as count,DateCreate FROM Customer GROUP BY DateCreate 
+        HAVING DateCreate between Min(DateCreate) and '${req.body.dateString_oldCustomer}'`)
+        let arrCountNewCustomer = await sequelize.query(`SELECT Count(PhoneCustomer) as count,DateCreate FROM Customer GROUP BY DateCreate 
+        HAVING DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}'`)
+        return res.status(200).json({
+            status_c: 'success',
+            arrCountOldCustomer: arrCountOldCustomer[0],
+            arrCountNewCustomer: arrCountNewCustomer[0]
+        })
+    }
+
+    async Pagination(req, res) {
+        let bookedArr = await sequelize.query(` select Book.*,HourStart,MinuteStart,PathImgStaff from  Book, Shift,Staff 
+        WHERE Book.IDStaff = Staff.IDStaff AND Book.IDShiftBook = Shift.IDShift ORDER BY (DateBook) desc`)
+        let totalPage = Math.ceil(bookedArr[0].length / 10);
+        var page = req.body.page_number;
+        return res.status(200).json({
+            status: 'success',
+            bookedArr: bookedArr[0].slice(10 * (page - 1), 10 * (page)),
+            totalPage,
         })
     }
 }

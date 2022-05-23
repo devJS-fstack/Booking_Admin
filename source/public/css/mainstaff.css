@@ -21,6 +21,9 @@ body {
   background-color: #252954;
   color: #9b9ca7; }
 
+button {
+  outline: none !important; }
+
 .wrapper {
   max-width: 1600px;
   background-color: #0e0e23;

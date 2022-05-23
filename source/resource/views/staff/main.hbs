@@ -285,14 +285,14 @@
                                         <button aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
                                             class="adm-button adm-button__borderless__dark adm-button__size__micro is-icon-end el-dropdown-selfdefine"
                                             id="dropdownMenuButton">
-                                            5/2022
+                                            <span class="span-btn-time__booked"></span>
                                             <i class="fa-solid fa-angle-down"></i>
                                         </button>
-                                        <ul class="dropdown-menu el-scrollbar__view el-select-dropdown__list"
+                                        <ul class="dropdown-menu el-scrollbar__view el-select-dropdown__list dropdown__listTimeBooked"
                                             aria-labelledby="dropdownMenuButton">
                                             <li style="padding-left:20px ;"
                                                 class="el-select-dropdown__item adm-select-option list-employee__dropdown">
-                                                <span>5/2022</span>
+                                                <span></span>
                                             </li>
                                         </ul>
                                     </div>
@@ -313,22 +313,22 @@
                                 </div>
                                 <div
                                     class="dashboard-appointments-stats__footer__element dashboard-appointments-stats__footer__element--new-customer">
-                                    <div class="dashboard-appointments-stats__footer__element__title">Khách hàng mới
+                                    <div class="dashboard-appointments-stats__footer__element__title">Khách hàng cũ
                                     </div>
                                     <div class="dashboard-appointments-stats__footer__element__value">
-                                        44
+                                        <span class="old-customer"></span>
                                         <span
-                                            class="dashboard-appointments-stats__footer__element__value__blue">66.7%</span>
+                                            class="dashboard-appointments-stats__footer__element__value__blue percent-old-customer"></span>
                                     </div>
                                 </div>
 
                                 <div class="dashboard-appointments-stats__footer__element">
-                                    <div class="dashboard-appointments-stats__footer__element__title">Khách hàng cũ
+                                    <div class="dashboard-appointments-stats__footer__element__title">Khách hàng mới
                                     </div>
                                     <div class="dashboard-appointments-stats__footer__element__value">
-                                        13
+                                        <span class="new-customer"></span>
                                         <span
-                                            class="dashboard-appointments-stats__footer__element__value__green">34.3%</span>
+                                            class="dashboard-appointments-stats__footer__element__value__green percent-new-customer"></span>
                                     </div>
                                 </div>
                             </div>
@@ -339,8 +339,8 @@
                                 <div class="dashboard-appointments-table-stats__header__title">Lịch sử đặt lịch</div>
                             </div>
                             <div class="dashboard-appointments-table-stats__table custom-scrollbar">
-                                <div>
-                                    <div class="adm-appointments-last-booked">
+                                <div class="list-history__booked">
+                                    {{!-- <div class="adm-appointments-last-booked">
                                         <div class="adm-appointments-last-booked__row loaded">
                                             <div class="el-row is-align-middle el-row--flex"
                                                 style="margin-left: -8px; margin-right: -8px;">
@@ -383,12 +383,11 @@
                                             </div>
                                         </div>
 
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="adm-pagination" style="padding: 16px 24px;">
                                     <div class="adm-pagination__page el-pagination">
-                                        <slot>
-                                            Trang 1 trên 2
+                                        <slot class="pagination-text">
                                         </slot>
                                     </div>
                                     <div class="el-pagination">

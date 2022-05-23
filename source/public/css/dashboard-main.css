@@ -170,6 +170,9 @@ button.adm-button__size__micro.is-icon-end i {
 button.adm-button__borderless__dark:hover {
   background-color: #edeff3; }
 
+.el-col-2 {
+  width: 8.33333%; }
+
 .dropdown-menu.show {
   display: block;
   position: absolute !important;
@@ -180,6 +183,10 @@ button.adm-button__borderless__dark:hover {
   animation: fadeIn 0.3s ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border-radius: 7px; }
+
+.adm-pagination .el-pagination .el-pager li:hover {
+  background-color: #f4f6fa;
+  cursor: pointer; }
 
 @keyframes fadeIn {
   0% {
@@ -453,7 +460,7 @@ button.adm-button__borderless__dark:hover {
 
 .el-pager li.active {
   color: #005aee;
-  cursor: default; }
+  cursor: default !important; }
 
 .adm-pagination .el-pagination .el-pager li {
   align-items: center;
@@ -512,6 +519,10 @@ button.adm-button__borderless__dark:hover {
 
 .dashboard-performance-stats__menu {
   margin-bottom: 20px; }
+
+.adm-pagination .el-pagination .btn-next:not(:disabled):hover,
+.adm-pagination .el-pagination .btn-prev:not(:disabled):hover {
+  background-color: #f4f6fa; }
 
 .adm-menu--horizontal {
   border-bottom: 1px solid #dee1e6;

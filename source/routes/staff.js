@@ -327,6 +327,8 @@ router.get('/service', StaffController.service)
 // dashboard
 
 router.post('/dashboard-manager/book-revenue', StaffController.getBook_Revenue)
+router.post('/dashboard-manager/count-customer', StaffController.CountCustomer)
+router.post('/dashboard-manager/pagination', StaffController.Pagination)
 router.post('/dashboard-manager/customer-revenue-currentweek', StaffController.getCustomer_Revenue_CurrentWeek)
 router.get('/dashboard-manager', StaffController.dashboard)
 
