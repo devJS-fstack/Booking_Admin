@@ -1,4 +1,5 @@
 navheader.style.display = 'none'
+const idStore = location.href.split('?idStore=')[1];
 
 
 var options_customer = {
@@ -442,10 +443,227 @@ window.addEventListener('load', async () => {
 
     // render history booked
     renderHistoryBook(1, 0);
+
+    // render performance employee
+    const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+    if (status_p == 'success') {
+        renderPerformance_Employee(performance_employee, total_payment);
+    }
 })
+
+const performance = document.querySelector('.performance')
+
+function renderPerformance_Employee(arr, total_payment) {
+    var html = ``;
+    arr.forEach((item, index) => {
+        var percent = (item.sum * 100) / total_payment;
+        html += ` <div class="dashboard-employee-performance-card dashboard-performance-stats__card">
+        <div class="dashboard-employee-performance-card__header">
+            <div style="background-image: url(${item.PathImgStaff});color: rgb(19, 150, 110);"
+                class="adm-avatar size-32 mr-3 ml-0">
+            </div>
+            ${item.SurName} ${item.NameStaff}
+        </div>
+        <div class="dashboard-employee-performance-card__content">
+            <div class="dashboard-employee-performance-card__content__item">
+                Cuộc Hẹn
+                <div class="dashboard-employee-performance-card__content__item__value">
+                    ${item.count}
+                </div>
+            </div>
+            <div class="dashboard-employee-performance-card__content__item">
+                Doanh Thu
+                <div class="dashboard-employee-performance-card__content__item__value">
+                   ${formatMoneyViet(item.sum)}.000đ
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-employee-performance-card__chart">
+            <div style="width:${financial_2(percent)}%"></div>
+        </div>
+        <div class="dashboard-employee-performance-card__occupancy-percentage">
+            <div
+                class="dashboard-employee-performance-card__occupancy-percentage__title">
+                Tỉ lệ doanh thu</div>
+            <div
+                class="dashboard-employee-performance-card__occupancy-percentage__value">
+                ${financial_2(percent)}%</div>
+        </div>
+    </div>`
+    })
+
+    performance.innerHTML = html
+}
+
+function renderPerformance_Service(arr, total_payment) {
+    var html = ``;
+    arr.forEach((item, index) => {
+        var percent = (item.sum * 100) / total_payment;
+        html += ` <div class="dashboard-employee-performance-card dashboard-performance-stats__card">
+        <div class="dashboard-employee-performance-card__header">
+            <div style="background-image: url(${item.PathImg});color: rgb(19, 150, 110);"
+                class="adm-avatar size-32 mr-3 ml-0">
+            </div>
+            ${item.NameService}
+        </div>
+        <div class="dashboard-employee-performance-card__content">
+            <div class="dashboard-employee-performance-card__content__item">
+                Cuộc Hẹn
+                <div class="dashboard-employee-performance-card__content__item__value">
+                    ${item.count}
+                </div>
+            </div>
+            <div class="dashboard-employee-performance-card__content__item">
+                Doanh Thu
+                <div class="dashboard-employee-performance-card__content__item__value">
+                   ${formatMoneyViet(item.sum)}.000đ
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-employee-performance-card__chart">
+            <div style="width:${financial_2(percent)}%"></div>
+        </div>
+        <div class="dashboard-employee-performance-card__occupancy-percentage">
+            <div
+                class="dashboard-employee-performance-card__occupancy-percentage__title">
+                Tỉ lệ doanh thu</div>
+            <div
+                class="dashboard-employee-performance-card__occupancy-percentage__value">
+                ${financial_2(percent)}%</div>
+        </div>
+    </div>`
+    })
+
+    performance.innerHTML = html
+}
+
+const dashboard_itemPerform = document.querySelectorAll('.dashboard-performance-stats__menu__item')
+var indexPreItemPer = 0;
+dashboard_itemPerform.forEach((item, index) => {
+    item.onclick = async () => {
+        var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+        var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+        if (indexPreItemPer != index) {
+            dashboard_itemPerform[indexPreItemPer].classList.remove('is-active');
+            dashboard_itemPerform[indexPreItemPer].style = 'border-bottom-color: transparent;';
+            item.classList.add('is-active');
+            item.style = '';
+            indexPreItemPer = index;
+            if (index == 0) {
+                const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+                if (status_p == 'success') {
+                    renderPerformance_Employee(performance_employee, total_payment);
+                }
+            }
+            else {
+                const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
+                if (status_s == 'success') {
+                    renderPerformance_Service(performance_service, total_payment);
+                }
+            }
+        }
+
+    }
+})
+
+const itemTimePerformance = document.querySelectorAll('.item-time__performance');
+const spans_timePerformance = document.querySelectorAll('.item-time__performance span')
+
+itemTimePerformance.forEach((item, index) => {
+    item.onclick = async () => {
+        $('.text-time-performance').text(spans_timePerformance[index].textContent.trim())
+        switch (index) {
+            case 0:
+                currentWeek();
+                var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                if (indexPreItemPer == 0) {
+                    const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+                    if (status_p == 'success') {
+                        renderPerformance_Employee(performance_employee, total_payment);
+                    }
+                } else {
+                    const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
+                    if (status_s == 'success') {
+                        renderPerformance_Service(performance_service, total_payment);
+                    }
+                }
+                break;
+            case 1:
+                lastweek();
+                var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                if (indexPreItemPer == 0) {
+                    const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+                    if (status_p == 'success') {
+                        renderPerformance_Employee(performance_employee, total_payment);
+                    }
+                } else {
+                    const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
+                    if (status_s == 'success') {
+                        renderPerformance_Service(performance_service, total_payment);
+                    }
+                }
+                break;
+            case 2:
+                currentMonth();
+                var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                if (indexPreItemPer == 0) {
+                    const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+                    if (status_p == 'success') {
+                        renderPerformance_Employee(performance_employee, total_payment);
+                    }
+                } else {
+                    const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
+                    if (status_s == 'success') {
+                        renderPerformance_Service(performance_service, total_payment);
+                    }
+                }
+                break;
+            case 3:
+                threeMonth();
+                var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                if (indexPreItemPer == 0) {
+                    const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+                    if (status_p == 'success') {
+                        renderPerformance_Employee(performance_employee, total_payment);
+                    }
+                } else {
+                    const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
+                    if (status_s == 'success') {
+                        renderPerformance_Service(performance_service, total_payment);
+                    }
+                }
+                break;
+            case 3:
+                sixmonth();
+                var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                if (indexPreItemPer == 0) {
+                    const { status_p, performance_employee, total_payment } = await getPerformance_Employee(firstDateString, lastDateString)
+                    if (status_p == 'success') {
+                        renderPerformance_Employee(performance_employee, total_payment);
+                    }
+                } else {
+                    const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
+                    if (status_s == 'success') {
+                        renderPerformance_Service(performance_service, total_payment);
+                    }
+                }
+                break;
+        }
+    }
+})
+
 
 function financial(x) {
     return Number.parseFloat(x).toFixed(1);
+}
+
+function financial_2(x) {
+    return Number.parseFloat(x).toFixed(2);
 }
 
 function sumCustomer(arr) {
@@ -1043,6 +1261,8 @@ btnNext.onclick = async () => {
 
 btnPre.disabled = true;
 
+
+
 btnPre.onclick = async () => {
     itemNumber = document.querySelectorAll('.number');
     if (pageCurrent == 1) {
@@ -1075,59 +1295,65 @@ async function renderHistoryBook(page, choose) {
     if (status == 'success') {
         var html = ``;
         totalPage_var = totalPage
-        $('.pagination-text').text(`Trang ${page} trên ${totalPage}`)
-        if (choose == 0) {
-            renderPager(totalPage);
-            clickPageNumber(itemNumber);
-        }
-        bookedArr.forEach((item, index) => {
-            html += `<div class="adm-appointments-last-booked">
-            <div class="adm-appointments-last-booked__row loaded">
-                <div class="el-row is-align-middle el-row--flex"
-                    style="margin-left: -8px; margin-right: -8px;">
-                    <div class="adm-appointments-last-booked__time el-col el-col-5">
-                        <div class="el-row is-align-middle el-row--flex">
-                            <span>${dateFormat(item.DateBook)} ${timeFormat(item.HourStart, item.MinuteStart)}</span>
+        if (totalPage_var == 0) {
+            $('.pagination-text').text(`Trang ${0} trên ${totalPage}`)
+            btnNext.disabled = true;
+            listHistoryBooked.style.width = '709px';
+        } else {
+            $('.pagination-text').text(`Trang ${page} trên ${totalPage}`)
+            if (choose == 0) {
+                renderPager(totalPage);
+                clickPageNumber(itemNumber);
+            }
+            bookedArr.forEach((item, index) => {
+                html += `<div class="adm-appointments-last-booked">
+                <div class="adm-appointments-last-booked__row loaded">
+                    <div class="el-row is-align-middle el-row--flex"
+                        style="margin-left: -8px; margin-right: -8px;">
+                        <div class="adm-appointments-last-booked__time el-col el-col-5">
+                            <div class="el-row is-align-middle el-row--flex">
+                                <span>${dateFormat(item.DateBook)} ${timeFormat(item.HourStart, item.MinuteStart)}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="el-col el-col-7"
-                        style="padding-left: 8px; padding-right: 8px;">
-                        <div class="el-row is-align-middle el-row--flex">
-                            <span>${item.PhoneCustomer}</span>
+                        <div class="el-col el-col-7"
+                            style="padding-left: 8px; padding-right: 8px;">
+                            <div class="el-row is-align-middle el-row--flex">
+                                <span>${item.PhoneCustomer}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="el-col el-col-5"
-                        style="padding-left: 8px; padding-right: 8px;">
-                        <p class="flex-center">
-                            <span class="overflow-ellipsis semi-bold">${item.StatusBook}</span>
-                        </p>
-                    </div>
-                    <div class="el-col el-col-7"
-                        style="padding-left: 8px; padding-right: 8px;">
-                        <p class="flex-center">
-                            <span class="overflow-ellipsis semi-bold">${formatMoneyViet(item.Payment)}.000đ</span>
-                        </p>
-                    </div>
-                    <div class="el-col el-col-2"
-                        style="padding-left: 8px; padding-right: 8px;">
-                        <div class="el-row el-row--flex">
-                            <div class="el-tooltip">
-                                <div
-                                    class="el-row is-justify-center is-align-middle el-row--flex">
-                                    <div style="background-image: url(${item.PathImgStaff});color: rgb(19, 150, 110);"
-                                        class="adm-avatar size-32 mt-0 ml-0">
+                        <div class="el-col el-col-5"
+                            style="padding-left: 8px; padding-right: 8px;">
+                            <p class="flex-center">
+                                <span class="overflow-ellipsis semi-bold">${item.StatusBook}</span>
+                            </p>
+                        </div>
+                        <div class="el-col el-col-7"
+                            style="padding-left: 8px; padding-right: 8px;">
+                            <p class="flex-center">
+                                <span class="overflow-ellipsis semi-bold">${formatMoneyViet(item.Payment)}.000đ</span>
+                            </p>
+                        </div>
+                        <div class="el-col el-col-2"
+                            style="padding-left: 8px; padding-right: 8px;">
+                            <div class="el-row el-row--flex">
+                                <div class="el-tooltip">
+                                    <div
+                                        class="el-row is-justify-center is-align-middle el-row--flex">
+                                        <div style="background-image: url(${item.PathImgStaff});color: rgb(19, 150, 110);"
+                                            class="adm-avatar size-32 mt-0 ml-0">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+    
+            </div>`
+            })
 
-        </div>`
-        })
-
-        listHistoryBooked.innerHTML = html
+            listHistoryBooked.innerHTML = html
+        }
 
         return `success`
     }
@@ -1137,11 +1363,29 @@ async function renderHistoryBook(page, choose) {
 
 
 
+
 // get API
+
+async function getPerformance_Service(firstDate, lastDate) {
+    return (await instance.post('dashboard-manager/perfomance-service', {
+        firstDate,
+        lastDate,
+        idStore,
+    })).data
+}
+
+async function getPerformance_Employee(firstDate, lastDate) {
+    return (await instance.post('dashboard-manager/perfomance-employee', {
+        firstDate,
+        lastDate,
+        idStore,
+    })).data
+}
 
 async function paginationApi(page_number) {
     return (await instance.post('dashboard-manager/pagination', {
-        page_number
+        page_number,
+        idStore,
     })).data
 }
 
@@ -1149,7 +1393,8 @@ async function getCountCustomer(firstDate, lastDate, dateString_oldCustomer) {
     return (await instance.post('dashboard-manager/count-customer', {
         dateString_oldCustomer,
         firstDate,
-        lastDate
+        lastDate,
+        idStore,
     })).data
 }
 
@@ -1157,13 +1402,15 @@ async function getBook_Revenue(firstDate, lastDate, dateString_oldCustomer) {
     return (await instance.post('dashboard-manager/book-revenue', {
         dateString_oldCustomer,
         firstDate,
-        lastDate
+        lastDate,
+        idStore,
     })).data
 }
 
 async function getCustomerCurrentWeek(firstDate, lastDate) {
     return (await instance.post('dashboard-manager/customer-revenue-currentweek', {
         firstDate,
-        lastDate
+        lastDate,
+        idStore,
     })).data
 }

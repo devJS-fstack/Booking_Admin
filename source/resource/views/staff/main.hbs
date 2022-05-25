@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/service-dashboard.css">
     <link rel="stylesheet" href="../css/employee.css">
-    {{!--
-    <link rel="stylesheet" href="../css/booking.css"> --}}
+
+    <link rel="stylesheet" href="../css/booking.css">
     {{!--
     <link rel="stylesheet" href="../css/customer.css"> --}}
     <link rel="stylesheet" href="../css/mainstaff.css">
@@ -65,6 +65,16 @@
                 </svg>
             </a>
             <span>Khách Hàng</span>
+            <a href="shift?idStore={{idstore}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-calendar-check" viewBox="0 0 16 16">
+                    <path
+                        d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                    <path
+                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                </svg>
+            </a>
+            <span>Làm Việc</span>
             <a href="">
                 <svg viewBox="0 0 512 512" fill="currentColor">
                     <path
@@ -390,21 +400,156 @@
                                         <slot class="pagination-text">
                                         </slot>
                                     </div>
-                                    <div class="el-pagination">
+                                    <div class="el-pagination pagination_main">
                                         <button class="btn-prev">
                                             <i class="fa-solid fa-angle-left el-icon"></i>
                                         </button>
                                         <ul class="el-pager">
-                                            <li class="number active">
+                                            {{!-- <li class="number active">
                                                 1
                                             </li>
                                             <li class="number">
                                                 2
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                         <button class="btn-next">
                                             <i class="fa-solid fa-angle-right el-icon"></i>
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sidebar-appointment">
+                                <div class="sidebar">
+                                    <div class="sidebar__header">
+                                        <div class="sidebar__header__title semi-bold flex-center">
+                                            Thông Tin Chi Tiết
+                                        </div>
+                                        <div class="sidebar__header__actions">
+                                            <div class="adm-actions__drop-down ml-2">
+                                                <div class="el-dropdown">
+                                                    <button
+                                                        style="color: #14233d;background-color: transparent;border: none;"
+                                                        class="adm-button adm-button__borderless__grey adm-button__size__small is-icon-only el-dropdown-selfdefine">
+                                                        <span class="adm-button__icon-wrapper">
+                                                            <i class="fa-solid fa-ellipsis"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <div class="sidebar__header__actions__close ml-2"
+                                                    style="font-size: 20px;color: #00143c;">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sidebar__content">
+                                        <div class="sidebar__status">
+                                            <div class="status flex-center">
+                                                <i class="fa-solid fa-user-check mr-3"></i>
+                                                <span class="status-symbol approved">
+                                                    Đã Đặt Lịch
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="adm-appointment-info-section adm-appointment-info-section-datetime">
+                                                <div class="adm-appointment-info-section__header">
+                                                    <i class="fa-regular fa-calendar"
+                                                        style="color: #005aee;font-size:20px"></i>
+                                                    <span class="adm-appointment-info-section__header__title">
+                                                        Ngày & Giờ
+                                                    </span>
+                                                </div>
+                                                <div class="adm-appointment-info-section__content">
+                                                    <div class="adm-appointment-info-section-datetime__date">
+                                                        <span>17-05-2022</span>
+                                                    </div>
+                                                    <div class="adm-appointment-info-section-datetime__time">
+                                                        <span>20:30</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="adm-appointment-info-section-employee">
+                                                <div class="adm-avatar size-32 mr-0 ml-0 avatar-employe_book"
+                                                    style="background-image: url(http://localhost:3000/img/1652612227642.jpg); color: rgb(36, 112, 172);">
+                                                </div>
+                                                <div class="adm-appointment-info-section-employee__text">
+                                                    <div class="adm-appointment-info-section-employee__text__title">Nhân
+                                                        viên
+                                                        thực hiện</div>
+                                                    <div class="adm-appointment-info-section-employee__text__name">
+                                                        <span>Thắng Võ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="adm-appointment-info-section adm-appointment-info-section-customers">
+                                                <div class="adm-appointment-info-section__header">
+                                                    <i
+                                                        class="fa-regular fa-user adm-icon adm-icon__medium adm-icon__primary"></i>
+                                                    <span class="adm-appointment-info-section__header__title">Khách
+                                                        Hàng</span>
+                                                </div>
+                                                <div class="adm-appointment-info-section__content">
+                                                    <div class="adm-appointment-info-section-customers__item">
+                                                        <div class="adm-appointment-info-section-customers__item__name">
+                                                            <span>Hoàng Nguyễn</span>
+                                                        </div>
+                                                        <div
+                                                            class="adm-appointment-info-section-customers__item__email">
+                                                            <span>minhhoang@gmail.com</span>
+                                                        </div>
+                                                        <div
+                                                            class="adm-appointment-info-section-customers__item__phone">
+                                                            <span>0879229094</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="adm-appointment-info-section adm-appointment-info-section-customers">
+                                                <div class="adm-appointment-info-section__header">
+                                                    <i
+                                                        class="fa-solid fa-chair adm-icon adm-icon__medium adm-icon__primary"></i>
+                                                    <span class="adm-appointment-info-section__header__title">Dịch
+                                                        vụ</span>
+                                                </div>
+                                                <div class="adm-appointment-info-section__content">
+                                                    <div
+                                                        class="adm-appointment-info-section-customers__item service-list__book">
+                                                        <div class="adm-appointment-info-section-service">
+                                                            <span>Cắt gội massage</span>
+                                                            <span>200.000đ</span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="section sidebar-appointment__payments">
+                                                <div class="section-title">
+                                                    <i
+                                                        class="fa-regular fa-credit-card adm-icon adm-icon__medium adm-icon__primary"></i>
+                                                    <span>Tổng tiền</span>
+                                                </div>
+                                                <div class="flex-center">
+                                                    <h6 class="payment-book">100.000đ</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="flex action-booking">
+                                            <button id="cancel-booking" data-dismiss="modal" data-toggle="modal"
+                                                data-target="#alertModalDelete"
+                                                class="adm-button adm-button-size__medium"
+                                                style="border:none;background: #d63434;margin-left:16px">
+                                                <span>Hủy Lịch Hẹn</span>
+                                            </button>
+                                            <button id="adm-export-invoice"
+                                                class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
+                                                style="border:none">
+                                                <span>Xuất Hóa Đơn</span>
+                                            </button>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -419,29 +564,30 @@
                                         <button aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
                                             class="adm-button adm-button__borderless__dark adm-button__size__micro is-icon-end el-dropdown-selfdefine"
                                             id="dropdownMenuButton">
-                                            Tuần hiện tại
+                                            <span class="text-time-performance">Tuần hiện tại</span>
+
                                             <i class="fa-solid fa-angle-down"></i>
                                         </button>
                                         <ul class="dropdown-menu el-scrollbar__view el-select-dropdown__list"
                                             aria-labelledby="dropdownMenuButton">
                                             <li style="padding-left:20px ;"
-                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                class="el-select-dropdown__item adm-select-option item-time__performance">
                                                 <span>Tuần hiện tại</span>
                                             </li>
                                             <li style="padding-left:20px ;"
-                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                class="el-select-dropdown__item adm-select-option item-time__performance">
                                                 <span>Tuần trước</span>
                                             </li>
                                             <li style="padding-left:20px ;"
-                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                class="el-select-dropdown__item adm-select-option item-time__performance">
                                                 <span>Tháng hiện tại</span>
                                             </li>
                                             <li style="padding-left:20px ;"
-                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                class="el-select-dropdown__item adm-select-option item-time__performance">
                                                 <span>Ba tháng trước</span>
                                             </li>
                                             <li style="padding-left:20px ;"
-                                                class="el-select-dropdown__item adm-select-option list-employee__dropdown">
+                                                class="el-select-dropdown__item adm-select-option item-time__performance">
                                                 <span>Sáu tháng trước</span>
                                             </li>
                                         </ul>
@@ -463,7 +609,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="performance">
                                     <div class="dashboard-employee-performance-card dashboard-performance-stats__card">
                                         <div class="dashboard-employee-performance-card__header">
                                             <div style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);"
@@ -568,10 +714,10 @@
                         </div>
 
 
-
                     </div>
 
                 </div>
+
             </div>
 
         </div>
@@ -582,6 +728,6 @@
 
 </html>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
+<script src="https://pagination.js.org/dist/2.1.5/pagination.min.js"></script>
 <script src="../script/staff/main.js">
 </script>

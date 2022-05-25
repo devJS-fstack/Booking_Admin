@@ -29,6 +29,16 @@ var payment_bill;
 var date_bill;
 const action_booking = document.querySelector('.action-booking');
 
+// edit booking
+const editBooking = document.querySelector('.edit-booking');
+const editIcon = document.querySelector('.edit-icon');
+var dateBook_val;
+var shift_val;
+var arrService_val;
+var idStaff_val;
+var phone_val;
+
+
 var calendarEl = document.getElementById('calendar');
 var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
@@ -92,13 +102,24 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 
             if (booking[0].StatusBook == 'Đã đặt lịch') {
                 action_booking.style.display = 'flex';
+                editIcon.style.display = 'block';
+                // {insert value to edit} 
+                dateBook_val = booking[0].DateBook
+                shift_val = booking[0].IDShiftBook
+                arrService_val = arrProducts;
+                idStaff_val = booking[0].IDStaff
+                phone_val = booking[0].PhoneCustomer
             } else {
                 action_booking.style.display = 'none';
+                editIcon.style.display = 'none';
             }
 
         }
     },
 });
+
+
+
 function formatPayment(payment) {
     var paymentString = payment.toString().split('');
     var result = '';
@@ -629,6 +650,8 @@ const confirm_booking = document.getElementById('adm-btn-booking__add');
 add_booking.addEventListener('click', () => {
     arrService = [];
     input_from.value = "";
+    $('.title-booking').text('Thêm Lịch Hẹn');
+    $('.span-btn__booking').text('Thêm Lịch Hẹn');
     $('.input-time_book').addClass('is-disabled');
     inputTime_book.value = "";
     inputTime_book.disabled = true;
@@ -648,6 +671,103 @@ add_booking.addEventListener('click', () => {
     successInputCategory(3, "")
     successInputCategory(4, "")
 })
+
+function renderTimeBooked(idShift) {
+    for (var i = 0; i < itemDropdown_shift.length; i++) {
+        if (itemDropdown_shift[i].getAttribute('data-shift') == idShift) {
+            itemDropdown_shift[i].classList.add('selected');
+            indexPre_time = i;
+            inputTime_book.value = spans_time[i].textContent.trim();
+            break;
+        }
+    }
+}
+
+function renderStaffBooked(idStaff) {
+    for (var i = 0; i < itemDropdown_employee.length; i++) {
+        if (itemDropdown_employee[i].getAttribute('data-employee') == idStaff) {
+            itemDropdown_employee[i].classList.add('selected');
+            indexPre_employee = i;
+            inputEmployee_book.value = spans_employee[i].textContent.trim();
+            break;
+        }
+    }
+}
+
+async function renderEmployeeRegisShift(date) {
+    const { status_employee, employees } = await getEmPloyeeRegisShift_Date(date);
+    if (status_employee == 'have employee') {
+        arrIndexEmployee = [];
+        removeAllSelectedEmployee();
+        hideAllEmployee();
+        renderEmployee_DateRegis(employees);
+        noData_employee.style.display = 'none';
+        isHaveEmployee = true;
+        inputEmployee_book.value = "";
+    }
+    else {
+        removeAllSelectedEmployee();
+        hideAllEmployee();
+        noData_employee.style.display = 'flex';
+        isHaveEmployee = false;
+        inputEmployee_book.value = "";
+    }
+}
+
+function renderServiceBooked(arrService) {
+    var count = 0;
+    inputService_book.value = " ";
+    countService = 0;
+    itemDropdown_service.forEach((item, index) => {
+        arrService.forEach((service, indexS) => {
+            if (service.IDService == item.getAttribute('data-service')) {
+                item.classList.add('selected');
+                count++;
+                countService++;
+                if (count == 1) {
+                    tags_service.innerHTML = `
+                        <span
+                            class="el-tag el-tag--info el-tag--small el-tag--light">
+                            <span class="el-select__tags-text">
+                                ${spans_service[index].textContent.trim()}
+                            </span>
+                        </span>
+                        `
+                }
+            }
+        })
+    })
+    if (count > 1) {
+        tags_service.innerHTML += `<span
+                            class="el-tag el-tag--info el-tag--small el-tag--light">
+                            <span class="el-select__tags-text">
+                                +${count - 1}
+                            </span>
+                        </span>`
+    }
+    getIndexIsChecking();
+    indexFirstChecking = indexIsChecking;
+    indexIsChecking = -1;
+    countClick = 2;
+}
+
+
+editBooking.onclick = async () => {
+    add_booking.click()
+    $('.title-booking').text('Chỉnh Sửa Lịch Hẹn');
+    $('.span-btn__booking').text('Lưu Thay Đổi');
+    input_from.value = dateBook_val;
+    $('.input-time_book').removeClass('is-disabled');
+    inputTime_book.disabled = false;
+    renderTimeBooked(shift_val);
+    await renderEmployeeRegisShift(dateBook_val)
+    renderStaffBooked(idStaff_val);
+    inputPhoneCus_book.value = phone_val;
+    renderServiceBooked(arrService_val)
+    idShift = shift_val;
+    idStaff = idStaff_val;
+}
+
 var idStaff = 0;
 function launch_toast(mess) {
     var x = document.getElementById("toast")
@@ -705,10 +825,16 @@ confirm_booking.addEventListener('click', async () => {
         if (!validatePhone(inputPhoneCus_book.value))
             errInputCategory(4, "Bạn vui lòng nhập đúng số điện thoai của khách hàng")
         else {
-            const { status } = await getBooking_Phone_Date(input_from.value, inputPhoneCus_book.value)
-            if (status == 'found') {
-                errInputCategory(4, "Số điện thoại này đã được đặt lịch vào ngày này. Vui lòng hủy lịch hoặc hoàn thành trước khi đăng ký lịch mới!")
-            } else {
+            if (inputPhoneCus_book.value != phone_val) {
+                const { status } = await getBooking_Phone_Date(input_from.value, inputPhoneCus_book.value)
+                if (status == 'found') {
+                    errInputCategory(4, "Số điện thoại này đã được đặt lịch vào ngày này. Vui lòng hủy lịch hoặc hoàn thành trước khi đăng ký lịch mới!")
+                } else {
+                    successInputCategory(4, "");
+                    if (flag == 4) flag = 5;
+                }
+            }
+            else {
                 successInputCategory(4, "");
                 if (flag == 4) flag = 5;
             }
@@ -721,21 +847,49 @@ confirm_booking.addEventListener('click', async () => {
 
     //  ==>
     if (flag == 5) {
-        pushIdServiceToArr();
-        const { status } = await addBooking(input_from.value, idShift, arrService, inputPhoneCus_book.value, idStaff, idStore);
-        if (status == 'success') {
-            renderNumBooking_idEmployee();
-            var time = inputTime_book.value.split('h');
-            var hour = time[0];
-            var minute = time[1];
-            addEvent({
-                title: inputPhoneCus_book.value,
-                start: `${input_from.value}T${hour}:${minute}:00`
+        if ($('.span-btn__booking').text() == 'Lưu Thay Đổi') {
+            var arrEvent = calendar.getEvents();
+            arrEvent.forEach(item => {
+                if (item._def.defId == idEvent) {
+                    item.remove();
+                    renderNumBooking_idEmployee();
+                }
             })
-            //var lengthAll = numAllBooking[0].textContent.trim().split(' ')[0];
-            // numAllBooking[0].textContent = `${parseInt(lengthAll) + 1} lịch hẹn mới`
-            launch_toast("Đặt lịch thành công")
-            $('#add-booking').modal('hide');
+            pushIdServiceToArr();
+            const { status } = await editBooking_func(dateBook_val, shift_val, phone_val, idStaff_val,
+                input_from.value, idShift, arrService, inputPhoneCus_book.value, idStaff, idStore);
+            if (status == 'success') {
+                renderNumBooking_idEmployee();
+                var time = inputTime_book.value.split('h');
+                var hour = time[0];
+                var minute = time[1];
+                addEvent({
+                    title: inputPhoneCus_book.value,
+                    start: `${input_from.value}T${hour}:${minute}:00`
+                })
+                sidebar.classList.remove('active');
+                $('.sidebar-overlay').remove();
+                $('#add-booking').modal('hide');
+                launch_toast("Chỉnh sửa thành công");
+            }
+        }
+        else {
+            pushIdServiceToArr();
+            const { status } = await addBooking(input_from.value, idShift, arrService, inputPhoneCus_book.value, idStaff, idStore);
+            if (status == 'success') {
+                renderNumBooking_idEmployee();
+                var time = inputTime_book.value.split('h');
+                var hour = time[0];
+                var minute = time[1];
+                addEvent({
+                    title: inputPhoneCus_book.value,
+                    start: `${input_from.value}T${hour}:${minute}:00`
+                })
+                //var lengthAll = numAllBooking[0].textContent.trim().split(' ')[0];
+                // numAllBooking[0].textContent = `${parseInt(lengthAll) + 1} lịch hẹn mới`
+                launch_toast("Đặt lịch thành công")
+                $('#add-booking').modal('hide');
+            }
         }
     }
 
@@ -756,8 +910,6 @@ btnConfirmCancel.addEventListener('click', async () => {
             if (item._def.defId == idEvent) {
                 item.remove();
                 renderNumBooking_idEmployee();
-                // var lengthAll = numAllBooking[0].textContent.trim().split(' ')[0];
-                // numAllBooking[0].textContent = `${parseInt(lengthAll) - 1} lịch hẹn mới`
             }
         })
     }
@@ -796,6 +948,7 @@ btnExport_invoice.addEventListener('click', async () => {
         launch_toast("Đang xuất hóa đơn...");
         sidebar.classList.remove('active');
         $('.sidebar-overlay').remove();
+        renderNumBooking_idEmployee();
     }
 })
 
@@ -871,6 +1024,7 @@ async function createInvoice(idBill, idStaff, payment, phoneCus, date) {
         payment,
         phoneCus,
         date,
+        idStore,
     })).data
 }
 
@@ -884,6 +1038,21 @@ async function getBooking_Phone_Date(date, phone) {
     return (await instance.post('booking/getbooking-date-phone', {
         date,
         phone
+    })).data
+}
+
+async function editBooking_func(dateOld, idShiftOld, phoneCusOld, idStaffOld, dateNew, shiftNew, arrServiceNew, phoneCusNew, staffNew, store) {
+    return (await instance.post('booking/edit-booking', {
+        dateOld,
+        idShiftOld,
+        phoneCusOld,
+        idStaffOld,
+        dateNew,
+        shiftNew,
+        arrServiceNew,
+        phoneCusNew,
+        staffNew,
+        store,
     })).data
 }
 

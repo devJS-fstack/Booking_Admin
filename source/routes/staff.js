@@ -286,6 +286,7 @@ router.post('/booking/get-employee-datetime', StaffController.getEmployee_Date_T
 router.post('/booking/get-employee-regis-date', StaffController.getEmployeeRegis_Date);
 router.post('/booking/check-phone-customer', StaffController.checkPhoneCus_book)
 router.post('/booking/add-booking', StaffController.addBooking)
+router.post('/booking/edit-booking', StaffController.editBooking)
 router.post('/booking/getbooking-date-phone', StaffController.checkHaveBooking_Phone_Date);
 router.post('/booking/cancel-booking', StaffController.cancelBooking);
 router.post('/booking/create-bill', StaffController.createBill)
@@ -330,9 +331,13 @@ router.post('/dashboard-manager/book-revenue', StaffController.getBook_Revenue)
 router.post('/dashboard-manager/count-customer', StaffController.CountCustomer)
 router.post('/dashboard-manager/pagination', StaffController.Pagination)
 router.post('/dashboard-manager/customer-revenue-currentweek', StaffController.getCustomer_Revenue_CurrentWeek)
+router.post('/dashboard-manager/perfomance-employee', StaffController.getPerformance_Employee)
+router.post('/dashboard-manager/perfomance-service', StaffController.getPerformance_Service)
 router.get('/dashboard-manager', StaffController.dashboard)
 
+// shift
 
+router.get('/shift', StaffController.shift)
 
 // login
 router.post('/login', StaffController.login);

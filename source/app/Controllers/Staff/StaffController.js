@@ -526,6 +526,55 @@ class StaffController {
         }
     }
 
+    async editBooking(req, res) {
+        const body = req.body
+        var sql_deleteBookItem = `delete BookItem WHERE DateBook = '${body.dateOld}' AND IDShiftBook = ${body.idShiftOld} AND IDStaff = '${body.idStaffOld}' `
+        var sql_updateBook = `UPDATE [dbo].[Book]
+        SET [DateBook] = '${body.dateNew}'
+           ,[IDShiftBook] = ${body.shiftNew}
+           ,[IDStaff] = '${body.staffNew}'
+           ,[PhoneCustomer] = '${body.phoneCusNew}'
+           ,[IDStore] = ${body.store}
+           ,[StatusBook] = N'Đã đặt lịch'
+      WHERE DateBook = '${body.dateOld}' AND IDShiftBook = ${body.idShiftOld} AND IDStaff = '${body.idStaffOld}'`
+        var sql = `INSERT INTO [dbo].[BookItem]
+      ([DateBook]
+      ,[IDShiftBook]
+      ,[IDService]
+      ,[IDStaff])`;
+        await sequelize.query(sql_deleteBookItem);
+        await sequelize.query(sql_updateBook);
+        var arrServicesId = body.arrServiceNew;
+        var isDone = false;
+        arrServicesId.forEach((item, index) => {
+            if (index == 0) {
+                sql += `VALUES ('${body.dateNew}',${body.shiftNew},${item},'${body.staffNew}')`
+            }
+            else {
+                sql += `,('${body.dateNew}',${body.shiftNew},${item},'${body.staffNew}')`
+            }
+
+            isDone = index == arrServicesId.length - 1 ? true : false;
+        })
+        if (isDone) {
+            let insertBookItem = await sequelize.query(sql);
+            let updatePriceBookitem = await sequelize.query(`UPDATE b
+                      SET b.Price = s.ListPrice
+                      FROM BookItem b
+                      INNER JOIN
+                      Service s
+                      ON b.IDService = s.IDService AND b.DateBook = '${body.dateNew}' AND b.IDShiftBook = ${body.shiftNew}`, {
+                raw: true,
+                type: QueryTypes.UPDATE,
+            })
+            let updatePaymentBook = await sequelize.query(`UPDATE Book SET Payment = (SELECT Sum(Price) 
+          FROM BookItem WHERE DateBook = '${body.dateNew}' AND IDShiftBook = ${body.shiftNew} AND IDStaff = '${body.staffNew}') WHERE DateBook = '${body.dateNew}' AND IDShiftBook = ${body.shiftNew} AND IDStaff = '${body.staffNew}'`)
+            return res.status(200).json({
+                status: 'success',
+            })
+        }
+    }
+
     async checkHaveBooking_Phone_Date(req, res) {
         let booking = await sequelize.query(`SELECT * FROM Book WHERE PhoneCustomer = '${req.body.phone}' AND StatusBook = N'Đã đặt lịch'`)
 
@@ -564,8 +613,9 @@ class StaffController {
                 ,[Status]
                 ,[Payment]
                 ,[IDStaff]
-                ,[PhoneCustomer])
-          VALUES ('${body.idBill}','${body.date}',N'Đã thanh toán',${body.payment},'${body.idStaff}','${body.phoneCus}')`)
+                ,[PhoneCustomer]
+                ,[IDStore])
+          VALUES ('${body.idBill}','${body.date}',N'Đã thanh toán',${body.payment},'${body.idStaff}','${body.phoneCus}',${body.idStore})`)
 
         let updateBook = await sequelize.query(`UPDATE Book SET StatusBook = N'Đã hoàn tất' WHERE DateBook = '${body.date}' AND IDStaff ='${body.idStaff}' AND PhoneCustomer = '${body.phoneCus}' AND StatusBook = N'Đã đặt lịch'`)
         return res.status(200).json({
@@ -710,7 +760,7 @@ class StaffController {
 
     async getCustomer_Revenue_CurrentWeek(req, res) {
         var sql_customer = `select * FROM CUSTOMER WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}'`
-        var sql_revenue = `select Sum(Payment) as sum, DateCreate FROM Bill  WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}' GROUP BY DateCreate`
+        var sql_revenue = `select Sum(Payment) as sum, DateCreate FROM Bill  WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}' and IDStore = '${req.body.idStore}'GROUP BY DateCreate`
         let customers = await sequelize.query(sql_customer)
         let revenue = await sequelize.query(sql_revenue)
         let start_end = await sequelize.query(`SELECT Min(DateBook) as min, Max(DateBook) as max FROM Book`)
@@ -724,15 +774,15 @@ class StaffController {
 
     async getBook_Revenue(req, res) {
         var sql = `SELECT Count(DateBook) as count,Sum(Payment) as sum,DateBook FROM Book 
-        WHERE DateBook between '${req.body.firstDate}' and '${req.body.lastDate}' GROUP BY DateBook`
+        WHERE DateBook between '${req.body.firstDate}' and '${req.body.lastDate}' and IDStore = ${req.body.idStore} GROUP BY DateBook`
         var sql_bill = `SELECT Count(DateCreate) as count,Sum(Payment) as sum,DateCreate FROM Bill
-        WHERE DateCreate between '2022-05-01' and '2022-05-31' GROUP BY DateCreate`
+        WHERE DateCreate between '2022-05-01' and '2022-05-31' AND IDStore =${req.body.idStore} GROUP BY DateCreate`
         let data = await sequelize.query(sql)
         let data_bill = await sequelize.query(sql_bill)
         let count_bookSuccess = await sequelize.query(` SELECT Count(DateBook) as count FROM Book
-        WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã hoàn tất' `)
+        WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã hoàn tất' AND IDStore = ${req.body.idStore} `)
         let count_bookPending = await sequelize.query(` SELECT Count(DateBook) as count FROM Book
-        WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã đặt lịch' `)
+        WHERE DateBook  between '${req.body.firstDate}' and '${req.body.lastDate}' AND StatusBook = N'Đã đặt lịch' AND IDStore = ${req.body.idStore}  `)
         let arrCountOldCustomer = await sequelize.query(`SELECT Count(PhoneCustomer) as count,DateCreate FROM Customer GROUP BY DateCreate 
         HAVING DateCreate between Min(DateCreate) and '${req.body.dateString_oldCustomer}'`)
         let arrCountNewCustomer = await sequelize.query(`SELECT Count(PhoneCustomer) as count,DateCreate FROM Customer GROUP BY DateCreate 
@@ -762,13 +812,55 @@ class StaffController {
 
     async Pagination(req, res) {
         let bookedArr = await sequelize.query(` select Book.*,HourStart,MinuteStart,PathImgStaff from  Book, Shift,Staff 
-        WHERE Book.IDStaff = Staff.IDStaff AND Book.IDShiftBook = Shift.IDShift ORDER BY (DateBook) desc`)
+        WHERE Book.IDStaff = Staff.IDStaff AND Book.IDShiftBook = Shift.IDShift AND Book.IDStore = ${req.body.idStore} ORDER BY (DateBook) desc`)
         let totalPage = Math.ceil(bookedArr[0].length / 10);
         var page = req.body.page_number;
         return res.status(200).json({
             status: 'success',
             bookedArr: bookedArr[0].slice(10 * (page - 1), 10 * (page)),
             totalPage,
+        })
+    }
+
+    async getPerformance_Employee(req, res) {
+        let sql = `SELECT TOP(3)(b.IDStaff),Count(b.IDStaff) as count,SUM(b.Payment) as sum,PathImgStaff,SurName,NameStaff
+        FROM Book as b INNER JOIN Staff
+        ON b.DateBook between '${req.body.firstDate}' and '${req.body.lastDate}'
+         AND b.IDStore = ${req.body.idStore} AND b.IDStaff = Staff.IDStaff
+        GROUP BY b.IDStaff,PathImgStaff,SurName,NameStaff
+        order by Sum(b.Payment) desc`
+        let sql_total = ` SELECT SUM(Payment) as sum FROM Book WHERE DateBook between '${req.body.firstDate}' and '${req.body.lastDate}' AND IDStore = ${req.body.idStore}`
+        var performance_employee = await sequelize.query(sql)
+        var total_payment = await sequelize.query(sql_total)
+        return res.status(200).json({
+            status_p: 'success',
+            performance_employee: performance_employee[0],
+            total_payment: total_payment[0][0].sum
+        })
+    }
+
+    async getPerformance_Service(req, res) {
+        let sql = `SELECT TOP(3)(bi.IDService),Count(bi.IDService) as count,SUM(bi.Price) as sum,s.PathImg,s.NameService 
+        FROM BookItem as bi, Service as s,Staff as st
+        WHERE bi.IDService = s.IDService AND DateBook between '${req.body.firstDate}' and '${req.body.lastDate}'
+        AND bi.IDStaff = st.IDStaff AND st.IDStore = ${req.body.idStore}
+        GROUP BY bi.IDService,s.PathImg,s.NameService
+        order by Count(bi.IDService) desc`
+        let sql_total = ` SELECT SUM(Payment) as sum FROM Book WHERE DateBook between '${req.body.firstDate}' and '${req.body.lastDate}' AND IDStore = ${req.body.idStore}`
+        var performance_service = await sequelize.query(sql)
+        var total_payment = await sequelize.query(sql_total)
+        return res.status(200).json({
+            status_s: 'success',
+            performance_service: performance_service[0],
+            total_payment: total_payment[0][0].sum
+        })
+    }
+
+    async shift(req, res) {
+        var regisShift = await sequelize.query(`select RegisShift.*,SurName,NameStaff from RegisShift, Staff WHERE RegisShift.IDStaff = Staff.IDStaff AND RegisShift.IDStore = ${req.query.idStore}`)
+        res.render('staff/shift', {
+            idstore: req.query.idStore,
+            regisShift: JSON.stringify(regisShift[0])
         })
     }
 }

@@ -806,6 +806,10 @@ button.adm-button__borderless__dark:hover {
     line-height: 24px;
 }
 
+.sidebar-appointment .sidebar.active {
+    margin-top: 60px;
+}
+
 @media (min-width: 1365px) {
     .dashboard-page__central-stats__performance {
         flex: unset;
