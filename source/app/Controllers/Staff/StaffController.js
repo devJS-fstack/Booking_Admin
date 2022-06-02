@@ -7,28 +7,144 @@ const easyinvoice = require('easyinvoice');
 require('dotenv').config();
 const fs = require('fs');
 const nodemailer = require("nodemailer");
-
+const JWT = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+var LocalStorage = require('node-localstorage').LocalStorage,
+    localStorage = new LocalStorage('./scratch');
 
 class StaffController {
     main(req, res) {
         res.render('staff/login')
     }
+
+    pageErr(req, res) {
+        res.render('staff/page404')
+    }
     async login(req, res) {
-        let login = await sequelize.query(`SELECT * FROM TaiKhoan WHERE Account='${req.body.username}' and Password='${req.body.password}' AND IDRole = 3`, {
+        // const salt = await bcrypt.genSalt(10);
+        // const hashPassword = await bcrypt.hash('VanTinh123', salt);
+        // console.log(hashPassword)
+        let login = await sequelize.query(`SELECT * FROM TaiKhoan INNER JOIN Staff ON Account='${req.body.username}' AND TaiKhoan.Account = Staff.IDStaff`, {
             raw: true,
             type: QueryTypes.SELECT,
         })
-        let idstore = await sequelize.query(`SELECT IDStore FROM Staff WHERE IDStaff = '${req.body.username}'`)
         if (login.length > 0) {
-            res.status(200).json({
-                status: 'found',
-                idstore: idstore[0][0].IDStore,
+            const result = await bcrypt.compare(req.body.password, login[0].Password);
+            if (result == true) {
+                const encodedToken = () => {
+                    return JWT.sign({
+                        accountId: login[0].Account,
+                        nameEmployee: `${login[0].SurName} ${login[0].NameStaff}`,
+                        pathImg: login[0].PathImgStaff,
+                        idstore: login[0].IDStore,
+                        iat: new Date().getTime(),
+                        exp: new Date().setDate(new Date().getDate() + 3)
+                    }, process.env.SECRET_KEY_ACCESS_TOKEN);
+                }
+                const token = encodedToken();
+                res.status(200).json({
+                    status: 'found',
+                    idstore: login[0].IDStore,
+                    token: token
+                })
+            }
+            else {
+                res.status(200).json({
+                    status: 'not found'
+                })
+            }
+        }
+    }
+
+    async checkToken(req, res) {
+        JWT.verify(req.body.accessToken, process.env.SECRET_KEY_ACCESS_TOKEN, async (err, user) => {
+            if (err) {
+                return res.status(200).json({
+                    status: 'Does not token real',
+                })
+            }
+            else {
+                const employee = await sequelize.query(`SELECT * FROM Staff WHERE IDStaff = '${user.accountId}'`)
+                return res.status(200).json({
+                    status: 'success',
+                    idEmployee: user.accountId,
+                    idstore: user.idstore,
+                    employee: employee[0][0],
+                })
+            }
+        })
+    }
+
+    async checkExistEmail(req, res) {
+        const checkExist = await sequelize.query(`SELECT * FROM Staff WHERE Email = '${req.body.email}'`)
+        if (checkExist[0].length > 0) {
+            return res.status(200).json({
+                status: 'exist'
+            })
+        } else {
+            return res.status(200).json({
+                status: 'not exist'
             })
         }
-        else {
-            res.status(200).json({
-                status: 'not found'
-            })
+    }
+
+    async sendEmailVerify(req, res) {
+        const email = req.body.email;
+        const password = req.body.password;
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+        let transporter = nodemailer.createTransport({
+            type: 'SMTP',
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.EMAIL_ACCOUNT_AUTHOR,
+                pass: process.env.EMAIL_PASSWORD_AUTHOR,
+            },
+        })
+        res.status(200).json({
+            status: 'success',
+        })
+        var minutesToAdd = 30;
+        var currentDate = new Date();
+        var futureDate = new Date(currentDate.getTime() + minutesToAdd * 60000);
+        let info = await transporter.sendMail({
+            from: 'vantinhnguyen728@gmail.com', // sender address
+            to: `${email}`, // list of receivers
+            subject: "Xác thực đặt lại tài khoản quản lý TheBaberShop", // Subject line
+            text: "Chào anh, đây là mật khẩu mới của anh. Anh vui lòng không để lộ, dùng tài khoản đặt lịch online sẽ có nhiều ưu đãi hấp dẫn ", // plain text body
+            html: `<p>Chào anh, đây là link để xác thực đặt lại mật khẩu cho email này. Anh vui lòng không để lộ</p>
+            <h1 style="display:flex">http://localhost:3000/login/verify-email/?email=${email}&spfdt=${hashPassword}&exp=${futureDate.getTime()}</h1>`, // html body
+        }).catch(err => { console.log(err) })
+    }
+
+    async verifyEmail(req, res) {
+        const email = req.query.email;
+        const password = req.query.spfdt;
+        const exp = req.query.exp;
+        var date = new Date();
+        if (date.getTime() < exp) {
+            var sql = `UPDATE TaiKhoan  SET Password = '${password}' 
+                FROM TaiKhoan as t,Staff as s 
+                WHERE t.Account = s.IDStaff and s.Email = '${email}'`
+            await sequelize.query(sql);
+            let user = await sequelize.query(`SELECT * FROM TaiKhoan,Staff WHERE Account = IDStaff and Email = '${email}'`)
+
+            const encodedToken = () => {
+                return JWT.sign({
+                    accountId: user[0][0].Account,
+                    nameEmployee: `${user[0][0].SurName} ${user[0][0].NameStaff}`,
+                    pathImg: user[0][0].PathImgStaff,
+                    idstore: user[0][0].IDStore,
+                    iat: new Date().getTime(),
+                    exp: new Date().setDate(new Date().getDate() + 3)
+                }, process.env.SECRET_KEY_ACCESS_TOKEN);
+            }
+            const token = encodedToken();
+            res.redirect(`/?accessToken=${token}`)
+        } else {
+            res.redirect('/page-err')
         }
     }
 
@@ -100,9 +216,18 @@ class StaffController {
         }
     }
 
+    async infoCategory(req, res) {
+        let info = await sequelize.query(`select * FROM TypeService WHERE IDTypeS = ${req.body.idType}`);
+        return res.status(200).json({
+            status: 'success',
+            info: info[0][0],
+        })
+    }
+
     async createCategory(req, res) {
+        let idNew = await sequelize.query(`select Max(IDTypeS) as max FROM TypeService`)
         let createCategory = await sequelize.query(`INSERT INTO TypeService(IDTypeS,NameTypeService,Description,AmountService)
-        VALUES(${req.body.id},N'${req.body.name}',N'${req.body.desc}',0)
+        VALUES(${idNew[0][0].max + 1},N'${req.body.name}',N'${req.body.desc}',0)
         `, {
             raw: true,
             type: QueryTypes.INSERT
@@ -190,7 +315,7 @@ class StaffController {
 
     async getInfoBook_Employee(req, res) {
         let infoBookFuture = await sequelize.query(`select IDStaff FROM Book WHERE IDStaff = '${req.body.idEmployee}' AND StatusBook = N'Đã đặt lịch'`);
-        let infoBookDone = await sequelize.query(`select IDStaff FROM Book WHERE IDStaff = '${req.body.idEmployee}' AND Status = N'Đã thanh toán'`);
+        let infoBookDone = await sequelize.query(`select IDStaff FROM Book WHERE IDStaff = '${req.body.idEmployee}' AND StatusBook = N'Đã thanh toán'`);
         return res.status(200).json({
             status: 'success',
             infoBookFuture: infoBookFuture[0],
@@ -199,11 +324,11 @@ class StaffController {
     }
 
     async employee(req, res) {
-        let employee = await sequelize.query(`select * from Staff WHERE IDStore = ${req.query.idStore}`)
+        let employee = await sequelize.query(`select * from Staff WHERE IDStore = ${req.query.idStore} AND NOT IDStaff = IDManager`)
         let store = await sequelize.query(`select * from Store`)
-        let managers = await sequelize.query(`select * from Staff where IDManager = IDStaff`)
+        let managers = await sequelize.query(`select * from Staff where IDManager = IDStaff AND IDStore = 1`)
         let services = await sequelize.query(`select * from Service WHERE Status = N'Hoạt Động'`)
-        let typeEmployee = await sequelize.query(`select * from TypeStaff`);
+        let typeEmployee = await sequelize.query(`select * from TypeStaff WHERE NOT IDTypeStaff = 3`);
         var lengthEmployee = employee[0].length;
         let employeesIsActive = await sequelize.query(`select * from Staff WHERE Status = N'Hoạt Động' AND TypeStaff = 1`)
         res.render('staff/employee', {
@@ -680,6 +805,9 @@ class StaffController {
                 pass: process.env.EMAIL_PASSWORD_AUTHOR,
             },
         })
+        res.status(200).json({
+            status: 'success',
+        })
         let info = await transporter.sendMail({
             from: 'vantinhnguyen728@gmail.com', // sender address
             to: `${email}`, // list of receivers
@@ -689,9 +817,6 @@ class StaffController {
             <h1 style="display:flex">${passwordNew}</h1>`, // html body
         }).catch(err => { console.log(err) })
         console.log("Message sent: %s", info.messageId);
-        return res.status(200).json({
-            status: 'success',
-        })
     }
 
     async getInfoCustomer(req, res) {
@@ -776,7 +901,7 @@ class StaffController {
         var sql = `SELECT Count(DateBook) as count,Sum(Payment) as sum,DateBook FROM Book 
         WHERE DateBook between '${req.body.firstDate}' and '${req.body.lastDate}' and IDStore = ${req.body.idStore} GROUP BY DateBook`
         var sql_bill = `SELECT Count(DateCreate) as count,Sum(Payment) as sum,DateCreate FROM Bill
-        WHERE DateCreate between '2022-05-01' and '2022-05-31' AND IDStore =${req.body.idStore} GROUP BY DateCreate`
+        WHERE DateCreate between '${req.body.firstDate}' and '${req.body.lastDate}' AND IDStore =${req.body.idStore} GROUP BY DateCreate`
         let data = await sequelize.query(sql)
         let data_bill = await sequelize.query(sql_bill)
         let count_bookSuccess = await sequelize.query(` SELECT Count(DateBook) as count FROM Book
@@ -858,9 +983,45 @@ class StaffController {
 
     async shift(req, res) {
         var regisShift = await sequelize.query(`select RegisShift.*,SurName,NameStaff from RegisShift, Staff WHERE RegisShift.IDStaff = Staff.IDStaff AND RegisShift.IDStore = ${req.query.idStore}`)
+        let store = await sequelize.query(`SELECT * FROM Store WHERE IDStore = ${req.query.idStore}`)
+        let storeJs = JSON.stringify(store[0])
         res.render('staff/shift', {
             idstore: req.query.idStore,
-            regisShift: JSON.stringify(regisShift[0])
+            regisShift: JSON.stringify(regisShift[0]),
+            storeJs,
+        })
+    }
+
+    async salaryEmployee(req, res) {
+        const body = req.body;
+        var sql_datework = `SELECT * FROM RegisShift WHERE DateRegis between '${body.dateStart}' and '${body.dateEnd}' AND IDStaff = '${body.idEmployee}'`;
+        var sql_info = `SELECT SalaryOnDay,t.NameType,s.PathImgStaff,s.SurName,s.NameStaff FROM TypeStaff as t,Staff as s
+		WHERE t.IDTypeStaff = s.TypeStaff and IDStaff = '${body.idEmployee}' `;
+        var datework = await sequelize.query(sql_datework);
+        var info = await sequelize.query(sql_info);
+        var infoBill = await sequelize.query(`SELECT * FROM BillSalary WHERE MonthPay = '${body.monthPayment}' AND Staff = '${body.idEmployee}'`);
+        return res.status(200).json({
+            status: 'success',
+            datework: datework[0],
+            infoEmployee: info[0][0],
+            bill: infoBill[0],
+        })
+    }
+
+    async createInvoice_salary(req, res) {
+        const body = req.body;
+        let insert_sql = `INSERT INTO [dbo].[BillSalary]
+        ([IDBill]
+        ,[MonthPay]
+        ,[Staff]
+        ,[Status]
+        ,[AmountDate]
+        ,[Payment])
+  VALUES
+        ('${body.idBill}','${body.timePay}','${body.idstaff}',N'Đã thanh toán',${body.amountDay},${body.payment})`
+        await sequelize.query(insert_sql)
+        return res.status(200).json({
+            status: 'success',
         })
     }
 }

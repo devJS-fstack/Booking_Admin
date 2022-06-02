@@ -7,7 +7,6 @@ p {
 .page-content {
   border-radius: 5px;
   min-height: 600px;
-  overflow-x: hidden;
   padding: 1.5rem 1.75rem;
   background: radial-gradient(circle, #1a2049 0%, #13162f 100%); }
 
@@ -71,6 +70,19 @@ p {
   cursor: pointer;
   display: flex;
   justify-content: flex-end; }
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: #929bae; }
+
+.list::-webkit-scrollbar {
+  height: 5px;
+  position: absolute;
+  right: 1px;
+  width: 3px; }
+
+.list::-webkit-scrollbar-thumb {
+  background: #ccd0d8;
+  border-radius: 3px; }
 
 .el-dropdown {
   color: #14233d;

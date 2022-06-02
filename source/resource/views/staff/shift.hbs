@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="../css/mainstaff.css">
     <link rel="stylesheet" href="../css/service-dashboard.css">
     <link rel="stylesheet" href="../font/css/all.min.css">
@@ -70,7 +71,7 @@
                 </svg>
             </a>
             <span>Làm Việc</span>
-            <a href="">
+            <a href="" id="log-out">
                 <svg viewBox="0 0 512 512" fill="currentColor">
                     <path
                         d="M255.2 468.6H63.8a21.3 21.3 0 01-21.3-21.2V64.6c0-11.7 9.6-21.2 21.3-21.2h191.4a21.2 21.2 0 100-42.5H63.8A63.9 63.9 0 000 64.6v382.8A63.9 63.9 0 0063.8 511H255a21.2 21.2 0 100-42.5z" />
@@ -106,6 +107,94 @@
                 <div class="service-and-category">
                     <div class="services-list">
                         <div id="calendar"></div>
+                        <div class="sidebar-employee">
+                            <div class="sidebar">
+                                <div class="sidebar__header">
+                                    <div class="sidebar__header__title semi-bold flex-center month_info">
+                                        Bảng Lương Tháng 05/2022
+                                    </div>
+                                    <div class="sidebar__header__actions">
+                                        <div class="adm-actions__drop-down ml-2">
+                                            <div class="sidebar__header__actions__close ml-2"
+                                                style="font-size: 20px;color: #00143c;">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sidebar__content">
+                                    <div class="sidebar__status">
+                                        <div class="status flex-center">
+                                            <i class="fa-solid fa-user-check mr-3"></i>
+                                            <span class="status-symbol approved">
+                                                Đã thanh toán
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="adm-appointment-info-section-employee">
+                                            <div class="adm-avatar size-32 mr-0 ml-0 avatar-employe"
+                                                style="background-image: url(http://localhost:3000/img/1652612227642.jpg); color: rgb(36, 112, 172);">
+                                            </div>
+                                            <div class="adm-appointment-info-section-employee__text">
+                                                <div class="adm-appointment-info-section-employee__text__title">Nhân
+                                                    viên
+                                                </div>
+                                                <div class="adm-appointment-info-section-employee__text__name">
+                                                    <span class="name-type__employee">Thắng Võ</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="adm-appointment-info-section adm-appointment-info-section-customers">
+                                            <div class="adm-appointment-info-section__header">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"
+                                                    class="adm-icon adm-icon__medium adm-icon__primary"
+                                                    fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" />
+                                                    <path
+                                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                                </svg>
+                                                <span class="adm-appointment-info-section__header__title">Các ngày
+                                                    đã làm</span>
+                                            </div>
+                                            <div class="adm-appointment-info-section__content mt-2">
+                                                <div
+                                                    class="adm-appointment-info-section-customers__item service-list__book">
+                                                    <div class="adm-appointment-info-section-service dates_work"
+                                                        style="flex-wrap: wrap;justify-content: space-around;">
+                                                        <span class="ml-2">Cắt gội massage</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="section sidebar-appointment__payments">
+                                            <div class="section-title">
+                                                <i
+                                                    class="fa-regular fa-credit-card adm-icon adm-icon__medium adm-icon__primary"></i>
+                                                <span class="salary">Tổng tiền lương</span>
+                                            </div>
+                                            <div class="flex-center">
+                                                <h6 class="salary-employee ml-2">100.000đ</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="flex action-booking">
+                                        <button id="adm-export-invoice"
+                                            class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
+                                            style="border:none;width:100%">
+                                            <span>Thanh Toán</span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            {{!-- <div class="sidebar-overlay">
+                            </div> --}}
+                        </div>
                     </div>
 
                 </div>
@@ -131,10 +220,8 @@
     //const bookings = {{{ bookingJs }}};
     // console.log(bookings);
     const regisShift = {{{ regisShift }}}
+    const store = {{{ storeJs }}};
 </script>
 <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
-<script>
-</script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-<script src=" ../script/staff/shift.js">
-</script>
+<script src=" ../script/staff/shift.js"></script>

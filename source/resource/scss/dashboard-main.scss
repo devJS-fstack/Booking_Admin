@@ -237,9 +237,20 @@ button.adm-button__borderless__dark:hover {
     border-radius: 7px;
 }
 
+.dropdown__account.show {
+    width: 100%;
+    left: 0 !important;
+    top: 46px !important;
+}
+
 .adm-pagination .el-pagination .el-pager li:hover {
     background-color: #f4f6fa;
     cursor: pointer;
+}
+
+.adm-button__filled__grey {
+    background-color: #edeff3;
+    color: #00143c;
 }
 
 @keyframes fadeIn {
@@ -483,6 +494,7 @@ button.adm-button__borderless__dark:hover {
     right: 1px;
     width: 5px;
 }
+
 
 .adm-appointments-last-booked__row.loaded:hover {
     background-color: #f4f6fa;

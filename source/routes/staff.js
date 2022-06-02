@@ -276,6 +276,47 @@ router.post('/employee/edit-employee-withimg', upload.single('file'), async (req
     }
     res.redirect('back');
 })
+
+router.post('/employee/edit-manager-without-img', async (req, res) => {
+    const body = req.body
+    let updateStaff = await sequelize.query(`
+        UPDATE [dbo].[Staff]
+       SET 
+        [SurName] =  N'${body.surname}'
+        ,[NameStaff] =N'${body.name_employee}'
+        ,[Phone] = '${body.phone}'
+        ,[Email] = '${body.email}'
+        ,[CCCD] = '${body.cccd}'
+     WHERE IDStaff = '${body.idManager}'
+        `)
+    res.status(200).json({
+        status: 'success',
+    })
+})
+
+router.post('/employee/edit-manager-with-img', upload.single('file'), async (req, res) => {
+    const body = req.body
+    let getPathImg = await sequelize.query(`select PathImgStaff FROM Staff WHERE IDStaff = '${body.idManager}' `);
+    let fileImgOld;
+    if (getPathImg[0].length > 0) {
+        fileImgOld = getPathImg[0][0].PathImgStaff.split('/');
+    }
+    let filePathImgOld = path.join(__dirname, `../public/img/${fileImgOld[4]}`);
+    fs.unlink(filePathImgOld, (err) => err);
+    let updateStaff = await sequelize.query(`
+        UPDATE [dbo].[Staff]
+       SET 
+        [SurName] =  N'${body.surname}'
+        ,[NameStaff] =N'${body.name_employee}'
+        ,[Phone] = '${body.phone}'
+        ,[Email] = '${body.email}'
+        ,[CCCD] = '${body.cccd}'
+        ,[PathImgStaff] = 'http://localhost:3000/img/${filepath}'
+
+     WHERE IDStaff = '${body.idManager}'
+        `)
+    res.redirect('back');
+})
 // booking
 
 router.post('/booking/employeeId', StaffController.getBooking_idEmployee)
@@ -318,6 +359,7 @@ router.post('/service/info-employee', StaffController.getInfoEmployee_service);
 router.post('/service/delete-service', StaffController.deleteService);
 router.post('/service/info-service', StaffController.infoService);
 router.post('/service/edit-category', StaffController.editCategory)
+router.post('/service/info-typecategory', StaffController.infoCategory)
 router.post('/service/delete-category', StaffController.deleteCategory)
 router.post('/service/create-category', StaffController.createCategory)
 router.post('/service/employee-service', StaffController.employService)
@@ -336,11 +378,17 @@ router.post('/dashboard-manager/perfomance-service', StaffController.getPerforma
 router.get('/dashboard-manager', StaffController.dashboard)
 
 // shift
-
+router.post('/shift/info-salary', StaffController.salaryEmployee)
+router.post('/shift/create-invoice', StaffController.createInvoice_salary)
 router.get('/shift', StaffController.shift)
 
 // login
+router.post('/checkToken', StaffController.checkToken)
+router.post('/login/check-exist-email', StaffController.checkExistEmail)
+router.post('/login/send-email-verify', StaffController.sendEmailVerify);
+router.get('/login/verify-email/', StaffController.verifyEmail);
 router.post('/login', StaffController.login);
+router.get('/page-err', StaffController.pageErr)
 router.get('/', StaffController.main);
 
 module.exports = router;

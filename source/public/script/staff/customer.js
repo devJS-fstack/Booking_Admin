@@ -1,61 +1,66 @@
-const idStore = location.href.split('?idStore=')[1];
-var itemCustomer = document.querySelectorAll('.adm-service');
-const numberBooking = document.querySelectorAll('.num-bookings');
-const dateLastBook = document.querySelectorAll('.date-last-book')
-itemCustomer.forEach((item, index) => {
-    var count = 0;
-    bookings.forEach(book => {
-        if (book.PhoneCustomer == item.getAttribute('data-customer')) {
-            count++;
-        }
-    })
-    numberBooking[index].textContent = count;
-})
-
-const sidebar = document.querySelector('.sidebar')
-const booked_employee = document.querySelector('.booked_employee')
-const sidebar_content = document.querySelector('.sidebar__content')
-
-function formatPayment(payment) {
-    var paymentString = payment.toString().split('');
-    var result = '';
-    var countStr = 0;
-    paymentString.forEach((item, index) => {
-        if (paymentString.length == 4) {
-            if (index == 1) {
-                result += `.${item}`
-            }
-            else {
-                result += item;
-            }
-        }
-        else {
-            result += item;
-        }
-
-    })
-    return result;
-
-}
-
-function clickCustomer(itemCustomer) {
-    itemCustomer.forEach((item, index) => {
-        item.onclick = async (e) => {
-            if (!e.target.closest('.adm-actions__drop-down')) {
-                sidebar.classList.add('active');
-                $('<div class="sidebar-overlay"></div>').insertAfter('.sidebar')
-                $('.sidebar-overlay').click(function () {
-                    sidebar.classList.remove('active');
-                    $('.sidebar-overlay').remove();
+const accessToken = `${window.localStorage.getItem('accessToken')}`;
+if (accessToken != `null`) {
+    (async () => {
+        const { status, nameEmployee, pathImg } = await checkToken(accessToken);
+        if (status == 'success') {
+            const idStore = location.href.split('?idStore=')[1];
+            var itemCustomer = document.querySelectorAll('.adm-service');
+            const numberBooking = document.querySelectorAll('.num-bookings');
+            const dateLastBook = document.querySelectorAll('.date-last-book')
+            itemCustomer.forEach((item, index) => {
+                var count = 0;
+                bookings.forEach(book => {
+                    if (book.PhoneCustomer == item.getAttribute('data-customer')) {
+                        count++;
+                    }
                 })
-                $('.name_info').text(`${item.getAttribute('data-name')}`)
-                const { status, arrBook, arrService, payment } = await renderBooked(item.getAttribute('data-customer'), idStore)
-                if (status == 'success') {
-                    var htmlBooked = ``;
-                    var htmlService = ``;
-                    if (arrBook.length > 0) {
-                        arrBook.forEach(item => {
-                            htmlBooked += `<div class="sidebar-customer__most-appointments">
+                numberBooking[index].textContent = count;
+            })
+
+            const sidebar = document.querySelector('.sidebar')
+            const booked_employee = document.querySelector('.booked_employee')
+            const sidebar_content = document.querySelector('.sidebar__content')
+
+            function formatPayment(payment) {
+                var paymentString = payment.toString().split('');
+                var result = '';
+                var countStr = 0;
+                paymentString.forEach((item, index) => {
+                    if (paymentString.length == 4) {
+                        if (index == 1) {
+                            result += `.${item}`
+                        }
+                        else {
+                            result += item;
+                        }
+                    }
+                    else {
+                        result += item;
+                    }
+
+                })
+                return result;
+
+            }
+
+            function clickCustomer(itemCustomer) {
+                itemCustomer.forEach((item, index) => {
+                    item.onclick = async (e) => {
+                        if (!e.target.closest('.adm-actions__drop-down')) {
+                            sidebar.classList.add('active');
+                            $('<div class="sidebar-overlay"></div>').insertAfter('.sidebar')
+                            $('.sidebar-overlay').click(function () {
+                                sidebar.classList.remove('active');
+                                $('.sidebar-overlay').remove();
+                            })
+                            $('.name_info').text(`${item.getAttribute('data-name')}`)
+                            const { status, arrBook, arrService, payment } = await renderBooked(item.getAttribute('data-customer'), idStore)
+                            if (status == 'success') {
+                                var htmlBooked = ``;
+                                var htmlService = ``;
+                                if (arrBook.length > 0) {
+                                    arrBook.forEach(item => {
+                                        htmlBooked += `<div class="sidebar-customer__most-appointments">
                            <div class="section-title">
                                <div class="adm-avatar size-40 mr-0 ml-0 avatar-employe_book"
                                    style="background-image: url(${item.PathImgStaff}); color: rgb(36, 112, 172);">
@@ -73,15 +78,15 @@ function clickCustomer(itemCustomer) {
                                </div>
                            </div>
                        </div>`
-                        })
-                        arrService.forEach(item1 => {
-                            htmlService += `
+                                    })
+                                    arrService.forEach(item1 => {
+                                        htmlService += `
                             <div class="adm-appointment-info-section-service services_customer mt-2">
                             <span>${item1.NameService}(${item1.count})</span>
                     </div>
                    `
-                        })
-                        sidebar_content.innerHTML = `
+                                    })
+                                    sidebar_content.innerHTML = `
                         <div>
                         <div class="section booked_employee">
                         ${htmlBooked}
@@ -121,8 +126,8 @@ function clickCustomer(itemCustomer) {
                         </div>
                     </div>
                         `;
-                    } else {
-                        sidebar_content.innerHTML = `
+                                } else {
+                                    sidebar_content.innerHTML = `
                         <div class="content-empty pt-5">
                                                     <svg data-v-b0b65208="" width="150" height="150"
                                                         viewBox="0 0 150 150" fill="none"
@@ -181,197 +186,198 @@ function clickCustomer(itemCustomer) {
                                                         trước đây</p>
                                                 </div>
                         `
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+
+            clickCustomer(itemCustomer)
+
+            function formatDate(date) {
+                var result = new Date(`${date}`);
+                var day = result.getDate() > 9 ? result.getDate() : `0${result.getDate()}`;
+                var month = result.getMonth() + 1 > 9 ? result.getMonth() + 1 : `0${result.getMonth() + 1}`;
+                return `${day}-${month}-${result.getFullYear()}`
+            }
+
+            window.addEventListener('load', async () => {
+                const { status, arrLastBook } = await getLastDateBook(idStore);
+                if (status == 'success') {
+                    itemCustomer.forEach((item, index) => {
+                        arrLastBook.forEach(book => {
+                            if (book[0].PhoneCustomer == item.getAttribute('data-customer')) {
+                                dateLastBook[index].textContent = formatDate(book[0].max);
+                            }
+                        })
+                    })
+                }
+            })
+
+
+
+            const inputPhoneCus = document.getElementById('input_phone_cus');
+            const inputNameCus = document.getElementById('input_name_cus');
+            const inputEmailCus = document.getElementById('input_email_cus');
+
+            const inputPhoneCus_edit = document.getElementById('input_phone_cus_edit');
+            const inputNameCus_edit = document.getElementById('input_name_cus_edit');
+            const inputEmailCus_edit = document.getElementById('input_email_cus_edit');
+
+            const div_category = document.querySelectorAll('.adm-form-item .el-form-item');
+            const err_div = document.querySelectorAll('.adm-form-item__error')
+            function errInputCategory(index, text) {
+                div_category[index].classList.remove('is-success');
+                div_category[index].classList.add('is-error');
+                err_div[index].textContent = text;
+            }
+
+            function successInputCategory(index, text) {
+                div_category[index].classList.add('is-success');
+                div_category[index].classList.remove('is-error');
+                err_div[index].textContent = text;
+            }
+
+            async function launch_toast(mess) {
+                var x = document.getElementById("toast")
+                x.className = "show";
+                x.textContent = '';
+                await setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                await setTimeout(function () { x.textContent = mess }, 700);
+            }
+            inputPhoneCus.oninput = () => {
+                inputPhoneCus.value = inputPhoneCus.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+            }
+
+            const confirmAddCus = document.getElementById('confirm-add_customer');
+            const btnAddCustomer = document.getElementById('btn-AddCustomer');
+            var customerAllLength_text = document.querySelector('.all-customer_text');
+            var lengthCus_Current = customerAllLength_text.textContent.trim();
+
+            btnAddCustomer.addEventListener("click", () => {
+                successInputCategory(0, "")
+                successInputCategory(1, "")
+                successInputCategory(2, "")
+                inputPhoneCus.value = "";
+                inputEmailCus.value = "";
+                inputNameCus.value = "";
+            })
+
+            inputPhoneCus.oninput = async () => {
+                successInputCategory(0, "")
+                if (inputPhoneCus.value.length == 10) {
+                    const { status } = await checkDuplicatePhone(inputPhoneCus.value)
+                    if (status == 'found') {
+                        errInputCategory(0, "Số điện thoại này đã được sử dụng")
+                    } else {
+                        successInputCategory(0, "")
                     }
                 }
             }
-        }
-    })
-}
 
-clickCustomer(itemCustomer)
-
-function formatDate(date) {
-    var result = new Date(`${date}`);
-    var day = result.getDate() > 9 ? result.getDate() : `0${result.getDate()}`;
-    var month = result.getMonth() + 1 > 9 ? result.getMonth() + 1 : `0${result.getMonth() + 1}`;
-    return `${day}-${month}-${result.getFullYear()}`
-}
-
-window.addEventListener('load', async () => {
-    const { status, arrLastBook } = await getLastDateBook(idStore);
-    if (status == 'success') {
-        itemCustomer.forEach((item, index) => {
-            arrLastBook.forEach(book => {
-                if (book[0].PhoneCustomer == item.getAttribute('data-customer')) {
-                    dateLastBook[index].textContent = formatDate(book[0].max);
-                }
-            })
-        })
-    }
-})
-
-
-
-const inputPhoneCus = document.getElementById('input_phone_cus');
-const inputNameCus = document.getElementById('input_name_cus');
-const inputEmailCus = document.getElementById('input_email_cus');
-
-const inputPhoneCus_edit = document.getElementById('input_phone_cus_edit');
-const inputNameCus_edit = document.getElementById('input_name_cus_edit');
-const inputEmailCus_edit = document.getElementById('input_email_cus_edit');
-
-const div_category = document.querySelectorAll('.adm-form-item .el-form-item');
-const err_div = document.querySelectorAll('.adm-form-item__error')
-function errInputCategory(index, text) {
-    div_category[index].classList.remove('is-success');
-    div_category[index].classList.add('is-error');
-    err_div[index].textContent = text;
-}
-
-function successInputCategory(index, text) {
-    div_category[index].classList.add('is-success');
-    div_category[index].classList.remove('is-error');
-    err_div[index].textContent = text;
-}
-
-async function launch_toast(mess) {
-    var x = document.getElementById("toast")
-    x.className = "show";
-    x.textContent = '';
-    await setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-    await setTimeout(function () { x.textContent = mess }, 700);
-}
-inputPhoneCus.oninput = () => {
-    inputPhoneCus.value = inputPhoneCus.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-}
-
-const confirmAddCus = document.getElementById('confirm-add_customer');
-const btnAddCustomer = document.getElementById('btn-AddCustomer');
-var customerAllLength_text = document.querySelector('.all-customer_text');
-var lengthCus_Current = customerAllLength_text.textContent.trim();
-
-btnAddCustomer.addEventListener("click", () => {
-    successInputCategory(0, "")
-    successInputCategory(1, "")
-    successInputCategory(2, "")
-    inputPhoneCus.value = "";
-    inputEmailCus.value = "";
-    inputNameCus.value = "";
-})
-
-inputPhoneCus.oninput = async () => {
-    successInputCategory(0, "")
-    if (inputPhoneCus.value.length == 10) {
-        const { status } = await checkDuplicatePhone(inputPhoneCus.value)
-        if (status == 'found') {
-            errInputCategory(0, "Số điện thoại này đã được sử dụng")
-        } else {
-            successInputCategory(0, "")
-        }
-    }
-}
-
-inputEmailCus.oninput = () => {
-    successInputCategory(2, "")
-}
-
-inputNameCus.oninput = () => {
-    successInputCategory(1, "")
-}
-
-var inputNamePre_edit;
-var inputPhonePre_edit;
-var inputEmailPre_edit;
-var indexEdit;
-
-inputPhoneCus_edit.oninput = async () => {
-    successInputCategory(0, "")
-    if (inputPhoneCus_edit.value != inputPhonePre_edit) {
-        if (inputPhoneCus_edit.value.length == 10) {
-            const { status } = await checkDuplicatePhone(inputPhoneCus_edit.value)
-            if (status == 'found') {
-                errInputCategory(3, "Số điện thoại này đã được sử dụng")
-            } else {
-                successInputCategory(3, "")
+            inputEmailCus.oninput = () => {
+                successInputCategory(2, "")
             }
-        }
-    } else {
-        successInputCategory(3, "")
-    }
-}
 
-inputEmailCus_edit.oninput = () => {
-    successInputCategory(5, "")
-}
-
-inputNameCus_edit.oninput = () => {
-    successInputCategory(4, "")
-}
-
-
-
-function textAvt(name) {
-    var arrName = name.split(' ');
-    var first = arrName[0].split('')[0];
-    var last = arrName[arrName.length - 1].split('')[0];
-    return `${first}${last}`;
-}
-
-
-var editCustomer = document.querySelectorAll('.edit-customer');
-var deleteCustomer = document.querySelectorAll('.delete-customer');
-confirmAddCus.addEventListener('click', async (e) => {
-    var flag = 0;
-    e.preventDefault();
-    if (inputPhoneCus.value == "") {
-        errInputCategory(0, "Bạn vui lòng nhập số điện thoại của khách hàng")
-    } else {
-        if (validatePhone(inputPhoneCus.value)) {
-            const { status } = await checkDuplicatePhone(inputPhoneCus.value)
-            if (status == 'found') {
-                errInputCategory(0, "Số điện thoại này đã được sử dụng")
+            inputNameCus.oninput = () => {
+                successInputCategory(1, "")
             }
-            else {
+
+            var inputNamePre_edit;
+            var inputPhonePre_edit;
+            var inputEmailPre_edit;
+            var indexEdit;
+
+            inputPhoneCus_edit.oninput = async () => {
                 successInputCategory(0, "")
-                if (flag == 0) flag = 1;
+                if (inputPhoneCus_edit.value != inputPhonePre_edit) {
+                    if (inputPhoneCus_edit.value.length == 10) {
+                        const { status } = await checkDuplicatePhone(inputPhoneCus_edit.value)
+                        if (status == 'found') {
+                            errInputCategory(3, "Số điện thoại này đã được sử dụng")
+                        } else {
+                            successInputCategory(3, "")
+                        }
+                    }
+                } else {
+                    successInputCategory(3, "")
+                }
             }
-        } else {
-            errInputCategory(0, "Bạn vui lòng nhập đúng số điện thoại")
-        }
-    }
 
-    if (inputNameCus.value == "") {
-        errInputCategory(1, "Bạn vui lòng nhập tên của khách hàng")
-    } else {
-        successInputCategory(1, "")
-        if (flag == 1) flag = 2;
-    }
+            inputEmailCus_edit.oninput = () => {
+                successInputCategory(5, "")
+            }
 
-    if (inputEmailCus.value == "") {
-        errInputCategory(2, "Bạn vui lòng nhập email của khách hàng")
-    } else {
-        if (validateEmail(inputEmailCus.value)) {
-            // if (checkDuplicateEmail(inputEmailCus.value)) {
-            //     errInputCategory(2, "Email này đã được sử dụng")
-            // } else {
-            //     successInputCategory(2, "")
-            //     if (flag == 2) flag = 3;
-            // }
-            successInputCategory(2, "")
-            if (flag == 2) flag = 3;
-        } else {
-            errInputCategory(2, "Bạn vui lòng nhập đúng email")
-        }
-    }
+            inputNameCus_edit.oninput = () => {
+                successInputCategory(4, "")
+            }
 
-    //  ==> 
-    if (flag == 3) {
-        var customers_new = document.querySelectorAll('.adm-service')
-        $('#add-customer_modal').modal('hide');
-        await launch_toast('Tạo tài khoản thành công');
-        customerAllLength_text.textContent = `${parseInt(++lengthCus_Current)}`
-        var date = new Date();
-        var html = ` <div data-customer=${inputPhoneCus.value.trim()} class="adm-service pointer"
+
+
+            function textAvt(name) {
+                var arrName = name.split(' ');
+                var first = arrName[0].split('')[0];
+                var last = arrName[arrName.length - 1].split('')[0];
+                return `${first}${last}`;
+            }
+
+
+            var editCustomer = document.querySelectorAll('.edit-customer');
+            var deleteCustomer = document.querySelectorAll('.delete-customer');
+            confirmAddCus.addEventListener('click', async (e) => {
+                var flag = 0;
+                e.preventDefault();
+                if (inputPhoneCus.value == "") {
+                    errInputCategory(0, "Bạn vui lòng nhập số điện thoại của khách hàng")
+                } else {
+                    if (validatePhone(inputPhoneCus.value)) {
+                        const { status } = await checkDuplicatePhone(inputPhoneCus.value)
+                        if (status == 'found') {
+                            errInputCategory(0, "Số điện thoại này đã được sử dụng")
+                        }
+                        else {
+                            successInputCategory(0, "")
+                            if (flag == 0) flag = 1;
+                        }
+                    } else {
+                        errInputCategory(0, "Bạn vui lòng nhập đúng số điện thoại")
+                    }
+                }
+
+                if (inputNameCus.value == "") {
+                    errInputCategory(1, "Bạn vui lòng nhập tên của khách hàng")
+                } else {
+                    successInputCategory(1, "")
+                    if (flag == 1) flag = 2;
+                }
+
+                if (inputEmailCus.value == "") {
+                    errInputCategory(2, "Bạn vui lòng nhập email của khách hàng")
+                } else {
+                    if (validateEmail(inputEmailCus.value)) {
+                        // if (checkDuplicateEmail(inputEmailCus.value)) {
+                        //     errInputCategory(2, "Email này đã được sử dụng")
+                        // } else {
+                        //     successInputCategory(2, "")
+                        //     if (flag == 2) flag = 3;
+                        // }
+                        successInputCategory(2, "")
+                        if (flag == 2) flag = 3;
+                    } else {
+                        errInputCategory(2, "Bạn vui lòng nhập đúng email")
+                    }
+                }
+
+                //  ==> 
+                if (flag == 3) {
+                    var customers_new = document.querySelectorAll('.adm-service')
+                    $('#add-customer_modal').modal('hide');
+                    await launch_toast('Tạo tài khoản thành công');
+                    customerAllLength_text.textContent = `${parseInt(++lengthCus_Current)}`
+                    var date = new Date();
+                    var html = ` <div data-customer=${inputPhoneCus.value.trim()} data-name="${inputNameCus.value}"
+                    class="adm-service pointer"
         style="border-color: rgb(192, 235, 117);background-color: #182e5b;">
         <div class="adm-service__data">
             <div class="flex-center el-row is-align-middle"
@@ -454,249 +460,260 @@ confirmAddCus.addEventListener('click', async (e) => {
             </div>
         </div>
     </div>`;
-        $(`${html}`).insertAfter(customers_new[customers_new.length - 1]);
-        const { status } = await createCustomer(inputPhoneCus.value, inputNameCus.value, inputEmailCus.value)
-        editCustomer = document.querySelectorAll('.edit-customer');
-        deleteCustomer = document.querySelectorAll('.delete-customer');
-        itemCustomer = document.querySelectorAll('.adm-service');
-        clickEdit(editCustomer);
-        clickDelete(deleteCustomer);
-        clickCustomer(itemCustomer)
-    }
-})
-function clickEdit(editCustomer) {
-    editCustomer.forEach((item, index) => {
-        item.onclick = async () => {
-            successInputCategory(0, "")
-            successInputCategory(1, "")
-            successInputCategory(2, "")
-            const { status, customer } = await getInfoCustomer(item.getAttribute('data-customer'))
-            inputPhoneCus_edit.value = `${customer.PhoneCustomer}`;
-            inputEmailCus_edit.value = `${customer.EmailCustomer}`;
-            inputNameCus_edit.value = `${customer.NameCustomer}`;
-            inputNamePre_edit = `${customer.NameCustomer}`;
-            inputPhonePre_edit = `${customer.PhoneCustomer}`;;
-            inputEmailPre_edit = `${customer.EmailCustomer}`;
-            indexEdit = index;
-        }
-    })
-}
-var indexDelete;
-var phoneDelete;
-function clickDelete(deleteCustomer) {
-    deleteCustomer.forEach((item, index) => {
-        item.onclick = async () => {
-            indexDelete = index;
-            phoneDelete = item.getAttribute('data-customer');
-        }
-    })
-}
+                    $(`${html}`).insertAfter(customers_new[customers_new.length - 1]);
+                    const { status } = await createCustomer(inputPhoneCus.value, inputNameCus.value, inputEmailCus.value)
+                    editCustomer = document.querySelectorAll('.edit-customer');
+                    deleteCustomer = document.querySelectorAll('.delete-customer');
+                    itemCustomer = document.querySelectorAll('.adm-service');
+                    clickEdit(editCustomer);
+                    clickDelete(deleteCustomer);
+                    clickCustomer(itemCustomer)
+                }
+            })
+            function clickEdit(editCustomer) {
+                editCustomer.forEach((item, index) => {
+                    item.onclick = async () => {
+                        successInputCategory(0, "")
+                        successInputCategory(1, "")
+                        successInputCategory(2, "")
+                        const { status, customer } = await getInfoCustomer(item.getAttribute('data-customer'))
+                        inputPhoneCus_edit.value = `${customer.PhoneCustomer}`;
+                        inputEmailCus_edit.value = `${customer.EmailCustomer}`;
+                        inputNameCus_edit.value = `${customer.NameCustomer}`;
+                        inputNamePre_edit = `${customer.NameCustomer}`;
+                        inputPhonePre_edit = `${customer.PhoneCustomer}`;;
+                        inputEmailPre_edit = `${customer.EmailCustomer}`;
+                        indexEdit = index;
+                    }
+                })
+            }
+            var indexDelete;
+            var phoneDelete;
+            function clickDelete(deleteCustomer) {
+                deleteCustomer.forEach((item, index) => {
+                    item.onclick = async () => {
+                        indexDelete = index;
+                        phoneDelete = item.getAttribute('data-customer');
+                    }
+                })
+            }
 
 
-clickEdit(editCustomer);
-clickDelete(deleteCustomer);
+            clickEdit(editCustomer);
+            clickDelete(deleteCustomer);
 
-const confirm_editCus = document.getElementById('confirm-edit_customer');
-const confirm_deleteCus = document.getElementById('btn-confirm-delete');
+            const confirm_editCus = document.getElementById('confirm-edit_customer');
+            const confirm_deleteCus = document.getElementById('btn-confirm-delete');
 
-confirm_editCus.addEventListener('click', async (e) => {
-    var flag = 0;
-    e.preventDefault();
-    if (inputPhoneCus_edit.value == "") {
-        errInputCategory(3, "Bạn vui lòng nhập số điện thoại để chỉnh sửa")
-    } else {
-        if (inputPhoneCus_edit.value != inputPhonePre_edit) {
-            if (validatePhone(inputPhoneCus_edit.value)) {
-                const { status } = await checkDuplicatePhone(inputPhoneCus_edit.value)
-                if (status == 'found') {
-                    errInputCategory(3, "Số điện thoại này đã được sử dụng")
+            confirm_editCus.addEventListener('click', async (e) => {
+                var flag = 0;
+                e.preventDefault();
+                if (inputPhoneCus_edit.value == "") {
+                    errInputCategory(3, "Bạn vui lòng nhập số điện thoại để chỉnh sửa")
+                } else {
+                    if (inputPhoneCus_edit.value != inputPhonePre_edit) {
+                        if (validatePhone(inputPhoneCus_edit.value)) {
+                            const { status } = await checkDuplicatePhone(inputPhoneCus_edit.value)
+                            if (status == 'found') {
+                                errInputCategory(3, "Số điện thoại này đã được sử dụng")
+                            }
+                            else {
+                                successInputCategory(3, "")
+                                if (flag == 0) flag = 1;
+                            }
+                        } else {
+                            errInputCategory(3, "Bạn vui lòng nhập đúng số điện thoại")
+                        }
+                    }
+                    else {
+                        successInputCategory(3, "")
+                        if (flag == 0) flag = 1;
+                    }
+                }
+
+                if (inputNameCus_edit.value == "") {
+                    errInputCategory(4, "Bạn vui lòng nhập tên của khách hàng")
+                } else {
+                    successInputCategory(4, "")
+                    if (flag == 1) flag = 2;
+                }
+
+                if (inputEmailCus_edit.value == "") {
+                    errInputCategory(5, "Bạn vui lòng nhập email của khách hàng")
+                } else {
+                    if (inputEmailCus_edit.value != inputEmailPre_edit) {
+                        if (validateEmail(inputEmailCus_edit.value)) {
+                            const { status } = await checkDuplicateEmail(inputEmailCus_edit.value);
+                            if (status == 'found') {
+                                errInputCategory(5, "Email này đã được sử dụng")
+                            } else {
+                                successInputCategory(5, "")
+                                if (flag == 2) flag = 3;
+                            }
+                        } else {
+                            errInputCategory(5, "Bạn vui lòng nhập đúng email")
+                        }
+                    }
+                    else {
+                        successInputCategory(5, "")
+                        if (flag == 2) flag = 3;
+                    }
+                }
+
+                //  ==> 
+                if (flag == 3) {
+                    $('#edit-customer_modal').modal('hide');
+                    await launch_toast("Chỉnh sửa thành công");
+                    var customerName = document.querySelectorAll('.customer-name');
+                    var customerPhone = document.querySelectorAll('.customer-phone');
+                    var avtText = document.querySelectorAll('.avt-text')
+                    customerName[indexEdit].textContent = inputNameCus_edit.value;
+                    customerPhone[indexEdit].textContent = inputPhoneCus_edit.value;
+                    avtText[indexEdit].textContent = textAvt(inputNameCus_edit.value);
+                    const { status } = await editCustomer_phone(inputPhonePre_edit, inputPhoneCus_edit.value, inputEmailCus_edit.value, inputNameCus_edit.value)
+                }
+            })
+
+            confirm_deleteCus.addEventListener('click', async () => {
+                customerAllLength_text.textContent = `${parseInt(--lengthCus_Current)}`
+                var customers_new = document.querySelectorAll('.adm-service');
+                customers_new[indexDelete].remove();
+                $('#alertModal').modal('hide');
+                await launch_toast('Xóa thành công');
+                const { status } = await deleteCustomer_phone(phoneDelete);
+                console.log(status);
+            })
+
+
+            const input_search = document.querySelector('#search_customer')
+
+
+            function removeVietnameseTones(str) {
+                str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+                str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+                str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+                str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+                str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+                str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+                str = str.replace(/đ/g, "d");
+                str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+                str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+                str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+                str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+                str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+                str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+                str = str.replace(/Đ/g, "D");
+                // Some system encode vietnamese combining accent as individual utf-8 characters
+                // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+                str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+                str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+                // Remove extra spaces
+                // Bỏ các khoảng trắng liền nhau
+                str = str.replace(/ + /g, " ");
+                str = str.trim();
+                // Remove punctuations
+                // Bỏ dấu câu, kí tự đặc biệt
+                str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
+                return str;
+            }
+
+            function showAllCustomer() {
+                itemCustomer = document.querySelectorAll('.adm-service');
+                itemCustomer.forEach((item, index) => {
+                    item.style.display = 'flex';
+                })
+            }
+
+            input_search.oninput = () => {
+                var customer_name = document.querySelectorAll('.customer-name');
+                var customer_phone = document.querySelectorAll('.customer-phone')
+                itemCustomer = document.querySelectorAll('.adm-service');
+                var searchValue = removeVietnameseTones(input_search.value.trim().toUpperCase());
+                var inputArr = input_search.value.split('');
+                if (inputArr[0] != '0') {
+                    if (input_search.value == "") {
+                        showAllCustomer();
+                    }
+                    customer_name.forEach((item, index) => {
+                        var name = removeVietnameseTones(item.textContent.trim().toUpperCase())
+                        if (name.search(searchValue) > -1) {
+                            itemCustomer[index].style.display = 'flex';
+                        }
+                        else {
+                            itemCustomer[index].style.display = 'none';
+                        }
+                    })
                 }
                 else {
-                    successInputCategory(3, "")
-                    if (flag == 0) flag = 1;
+                    customer_phone.forEach((item, index) => {
+                        var phone = item.textContent.trim();
+                        if (phone.search(input_search.value.trim()) > -1) {
+                            itemCustomer[index].style.display = 'flex';
+                        } else {
+                            itemCustomer[index].style.display = 'none';
+                        }
+                    })
                 }
-            } else {
-                errInputCategory(3, "Bạn vui lòng nhập đúng số điện thoại")
+
+            }
+
+
+
+
+
+
+
+            // API
+
+            async function renderBooked(phone, idStore) {
+                return (await instance.post('customer/render-booked', {
+                    phone,
+                    idStore,
+                })).data
+            }
+
+            async function deleteCustomer_phone(phone) {
+                return (await instance.post('customer/delete', {
+                    phone,
+                })).data
+            }
+
+            async function editCustomer_phone(phoneOld, phone, email, name) {
+                return (await instance.post('customer/edit', {
+                    phoneOld,
+                    phone,
+                    email,
+                    name,
+                })).data
+            }
+
+            async function getInfoCustomer(phone) {
+                return (await instance.post('customer/info', {
+                    phone,
+                })).data
+            }
+
+            async function createCustomer(phone, name, email) {
+                return (await instance.post('customer/create', {
+                    phone,
+                    name,
+                    email,
+                })).data
+            }
+
+            async function getLastDateBook(idStore) {
+                return (await instance.post('customer/last-book', {
+                    idStore
+                })).data
             }
         }
-        else {
-            successInputCategory(3, "")
-            if (flag == 0) flag = 1;
+        const logoutBtn = document.querySelector('#log-out')
+        logoutBtn.onclick = (e) => {
+            e.preventDefault();
+            window.localStorage.clear();
+            window.location = '/'
         }
-    }
-
-    if (inputNameCus_edit.value == "") {
-        errInputCategory(4, "Bạn vui lòng nhập tên của khách hàng")
-    } else {
-        successInputCategory(4, "")
-        if (flag == 1) flag = 2;
-    }
-
-    if (inputEmailCus_edit.value == "") {
-        errInputCategory(5, "Bạn vui lòng nhập email của khách hàng")
-    } else {
-        if (inputEmailCus_edit.value != inputEmailPre_edit) {
-            if (validateEmail(inputEmailCus_edit.value)) {
-                const { status } = await checkDuplicateEmail(inputEmailCus_edit.value);
-                if (status == 'found') {
-                    errInputCategory(5, "Email này đã được sử dụng")
-                } else {
-                    successInputCategory(5, "")
-                    if (flag == 2) flag = 3;
-                }
-            } else {
-                errInputCategory(5, "Bạn vui lòng nhập đúng email")
-            }
-        }
-        else {
-            successInputCategory(5, "")
-            if (flag == 2) flag = 3;
-        }
-    }
-
-    //  ==> 
-    if (flag == 3) {
-        $('#edit-customer_modal').modal('hide');
-        await launch_toast("Chỉnh sửa thành công");
-        var customerName = document.querySelectorAll('.customer-name');
-        var customerPhone = document.querySelectorAll('.customer-phone');
-        var avtText = document.querySelectorAll('.avt-text')
-        customerName[indexEdit].textContent = inputNameCus_edit.value;
-        customerPhone[indexEdit].textContent = inputPhoneCus_edit.value;
-        avtText[indexEdit].textContent = textAvt(inputNameCus_edit.value);
-        const { status } = await editCustomer_phone(inputPhonePre_edit, inputPhoneCus_edit.value, inputEmailCus_edit.value, inputNameCus_edit.value)
-    }
-})
-
-confirm_deleteCus.addEventListener('click', async () => {
-    customerAllLength_text.textContent = `${parseInt(--lengthCus_Current)}`
-    var customers_new = document.querySelectorAll('.adm-service');
-    customers_new[indexDelete].remove();
-    $('#alertModal').modal('hide');
-    await launch_toast('Xóa thành công');
-    const { status } = await deleteCustomer_phone(phoneDelete);
-    console.log(status);
-})
-
-
-const input_search = document.querySelector('#search_customer')
-
-
-function removeVietnameseTones(str) {
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
-    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-    str = str.replace(/đ/g, "d");
-    str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
-    str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
-    str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
-    str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
-    str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
-    str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
-    str = str.replace(/Đ/g, "D");
-    // Some system encode vietnamese combining accent as individual utf-8 characters
-    // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
-    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
-    str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
-    // Remove extra spaces
-    // Bỏ các khoảng trắng liền nhau
-    str = str.replace(/ + /g, " ");
-    str = str.trim();
-    // Remove punctuations
-    // Bỏ dấu câu, kí tự đặc biệt
-    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
-    return str;
-}
-
-function showAllCustomer() {
-    itemCustomer = document.querySelectorAll('.adm-service');
-    itemCustomer.forEach((item, index) => {
-        item.style.display = 'flex';
-    })
-}
-
-input_search.oninput = () => {
-    var customer_name = document.querySelectorAll('.customer-name');
-    var customer_phone = document.querySelectorAll('.customer-phone')
-    itemCustomer = document.querySelectorAll('.adm-service');
-    var searchValue = removeVietnameseTones(input_search.value.trim().toUpperCase());
-    var inputArr = input_search.value.split('');
-    if (inputArr[0] != '0') {
-        if (input_search.value == "") {
-            showAllCustomer();
-        }
-        customer_name.forEach((item, index) => {
-            var name = removeVietnameseTones(item.textContent.trim().toUpperCase())
-            if (name.search(searchValue) > -1) {
-                itemCustomer[index].style.display = 'flex';
-            }
-            else {
-                itemCustomer[index].style.display = 'none';
-            }
-        })
-    }
-    else {
-        customer_phone.forEach((item, index) => {
-            var phone = item.textContent.trim();
-            if (phone.search(input_search.value.trim()) > -1) {
-                itemCustomer[index].style.display = 'flex';
-            } else {
-                itemCustomer[index].style.display = 'none';
-            }
-        })
-    }
-
-}
-
-
-
-
-
-
-
-// API
-
-async function renderBooked(phone, idStore) {
-    return (await instance.post('customer/render-booked', {
-        phone,
-        idStore,
-    })).data
-}
-
-async function deleteCustomer_phone(phone) {
-    return (await instance.post('customer/delete', {
-        phone,
-    })).data
-}
-
-async function editCustomer_phone(phoneOld, phone, email, name) {
-    return (await instance.post('customer/edit', {
-        phoneOld,
-        phone,
-        email,
-        name,
-    })).data
-}
-
-async function getInfoCustomer(phone) {
-    return (await instance.post('customer/info', {
-        phone,
-    })).data
-}
-
-async function createCustomer(phone, name, email) {
-    return (await instance.post('customer/create', {
-        phone,
-        name,
-        email,
-    })).data
-}
-
-async function getLastDateBook(idStore) {
-    return (await instance.post('customer/last-book', {
-        idStore
-    })).data
+    })();
+} else {
+    window.location = '/page-err'
 }

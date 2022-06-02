@@ -75,7 +75,7 @@
                 </svg>
             </a>
             <span>Làm Việc</span>
-            <a href="">
+            <a href="" id="log-out">
                 <svg viewBox="0 0 512 512" fill="currentColor">
                     <path
                         d="M255.2 468.6H63.8a21.3 21.3 0 01-21.3-21.2V64.6c0-11.7 9.6-21.2 21.3-21.2h191.4a21.2 21.2 0 100-42.5H63.8A63.9 63.9 0 000 64.6v382.8A63.9 63.9 0 0063.8 511H255a21.2 21.2 0 100-42.5z" />
@@ -88,13 +88,13 @@
         <div class="main-container pt-2"
             style="display: block;background-color: #f4f6fa;min-height: 100vh;width: 100%;">
             <div class="main-header is-main-navigation-bar-expanded">
-                <div class="main-header__account el-dropdown">
+                <div class="main-header__account el-dropdown" aria-haspopup="true" aria-expanded="false"
+                    data-toggle="dropdown">
                     <div class="main-header__account__slot el-dropdown-selfdefine">
-                        <div class="adm-avatar size-36 mr-0 ml-0"
-                            style="background-image: url(https://babershop.admin.trafft.com/api/v1/public/media/3d9a8071-df4b-4b55-a05a-6f6a68371d21?size=avatar);color: rgb(19, 150, 110);">
+                        <div class="adm-avatar size-36 mr-0 ml-0 avt-manager">
                         </div>
                         <div class="main-header__account__slot__name tablet-hidden">
-                            Nguyễn Văn Tình
+                            <span class="name-manager"></span>
                         </div>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                             svg-inline="" role="presentation" focusable="false" tabindex="-1"
@@ -104,7 +104,32 @@
                                 fill="#005AEE" class="customize-fill"></path>
                         </svg>
                     </div>
+                    <ul class="dropdown-menu el-scrollbar__view el-select-dropdown__list dropdown__account"
+                        aria-labelledby="dropdownMenuButton">
+                        <li style="padding-left:20px ;" class="el-select-dropdown__item adm-select-option info-manager">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-person" viewBox="0 0 16 16"
+                                style="width: 22px;height: 21px;padding-bottom: 3px;margin-right: 4px;">
+                                <path
+                                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                            </svg>
+                            <span>Thông Tin Cá Nhân</span>
+                        </li>
+                        <li style="padding-left:20px ;"
+                            class="el-select-dropdown__item adm-select-option log-out__manager">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-box-arrow-right" viewBox="0 0 16 16"
+                                style="width: 22px;height: 21px;padding-bottom: 3px;margin-right: 4px;">
+                                <path fill-rule="evenodd"
+                                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+                                <path fill-rule="evenodd"
+                                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                            </svg>
+                            <span>Đăng Xuất</span>
+                        </li>
+                    </ul>
                 </div>
+
             </div>
             <div class="adm-dashboard__container__wrapper">
                 <div class="dashboard-page">
@@ -715,7 +740,6 @@
 
 
                     </div>
-
                 </div>
 
             </div>
@@ -723,6 +747,223 @@
         </div>
 
 
+        {{!-- Modal --}}
+        <div class="modal fade" id="info-manager__modal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document"
+                style="margin-top: 70px; width: 1200px ; max-width:1200px">
+                <div class="modal-content">
+                    <div class="el-dialog__header">
+                        <span class="adm-modal-title tittle-employee">
+                            Thông Tin Cá Nhân
+                        </span>
+                        <button id="close-add__employee" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close" style="outline: none;">
+                            <span aria-hidden="true">&times;</span>
+                    </div>
+                    <div class="el-dialog__body">
+                        <form class="el-form" id="editManagerForm" action="employee/edit-manager-with-img" method="post"
+                            enctype="multipart/form-data">
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <div class="adm-form-item">
+                                        <div class="el-form-item">
+                                            <div class="el-form-item__content">
+                                                <div class="avatar-uploader">
+                                                    <div class="el-upload-available">
+                                                        <div class="el-upload el-upload--picture">
+                                                            <div class="el-upload-dragger">
+                                                                <div class="el-upload-dragger__upload">
+                                                                    <div>
+                                                                        <i
+                                                                            class="el-icon-upload fa-solid fa-cloud-arrow-up"></i>
+                                                                        <div class="el-upload__text mt-2">
+                                                                            Nhấn vào để tải ảnh lên
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="file" name="file"
+                                                                accept="image/png, image/jpeg" class="el-upload__input">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" svg-inline
+                                                    class="avatar-uploader__trash">
+                                                    <path
+                                                        d="M19.5 7h-4.167V5.608a2.017 2.017 0 00-2.083-1.941h-2.5a2.017 2.017 0 00-2.083 1.941V7H4.5a.833.833 0 000 1.667h.833v9.166a2.5 2.5 0 002.5 2.5h8.334a2.5 2.5 0 002.5-2.5V8.667h.833A.833.833 0 0019.5 7zm-9.167-1.392c0-.133.175-.275.417-.275h2.5c.242 0 .417.142.417.275V7h-3.334V5.608zM17 17.833a.833.833 0 01-.833.834H7.833A.833.833 0 017 17.833V8.667h10v9.166z"
+                                                        fill="#005AEE" class="customize-fill"></path>
+                                                    <path
+                                                        d="M9.5 16.167a.833.833 0 00.833-.834V12a.834.834 0 00-1.666 0v3.333a.833.833 0 00.833.834zM14.5 16.167a.833.833 0 00.833-.834V12a.834.834 0 00-1.666 0v3.333a.834.834 0 00.833.834z"
+                                                        fill="#005AEE" class="customize-fill"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="adm-form-item__error mt-3"
+                                            style="display: flex;justify-content: center;">
+
+                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Họ Nhân Viên
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-surname-employee" type="text"
+                                                                    autocomplete="nope" maxlength="50" iconstart iconend
+                                                                    rows="2" name="surname" tags class="el-input__inner"
+                                                                    placeholder="Nhập họ của nhân viên">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Tên Nhân Viên
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-name-employee" type="text"
+                                                                    autocomplete="nope" maxlength="50" iconstart iconend
+                                                                    rows="2" name="name_employee" tags
+                                                                    class="el-input__inner"
+                                                                    placeholder="Nhập tên của nhân viên">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        CCCD/CMND
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input maxlength="12" id="input-cccd-employee"
+                                                                    type="text" autocomplete="off"
+                                                                    class="el-input__inner"
+                                                                    placeholder="Nhập Căn Cước Công Dân" name="cccd">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Email
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-email-employee" type="text"
+                                                                    autocomplete="nope" maxlength="100" iconstart
+                                                                    iconend rows="2" name="email" tags
+                                                                    class="el-input__inner"
+                                                                    placeholder="nhanvien@abcxyz.com">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
+
+                                        <div class="el-col el-col-24 el-col-sm-12"
+                                            style="padding-left: 8px; padding-right: 8px;">
+                                            <div class="adm-form-item">
+                                                <div class="el-form-item is-success is-required">
+                                                    <label for="name" class="el-form-item__label">
+                                                        Số Điện Thoại
+                                                    </label>
+                                                    <div class="el-form-item__content">
+                                                        <div class="adm-input-wrapper">
+                                                            <div
+                                                                class="el-input el-input__default adm-input adm-input__size-default">
+                                                                <input id="input-phone-employee" type="text"
+                                                                    autocomplete="nope" maxlength="10" iconstart iconend
+                                                                    rows="2" name="phone" tags class="el-input__inner"
+                                                                    placeholder="Số Điện Thoại">
+                                                            </div>
+                                                        </div>
+                                                        <div class="adm-form-item__error">
+                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="text" name="idManager" style="display:none">
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="justify-content: flex-end !important">
+                        <button id="adm-btn-employee__close" data-dismiss="modal"
+                            class="adm-button adm-button__filled__grey adm-button-size__medium" style="border:none">
+                            <span>Đóng</span>
+                        </button>
+                        <button id="adm-btn-employee"
+                            class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
+                            style="border:none">
+                            <span>Lưu Thay Đổi</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="toast" style="z-index:99999">
+            <div id="img"></div>
+            <div id="desc"></div>
+        </div>
 
 </body>
 
