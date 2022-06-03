@@ -103,49 +103,69 @@ class StaffController {
                 pass: process.env.EMAIL_PASSWORD_AUTHOR,
             },
         })
-        res.status(200).json({
-            status: 'success',
-        })
         var minutesToAdd = 30;
         var currentDate = new Date();
         var futureDate = new Date(currentDate.getTime() + minutesToAdd * 60000);
+        const encodedToken = () => {
+            return JWT.sign({
+                email: email,
+                password: hashPassword,
+                iat: new Date().getTime(),
+                exp: futureDate.getTime(),
+            }, process.env.SECRET_KEY_ACCESS_TOKEN);
+        }
+        const token = encodedToken();
+        res.status(200).json({
+            status: 'success',
+        })
+
         let info = await transporter.sendMail({
             from: 'vantinhnguyen728@gmail.com', // sender address
             to: `${email}`, // list of receivers
             subject: "Xác thực đặt lại tài khoản quản lý TheBaberShop", // Subject line
             text: "Chào anh, đây là mật khẩu mới của anh. Anh vui lòng không để lộ, dùng tài khoản đặt lịch online sẽ có nhiều ưu đãi hấp dẫn ", // plain text body
             html: `<p>Chào anh, đây là link để xác thực đặt lại mật khẩu cho email này. Anh vui lòng không để lộ</p>
-            <h1 style="display:flex">http://localhost:3000/login/verify-email/?email=${email}&spfdt=${hashPassword}&exp=${futureDate.getTime()}</h1>`, // html body
+            <h1 style="display:flex">http://localhost:3000/login/verify-email/?accessToken=${token}</h1>`, // html body
         }).catch(err => { console.log(err) })
     }
 
     async verifyEmail(req, res) {
-        const email = req.query.email;
-        const password = req.query.spfdt;
-        const exp = req.query.exp;
-        var date = new Date();
-        if (date.getTime() < exp) {
-            var sql = `UPDATE TaiKhoan  SET Password = '${password}' 
+
+        JWT.verify(req.query.accessToken, process.env.SECRET_KEY_ACCESS_TOKEN, async (err, user) => {
+            if (err) {
+                res.redirect('/page-err')
+            }
+            else {
+                const email = user.email;
+                const password = user.password;
+                const exp = user.exp;
+                var date = new Date();
+                if (date.getTime() < exp) {
+                    var sql = `UPDATE TaiKhoan  SET Password = '${password}' 
                 FROM TaiKhoan as t,Staff as s 
                 WHERE t.Account = s.IDStaff and s.Email = '${email}'`
-            await sequelize.query(sql);
-            let user = await sequelize.query(`SELECT * FROM TaiKhoan,Staff WHERE Account = IDStaff and Email = '${email}'`)
+                    await sequelize.query(sql);
+                    let user = await sequelize.query(`SELECT * FROM TaiKhoan,Staff WHERE Account = IDStaff and Email = '${email}'`)
 
-            const encodedToken = () => {
-                return JWT.sign({
-                    accountId: user[0][0].Account,
-                    nameEmployee: `${user[0][0].SurName} ${user[0][0].NameStaff}`,
-                    pathImg: user[0][0].PathImgStaff,
-                    idstore: user[0][0].IDStore,
-                    iat: new Date().getTime(),
-                    exp: new Date().setDate(new Date().getDate() + 3)
-                }, process.env.SECRET_KEY_ACCESS_TOKEN);
+                    const encodedToken = () => {
+                        return JWT.sign({
+                            accountId: user[0][0].Account,
+                            nameEmployee: `${user[0][0].SurName} ${user[0][0].NameStaff}`,
+                            pathImg: user[0][0].PathImgStaff,
+                            idstore: user[0][0].IDStore,
+                            iat: new Date().getTime(),
+                            exp: new Date().setDate(new Date().getDate() + 3)
+                        }, process.env.SECRET_KEY_ACCESS_TOKEN);
+                    }
+                    const token = encodedToken();
+                    res.redirect(`/?accessToken=${token}`)
+                } else {
+                    res.redirect('/page-err')
+                }
             }
-            const token = encodedToken();
-            res.redirect(`/?accessToken=${token}`)
-        } else {
-            res.redirect('/page-err')
-        }
+        })
+
+
     }
 
     dashboard(req, res) {
