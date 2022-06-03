@@ -1,4 +1,6 @@
 const accessToken = `${window.localStorage.getItem('accessToken')}`;
+const ids = location.href.split('?idStore=')[1];
+$('#idStore').val(ids);
 if (accessToken != `null`) {
     (async () => {
         const { status } = await checkToken(accessToken);
@@ -24,7 +26,7 @@ if (accessToken != `null`) {
             }
             // variable to add employee
             var haveImg = false;
-            var idstore_add = -1;
+            // var idstore_add = -1;
             var idmanager;
             var idTypeStaff = 1;
             var idStore;
@@ -33,7 +35,7 @@ if (accessToken != `null`) {
 
             const inputSurName = document.getElementById('input-surname-employee__add');
             const inputNameEmployee = document.getElementById('input-name-employee__add');
-            const inputStore = document.querySelector('#input-store-employee__add');
+            // const inputStore = document.querySelector('#input-store-employee__add');
             const inputManager = document.querySelector('#input-manager-employee__add');
             const inputCCCD = document.querySelector('#input-cccd-employee__add');
             const inputEmail = document.querySelector('#input-email-employee__add');
@@ -81,13 +83,13 @@ if (accessToken != `null`) {
 
             // handle dropdown
 
-            const dropDown_storeEmployee = document.querySelector('#dropdown-store__employee');
+            // const dropDown_storeEmployee = document.querySelector('#dropdown-store__employee');
             const dropDown_managersEmployee = document.querySelector('#dropdown-managers__employee');
             const dropDown_sexEmployee = document.querySelector('#dropdown-sex__employee');
             const dropDown_servicesEmployee = document.querySelector('#dropdown-services__employee');
             const dropDown_typeEmployee = document.querySelector('#dropdown-type__employee');
             const arrows_down = document.querySelectorAll('.el-select__caret');
-            const itemDropdown_store = document.querySelectorAll('.item-store__dropdown');
+            // const itemDropdown_store = document.querySelectorAll('.item-store__dropdown');
             const itemDropdown_managers = document.querySelectorAll('.item-managers__dropdown');
             const itemDropdown_sex = document.querySelectorAll('.item-sex__dropdown');
             const itemDropdown_service = document.querySelectorAll('.item-service__dropdown');
@@ -103,21 +105,21 @@ if (accessToken != `null`) {
             const modalAddEmployee = document.querySelector('#add-employee_modal')
 
             // input click 
-            inputStore.onclick = () => {
-                if (dropDown_storeEmployee.getAttribute('style') == 'min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none;') {
-                    arrows_down[1].style.transform = 'rotate(0deg)';
-                    dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollStore}px; left: 400px;display:block;`
-                }
-                else {
-                    arrows_down[1].style.transform = 'rotate(180deg)';
-                    dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none`
-                }
-            }
+            // inputStore.onclick = () => {
+            //     if (dropDown_storeEmployee.getAttribute('style') == 'min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none;') {
+            //         arrows_down[1].style.transform = 'rotate(0deg)';
+            //         dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollStore}px; left: 400px;display:block;`
+            //     }
+            //     else {
+            //         arrows_down[1].style.transform = 'rotate(180deg)';
+            //         dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none`
+            //     }
+            // }
 
             inputManager.onclick = () => {
                 if (dropDown_managersEmployee.getAttribute('style') == 'min-width: 450px; transform-origin: center bottom; z-index: 2026; display: none;') {
                     arrows_down[2].style.transform = 'rotate(0deg)';
-                    dropDown_managersEmployee.style = `min-width: 450px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollManager}px; left: 883px;display:block;`
+                    dropDown_managersEmployee.style = `min-width: 450px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollManager}px; left: 415px;display:block;`
                 }
                 else {
                     arrows_down[2].style.transform = 'rotate(180deg)';
@@ -213,9 +215,9 @@ if (accessToken != `null`) {
                 scrollSex = 560 - scrollTop;
                 scrollService = 330 - scrollTop;
                 scrollType = 560 - scrollTop;
-                if (dropDown_storeEmployee.style.display == 'block') {
-                    dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollStore}px; left: 400px;display:block;`
-                }
+                // if (dropDown_storeEmployee.style.display == 'block') {
+                //     dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollStore}px; left: 400px;display:block;`
+                // }
                 if (dropDown_managersEmployee.style.display == 'block') {
                     dropDown_managersEmployee.style = `min-width: 450px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollManager}px; left: 883px;display:block;`
                 }
@@ -234,19 +236,19 @@ if (accessToken != `null`) {
 
             //  event onmouse
 
-            let isOver_store = false;
+            // let isOver_store = false;
             let isOver_manager = false;
             let isOver_sex = false;
             let isOver_serive = false;
             let isOver_type = false;
 
-            dropDown_storeEmployee.onmouseover = function () {
-                isOver_store = true;
-            }
+            // dropDown_storeEmployee.onmouseover = function () {
+            //     isOver_store = true;
+            // }
 
-            dropDown_storeEmployee.onmouseleave = function () {
-                isOver_store = false;
-            }
+            // dropDown_storeEmployee.onmouseleave = function () {
+            //     isOver_store = false;
+            // }
 
             dropDown_managersEmployee.onmouseover = function () {
                 isOver_manager = true;
@@ -287,12 +289,12 @@ if (accessToken != `null`) {
                 }
             }
 
-            inputStore.onfocusout = () => {
-                if (!isOver_store) {
-                    arrows_down[1].style.transform = 'rotate(180deg)';
-                    dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none`
-                }
-            }
+            // inputStore.onfocusout = () => {
+            //     if (!isOver_store) {
+            //         arrows_down[1].style.transform = 'rotate(180deg)';
+            //         dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none`
+            //     }
+            // }
 
             inputManager.onfocusout = () => {
                 if (!isOver_manager) {
@@ -325,7 +327,7 @@ if (accessToken != `null`) {
             var indexPreSex = -1;
             var indexPreType = 0;
             let countService = 0;
-            const spans_store = document.querySelectorAll('.item-store__dropdown span');
+            // const spans_store = document.querySelectorAll('.item-store__dropdown span');
             const spans_manager = document.querySelectorAll('.item-managers__dropdown span');
             const spans_sexs = document.querySelectorAll('.item-sex__dropdown span');
             const spans_typeEm = document.querySelectorAll('.item-type-employee__dropdown span');
@@ -334,42 +336,42 @@ if (accessToken != `null`) {
 
             // event click item dropdown
 
-            itemDropdown_store.forEach((item, index) => {
-                item.onclick = function () {
-                    clearSelected_Manager();
-                    renderManager_Store(item.getAttribute('data-store'))
-                    idStore = item.getAttribute('data-store');
-                    inputManager.value = ""
-                    idmanager = 0;
-                    successInputCategory(4, '')
-                    if (indexPreStore != -1) {
-                        itemDropdown_store[indexPreStore].classList.remove('selected');
-                    }
-                    inputStore.value = spans_store[index].textContent.trim();
-                    arrows_down[1].style.transform = 'rotate(180deg)';
-                    dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none`
-                    item.classList.add('selected');
-                    indexPreStore = index;
-                    idstore_add = item.getAttribute('data-store');
-                }
-            })
+            // itemDropdown_store.forEach((item, index) => {
+            //     item.onclick = function () {
+            //         clearSelected_Manager();
+            //         renderManager_Store(item.getAttribute('data-store'))
+            //         idStore = item.getAttribute('data-store');
+            //         inputManager.value = ""
+            //         idmanager = 0;
+            //         successInputCategory(4, '')
+            //         if (indexPreStore != -1) {
+            //             itemDropdown_store[indexPreStore].classList.remove('selected');
+            //         }
+            //         inputStore.value = spans_store[index].textContent.trim();
+            //         arrows_down[1].style.transform = 'rotate(180deg)';
+            //         dropDown_storeEmployee.style = `min-width: 492.575px; transform-origin: center top; z-index: 2026; display: none`
+            //         item.classList.add('selected');
+            //         indexPreStore = index;
+            //         idstore_add = item.getAttribute('data-store');
+            //     }
+            // })
 
             const noData_manager = document.querySelector('.no-data__manager');
 
-            function renderManager_Store(idStore) {
-                var haveManager = false;
-                itemDropdown_managers.forEach((item) => {
-                    if (item.getAttribute('data-store') == idStore) {
-                        item.style.display = 'flex';
-                        noData_manager.style.display = 'none';
-                        haveManager = true;
-                    }
-                    else {
-                        item.style.display = 'none';
-                    }
-                })
-                if (haveManager == false) noData_manager.style.display = 'flex';
-            }
+            // function renderManager_Store(idStore) {
+            //     var haveManager = false;
+            //     itemDropdown_managers.forEach((item) => {
+            //         if (item.getAttribute('data-store') == idStore) {
+            //             item.style.display = 'flex';
+            //             noData_manager.style.display = 'none';
+            //             haveManager = true;
+            //         }
+            //         else {
+            //             item.style.display = 'none';
+            //         }
+            //     })
+            //     if (haveManager == false) noData_manager.style.display = 'flex';
+            // }
 
             function renderAllManager() {
                 itemDropdown_managers.forEach((item) => {
@@ -570,7 +572,7 @@ if (accessToken != `null`) {
                 inputCCCD.value = "";
                 inputEmail.value = "";
                 inputPhone.value = "";
-                clearSelected_Store();
+                // clearSelected_Store();
                 clearSelected_Manager();
                 removeAllSelectedService();
                 clearSelected_TypeEmployee();
@@ -579,7 +581,6 @@ if (accessToken != `null`) {
                 inputService.placeholder = "Chọn Dịch Vụ Cho Phép";
                 countClick = 0;
                 countService = 0;
-                idStore = -1;
                 idmanager = -1;
                 idTypeStaff = 1;
                 successInputCategory(0, '');
@@ -615,19 +616,19 @@ if (accessToken != `null`) {
                     if (flag == 1) flag = 2
                 }
                 // validate service
-                if (inputService.placeholder == "Chọn Dịch Vụ Cho Phép") {
+                if (inputService.placeholder == 'Chọn Dịch Vụ Cho Phép') {
                     errInputCategory(3, 'Bạn vui lòng chọn dịch vụ cho phép của nhân viên này')
                 } else {
                     successInputCategory(3, '')
-                    if (flag == 2) flag = 3
+                    if (flag == 2) flag = 4
                 }
                 // validate store
-                if (inputStore.value == "") {
-                    errInputCategory(4, 'Bạn vui lòng chọn cửa hàng cho nhân viên này')
-                } else {
-                    successInputCategory(4, '')
-                    if (flag == 3) flag = 4
-                }
+                // if (inputStore.value == "") {
+                //     errInputCategory(4, 'Bạn vui lòng chọn cửa hàng cho nhân viên này')
+                // } else {
+                //     successInputCategory(4, '')
+                //     if (flag == 3) flag = 4
+                // }
                 // validate manager
                 if (inputManager.value == "") {
                     errInputCategory(5, 'Bạn vui lòng chọn nhân viên quản lý')
@@ -706,7 +707,7 @@ if (accessToken != `null`) {
                     inputEmail.value = inputEmail.value.trim();
                     inputCCCD.value = inputCCCD.value.trim();
                     inputPhone.value = inputPhone.value.trim();
-                    inputStore.value = idStore;
+                    idStore = ids;
                     inputManager.value = idmanager;
                     inputTypeEm.value = idTypeStaff;
                     console.log(formEmployee.action);
@@ -719,33 +720,33 @@ if (accessToken != `null`) {
             const tittleEmployee = document.querySelector('.tittle-employee');
             // handle edit employee
 
-            function resetSelected_Store(idStore) {
-                inputStore.value = "";
-                itemDropdown_store.forEach((item, index) => {
-                    if (item.getAttribute('data-store') == idStore) {
-                        if (!item.classList.contains('selected')) {
-                            item.classList.add('selected');
-                        }
-                        indexPreStore = index;
-                        inputStore.value = spans_store[index].textContent.trim();
-                        renderManager_Store(item.getAttribute('data-store'));
-                    }
-                    else {
-                        if (item.classList.contains('selected')) {
-                            item.classList.remove('selected');
-                        }
-                    }
-                })
-            }
+            // function resetSelected_Store(idStore) {
+            //     inputStore.value = "";
+            //     itemDropdown_store.forEach((item, index) => {
+            //         if (item.getAttribute('data-store') == idStore) {
+            //             if (!item.classList.contains('selected')) {
+            //                 item.classList.add('selected');
+            //             }
+            //             indexPreStore = index;
+            //             inputStore.value = spans_store[index].textContent.trim();
+            //             renderManager_Store(item.getAttribute('data-store'));
+            //         }
+            //         else {
+            //             if (item.classList.contains('selected')) {
+            //                 item.classList.remove('selected');
+            //             }
+            //         }
+            //     })
+            // }
 
-            function clearSelected_Store() {
-                inputStore.value = '';
-                indexPreStore = -1;
-                itemDropdown_store.forEach((item, index) => {
-                    if (item.classList.contains('selected')) item.classList.remove('selected');
+            // function clearSelected_Store() {
+            //     inputStore.value = '';
+            //     indexPreStore = -1;
+            //     itemDropdown_store.forEach((item, index) => {
+            //         if (item.classList.contains('selected')) item.classList.remove('selected');
 
-                })
-            }
+            //     })
+            // }
 
             function clearSelected_TypeEmployee() {
                 inputTypeEm.value = '';
@@ -795,6 +796,7 @@ if (accessToken != `null`) {
                         inputTypeEm.value = spans_typeEm[index].textContent.trim();
                         if (index > 0) {
                             inputService.placeholder = 'Nhân Viên Này Không Cần Chọn Dịch Vụ Cho Phép';
+                            inputService.value = ""
                         }
                     }
                     else {
@@ -880,7 +882,7 @@ if (accessToken != `null`) {
                     isUpload = false;
                     if (status == 'success') {
                         // set variable to edit
-                        idStore = info.IDStore;
+                        idStore = ids;
                         idmanager = info.IDManager;
                         idTypeStaff = info.TypeStaff;
                         inputEditEm.value = info.IDStaff;
@@ -897,15 +899,14 @@ if (accessToken != `null`) {
             `
                         haveImg = true;
                         clearImg_upload.style.display = 'block';
-                        resetSelected_Store(info.IDStore);
+                        // resetSelected_Store(info.IDStore);
                         resetSelected_Manager(info.IDManager);
                         resetSelected_Sex(info.Gender);
                         resetSelected_TypeStaff(info.TypeStaff);
                         resetSelected_Service();
                         const { statusS, service_employee } = await getService_Employee_id(idEmployee);
                         if (statusS == 'success') {
-                            inputService.placeholder = '';
-                            inputService.value = ' ';
+                            inputService.value = " ";
                             isCheckService(service_employee);
                         }
                         else {
@@ -1063,14 +1064,14 @@ if (accessToken != `null`) {
             const btnConfirmRegis = document.getElementById('adm-add-regis_shift');
             const inputdateFrom = document.getElementById('input_from');
             const inputdateTo = document.getElementById('input_to');
-            const inputStore_Regis = document.getElementById('input-store-regis-shift')
+            // const inputStore_Regis = document.getElementById('input-store-regis-shift')
 
             const inputEmployeRegis = document.getElementById('input-employee-regis__shift');
             const dropDown_employeeService = document.querySelector('#dropdown-employee__service');
             const listDropdown_employee = document.querySelectorAll('.list-employee__dropdown');
 
             var scrollYStore_Regis = 455;
-            var scrollY_employee = 555;
+            var scrollY_employee = 505;
             let isOver_employee = false;
             var isOver_storeRegis = false;
 
@@ -1087,98 +1088,98 @@ if (accessToken != `null`) {
 
             inputEmployeRegis.onclick = () => {
                 if (dropDown_employeeService.getAttribute('style') == 'min-width: 450px; transform-origin: center bottom; z-index: 2003; display: none;') {
-                    arrows_down[6].style.transform = 'rotate(0deg)';
+                    arrows_down[5].style.transform = 'rotate(0deg)';
                     dropDown_employeeService.style = `min-width: 450px; position: fixed; top: ${scrollY_employee}px; left: 543px; transform-origin: center bottom; z-index: 2003; display:block;`
                 }
                 else {
-                    arrows_down[6].style.transform = 'rotate(180deg)';
+                    arrows_down[5].style.transform = 'rotate(180deg)';
                     dropDown_employeeService.style = 'min-width: 450px; transform-origin: center bottom; z-index:2003; display: none;'
                 }
             }
 
-            const dropDownStore_regis = document.getElementById('dropdown-store__regis');
-            const itemDropdownStore_regis = document.querySelectorAll('.item-store__dropdown_regis');
-            const span_storeRegis = document.querySelectorAll('.item-store__dropdown_regis span')
-            dropDownStore_regis.onmouseover = function () {
-                isOver_storeRegis = true;
-            }
+            // const dropDownStore_regis = document.getElementById('dropdown-store__regis');
+            // const itemDropdownStore_regis = document.querySelectorAll('.item-store__dropdown_regis');
+            // const span_storeRegis = document.querySelectorAll('.item-store__dropdown_regis span')
+            // dropDownStore_regis.onmouseover = function () {
+            //     isOver_storeRegis = true;
+            // }
 
-            dropDownStore_regis.onmouseleave = function () {
-                isOver_storeRegis = false;
-            }
+            // dropDownStore_regis.onmouseleave = function () {
+            //     isOver_storeRegis = false;
+            // }
 
-            inputStore_Regis.onclick = () => {
-                if (dropDownStore_regis.getAttribute('style') == 'min-width: 400px; transform-origin: center top; z-index: 2026; display: none;') {
-                    arrows_down[5].style.transform = 'rotate(0deg)';
-                    dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollYStore_Regis}px; left: 530px;display:block;`
-                }
-                else {
-                    arrows_down[5].style.transform = 'rotate(180deg)';
-                    dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2026; display: none`
-                }
-            }
+            // inputStore_Regis.onclick = () => {
+            //     if (dropDownStore_regis.getAttribute('style') == 'min-width: 400px; transform-origin: center top; z-index: 2026; display: none;') {
+            //         arrows_down[5].style.transform = 'rotate(0deg)';
+            //         dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2030; position: fixed; top: ${scrollYStore_Regis}px; left: 530px;display:block;`
+            //     }
+            //     else {
+            //         arrows_down[5].style.transform = 'rotate(180deg)';
+            //         dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2026; display: none`
+            //     }
+            // }
 
             inputEmployeRegis.onfocusout = () => {
                 if (!isOver_employee) {
-                    arrows_down[6].style.transform = 'rotate(180deg)';
+                    arrows_down[5].style.transform = 'rotate(180deg)';
                     dropDown_employeeService.style = 'min-width: 450px; transform-origin: center bottom; z-index:2003; display: none;'
                 }
             }
 
-            inputStore_Regis.onfocusout = () => {
-                if (!isOver_storeRegis) {
-                    arrows_down[5].style.transform = 'rotate(180deg)';
-                    dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2026; display: none`
-                }
-            }
+            // inputStore_Regis.onfocusout = () => {
+            //     if (!isOver_storeRegis) {
+            //         arrows_down[5].style.transform = 'rotate(180deg)';
+            //         dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2026; display: none`
+            //     }
+            // }
 
 
 
-            var indexPreStore_regis = -1;
-            itemDropdownStore_regis.forEach((item, index) => {
-                item.onclick = function () {
-                    idStoreRegis = item.getAttribute('data-store')
-                    removeAllSelectedEmployee();
-                    renderEmployee_Store(item.getAttribute('data-store'))
-                    inputEmployeRegis.value = "";
-                    if (indexPreStore_regis != -1) {
-                        itemDropdownStore_regis[indexPreStore_regis].classList.remove('selected');
-                    }
-                    inputStore_Regis.value = span_storeRegis[index].textContent.trim();
-                    arrows_down[5].style.transform = 'rotate(180deg)';
-                    dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2026; display: none`
-                    item.classList.add('selected');
-                    indexPreStore_regis = index;
-                }
-            })
+            // var indexPreStore_regis = -1;
+            // itemDropdownStore_regis.forEach((item, index) => {
+            //     item.onclick = function () {
+            //         idStoreRegis = item.getAttribute('data-store')
+            //         removeAllSelectedEmployee();
+            //         renderEmployee_Store(item.getAttribute('data-store'))
+            //         inputEmployeRegis.value = "";
+            //         if (indexPreStore_regis != -1) {
+            //             itemDropdownStore_regis[indexPreStore_regis].classList.remove('selected');
+            //         }
+            //         // inputStore_Regis.value = span_storeRegis[index].textContent.trim();
+            //         arrows_down[5].style.transform = 'rotate(180deg)';
+            //         dropDownStore_regis.style = `min-width: 400px; transform-origin: center top; z-index: 2026; display: none`
+            //         item.classList.add('selected');
+            //         indexPreStore_regis = index;
+            //     }
+            // })
             const noData_employee = document.querySelector('.no-data__employee')
-            function renderEmployee_Store(idStore) {
-                var haveEmployee = false;
-                listDropdown_employee.forEach((item, index) => {
-                    if (item.getAttribute('data-store') == idStore) {
-                        item.style.display = 'flex';
-                        noData_employee.style.display = 'none';
-                        haveEmployee = true;
-                    }
-                    else {
-                        item.style.display = 'none';
-                    }
-                })
+            // function renderEmployee_Store(idStore) {
+            //     var haveEmployee = false;
+            //     listDropdown_employee.forEach((item, index) => {
+            //         if (item.getAttribute('data-store') == idStore) {
+            //             item.style.display = 'flex';
+            //             noData_employee.style.display = 'none';
+            //             haveEmployee = true;
+            //         }
+            //         else {
+            //             item.style.display = 'none';
+            //         }
+            //     })
 
-                if (haveEmployee == false) noData_employee.style.display = 'flex';
-            }
+            //     if (haveEmployee == false) noData_employee.style.display = 'flex';
+            // }
 
             const btnRegisShift = document.getElementById('btn-AddRegisShift')
 
             btnRegisShift.onclick = (e) => {
                 removeAllSelectedEmployee();
-                removeAllSelectedStore();
-                inputStore_Regis.value = "";
+                // removeAllSelectedStore();
+                // inputStore_Regis.value = "";
                 inputdateFrom.value = "";
                 inputdateTo.value = "";
                 successInputCategory(11, '');
                 successInputCategory(12, '');
-                successInputCategory(13, '');
+                // successInputCategory(13, '');
                 successInputCategory(14, '');
             }
 
@@ -1209,12 +1210,12 @@ if (accessToken != `null`) {
                 })
             }
 
-            function removeAllSelectedStore() {
-                indexPreStore_regis = -1;
-                itemDropdownStore_regis.forEach((item, index) => {
-                    if (item.classList.contains('selected')) item.classList.remove('selected');
-                })
-            }
+            // function removeAllSelectedStore() {
+            //     indexPreStore_regis = -1;
+            //     itemDropdownStore_regis.forEach((item, index) => {
+            //         if (item.classList.contains('selected')) item.classList.remove('selected');
+            //     })
+            // }
 
 
             listDropdown_employee.forEach((item, index) => {
@@ -1279,7 +1280,7 @@ if (accessToken != `null`) {
                     </span>`
                         }
                     }
-                    successInputCategory(13, '');
+                    // successInputCategory(13, '');
                 }
 
             })
@@ -1362,16 +1363,16 @@ if (accessToken != `null`) {
                     errInputCategory(14, 'Bạn vui lòng chọn nhân viên cần đăng ký ngày làm việc')
                 }
                 else {
-                    if (flag == 2) flag = 3
+                    if (flag == 2) flag = 4
                     successInputCategory(14, '');
                 }
 
-                if (inputStore_Regis.value == "") {
-                    errInputCategory(13, 'Bạn vui lòng chọn cửa hàng cần đăng ký')
-                } else {
-                    if (flag == 3) flag = 4
-                    successInputCategory(13, '');
-                }
+                // if (inputStore_Regis.value == "") {
+                //     errInputCategory(13, 'Bạn vui lòng chọn cửa hàng cần đăng ký')
+                // } else {
+                //     if (flag == 3) flag = 4
+                //     successInputCategory(13, '');
+                // }
 
                 if (flag == 4) {
                     var dateInputFrom = new Date(`${inputdateFrom.value}`);
@@ -1385,7 +1386,7 @@ if (accessToken != `null`) {
                         errInputCategory(14, 'Đã có nhân viên đăng ký làm việc trong thời gian này');
                     } else {
                         successInputCategory(14, '');
-                        const { status } = await regisShift(arrDateRegis, arrEmployeeRegis, idStoreRegis);
+                        const { status } = await regisShift(arrDateRegis, arrEmployeeRegis, ids);
                         if (status == 'success') {
                             $('#add-regisShift').modal('hide');
                             launch_toast('Đăng Ký Làm Việc Thành Công');
@@ -1527,6 +1528,14 @@ if (accessToken != `null`) {
     })();
 } else {
     window.location = '/page-err'
+}
+
+function launch_toast(mess) {
+    var x = document.getElementById("toast")
+    x.className = "show";
+    x.textContent = '';
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+    setTimeout(function () { x.textContent = mess }, 700);
 }
 
 

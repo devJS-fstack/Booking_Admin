@@ -9,7 +9,7 @@ navheader.style.display = 'none'
 
 const instance = axios.create({
     baseURL: '',
-    timeOut: 3 * 1000,
+    timeOut: 3 * 100000,
     headers: {
         'Content-Type': 'application/json'
     },

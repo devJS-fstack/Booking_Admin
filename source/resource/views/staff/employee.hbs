@@ -468,7 +468,7 @@
                                     </div>
                                     <div class="el-row" style="margin-left: -8px; margin-right: -8px;height: 116px;">
                                         <div class="el-col el-col-24 el-col-sm-12"
-                                            style="padding-left: 8px; padding-right: 8px;">
+                                            style="padding-left: 8px; padding-right: 8px; display:none">
                                             <div class="adm-form-item">
                                                 <div class="el-form-item is-success is-required">
                                                     <label for="name" class="el-form-item__label">
@@ -481,7 +481,7 @@
                                                                 <input id="input-store-employee__add" type="text"
                                                                     readonly="readonly" autocomplete="off"
                                                                     class="el-input__inner pointer"
-                                                                    placeholder="Chọn Cửa Hàng" name="store_id"
+                                                                    placeholder="Chọn Cửa Hàng" name=""
                                                                     style="text-overflow: ellipsis;padding: 0px 40px 0px 12px;"
                                                                     ;>
                                                                 <span class="el-input__suffix">
@@ -492,12 +492,12 @@
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        <div class="adm-form-item__error">
-                                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="adm-form-item__error">
+                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
                                         </div>
                                         <div class="el-col el-col-24 el-col-sm-12"
                                             style="padding-left: 8px; padding-right: 8px;">
@@ -675,6 +675,7 @@
 
                             <input type="text" id="arrServiceAssign" name="arrServices" style="display:none">
                             <input type="text" id="idEmployeeEdit" name="idStaff" style="display:none">
+                            <input type="text" id="idStore" name="store_id" style="display:none">
                         </form>
                     </div>
                     <div class="modal-footer" style="justify-content: flex-end !important">
@@ -784,7 +785,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="adm-form-item">
+                                    <div class="adm-form-item" style="display:none">
                                         <div class="el-form-item is-success is-required">
                                             <label for="name" class="el-form-item__label">
                                                 Cửa Hàng
@@ -796,7 +797,7 @@
                                                         <input id="input-store-regis-shift" type="text"
                                                             readonly="readonly" autocomplete="off"
                                                             class="el-input__inner pointer" placeholder="Chọn Cửa Hàng"
-                                                            name="store_id"
+                                                            name=""
                                                             style="text-overflow: ellipsis;padding: 0px 40px 0px 12px;"
                                                             ;>
                                                         <span class="el-input__suffix">
@@ -807,10 +808,10 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="adm-form-item__error">
-                                                    {{!-- Bạn vui lòng nhập tên danh mục --}}
-                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="adm-form-item__error">
+                                            {{!-- Bạn vui lòng nhập tên danh mục --}}
                                         </div>
                                     </div>
                                     <div class="adm-form-item">

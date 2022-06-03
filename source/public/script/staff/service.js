@@ -590,6 +590,7 @@ if (accessToken != `null`) {
                     listDropdown_category[0].classList.add('selected');
                     indexPredd = 0;
                     tittleService.textContent = 'Tạo Dịch Vụ';
+                    $('#adm-btn-service__add span').text('Thêm Dịch Vụ')
                     inputNameService.value = '';
                     inputDesService.value = '';
                     input_employeeService.placeholder = 'Lựa Chọn Nhân Viên';
@@ -747,6 +748,15 @@ if (accessToken != `null`) {
 
                 // Handle edit service 
                 const editDropDown_service = document.querySelectorAll('.edit-service');
+                function renderDataCategory(idType) {
+                    listDropdown_category.forEach((item, index) => {
+                        if (item.getAttribute('data-type') == idType) {
+                            input_categoryService.value = spans_categorydd[index].textContent.trim();
+                            listDropdown_category[index].classList.add('selected');
+                            indexPredd = index;
+                        }
+                    })
+                }
                 editDropDown_service.forEach((item, index) => {
                     item.onclick = async () => {
                         isUpload = false;
@@ -755,12 +765,14 @@ if (accessToken != `null`) {
                         $('#adm-btn-service__add span').text("Lưu Thay Đổi")
                         const { status, infoService } = await getInfoService(item.getAttribute('data-service'));
                         if (status === 'success') {
+                            // console.log(infoService)
                             const info = infoService[0];
                             idType_service = info.TypeService;
                             resetSelected_C();
-                            input_categoryService.value = spans_categorydd[info.TypeService - 1].textContent.trim();
-                            listDropdown_category[info.TypeService - 1].classList.add('selected');
-                            indexPredd = info.TypeService - 1;
+                            renderDataCategory(idType_service)
+                            // input_categoryService.value = spans_categorydd[info.TypeService - 1].textContent.trim();
+                            // listDropdown_category[info.TypeService - 1].classList.add('selected');
+                            // indexPredd = info.TypeService - 1;
                             inputNameService.value = info.NameService;
                             inputDesService.value = info.Description;
                             resetSelected_S();
@@ -836,18 +848,28 @@ if (accessToken != `null`) {
                     }
                 }
 
+                function renderDataCategory_afterDelete(idType) {
+                    console.log(idType);
+                    numberService.forEach((item, index) => {
+                        if (item.getAttribute('data-type') == idType) {
+                            var lengthCurrent = numberService[index].textContent.split(' ')[0];
+                            var lengthCurrentAll = numberService[0].textContent.split(' ')[0];
+                            numberService[index].textContent = `${lengthCurrent - 1} Dịch Vụ`;
+                            numberService[0].textContent = `${lengthCurrentAll - 1} Dịch Vụ`;
+                        }
+                    })
+                }
 
                 btnConfirm_deleteService.addEventListener('click', async () => {
                     $('#alertModal').modal('hide');
                     const { status } = await deleteService(idService_delete);
                     if (status == "success") {
                         //location.reload();
-                        var lengthCurrent = numberService[idtype].textContent.split(' ')[0];
-                        var lengthCurrentAll = numberService[0].textContent.split(' ')[0];
-                        numberService[idtype].textContent = `${lengthCurrent - 1} Dịch Vụ`;
-                        numberService[0].textContent = `${lengthCurrentAll - 1} Dịch Vụ`;
+                        renderDataCategory_afterDelete(idtype);
                         removeService(idService_delete);
                     }
+
+
                 })
 
 
@@ -982,7 +1004,6 @@ if (accessToken != `null`) {
 else {
     window.location = '/page-err';
 }
-
 
 
 
