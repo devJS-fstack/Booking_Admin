@@ -1,9 +1,20 @@
 const accessToken = `${window.localStorage.getItem('accessToken')}`;
 if (accessToken != `null`) {
     (async () => {
-        const { status, nameEmployee, pathImg } = await checkToken(accessToken);
+        const { status, employee, role } = await checkToken(accessToken);
         if (status == 'success') {
             const idStore = location.href.split('?idStore=')[1];
+            if (role === 3) {
+                if (employee.IDStore !== parseInt(idStore)) {
+                    location.href = './page-err'
+                }
+            }
+            else if (role == 4) {
+                var service_link = document.querySelector('.service-link');
+                var service_span = document.querySelector('.service-span');
+                service_link.classList.remove('d-none');
+                service_span.classList.remove('d-none');
+            }
             var itemCustomer = document.querySelectorAll('.adm-service');
             const numberBooking = document.querySelectorAll('.num-bookings');
             const dateLastBook = document.querySelectorAll('.date-last-book')
@@ -246,9 +257,7 @@ if (accessToken != `null`) {
                 await setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
                 await setTimeout(function () { x.textContent = mess }, 700);
             }
-            inputPhoneCus.oninput = () => {
-                inputPhoneCus.value = inputPhoneCus.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-            }
+
 
             const confirmAddCus = document.getElementById('confirm-add_customer');
             const btnAddCustomer = document.getElementById('btn-AddCustomer');
@@ -265,6 +274,7 @@ if (accessToken != `null`) {
             })
 
             inputPhoneCus.oninput = async () => {
+                inputPhoneCus.value = inputPhoneCus.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
                 successInputCategory(0, "")
                 if (inputPhoneCus.value.length == 10) {
                     const { status } = await checkDuplicatePhone(inputPhoneCus.value)
@@ -356,13 +366,13 @@ if (accessToken != `null`) {
                     errInputCategory(2, "Bạn vui lòng nhập email của khách hàng")
                 } else {
                     if (validateEmail(inputEmailCus.value)) {
-                        // if (checkDuplicateEmail(inputEmailCus.value)) {
-                        //     errInputCategory(2, "Email này đã được sử dụng")
-                        // } else {
-                        //     successInputCategory(2, "")
-                        //     if (flag == 2) flag = 3;
-                        // }
-                        successInputCategory(2, "")
+                        if (checkDuplicateEmail(inputEmailCus.value)) {
+                            errInputCategory(2, "Email này đã được sử dụng")
+                        } else {
+                            successInputCategory(2, "")
+                            if (flag == 2) flag = 3;
+                        }
+                        // successInputCategory(2, "")
                         if (flag == 2) flag = 3;
                     } else {
                         errInputCategory(2, "Bạn vui lòng nhập đúng email")
@@ -492,8 +502,13 @@ if (accessToken != `null`) {
             function clickDelete(deleteCustomer) {
                 deleteCustomer.forEach((item, index) => {
                     item.onclick = async () => {
-                        indexDelete = index;
-                        phoneDelete = item.getAttribute('data-customer');
+                        if (role === 3) {
+                            launch_toast('Bạn không có quyền làm việc này')
+                        } else {
+                            $('#alertModal').modal('show');
+                            indexDelete = index;
+                            phoneDelete = item.getAttribute('data-customer');
+                        }
                     }
                 })
             }
@@ -575,13 +590,14 @@ if (accessToken != `null`) {
             })
 
             confirm_deleteCus.addEventListener('click', async () => {
-                customerAllLength_text.textContent = `${parseInt(--lengthCus_Current)}`
-                var customers_new = document.querySelectorAll('.adm-service');
-                customers_new[indexDelete].remove();
-                $('#alertModal').modal('hide');
-                await launch_toast('Xóa thành công');
-                const { status } = await deleteCustomer_phone(phoneDelete);
-                console.log(status);
+                if (role === 4) {
+                    customerAllLength_text.textContent = `${parseInt(--lengthCus_Current)}`
+                    var customers_new = document.querySelectorAll('.adm-service');
+                    customers_new[indexDelete].remove();
+                    $('#alertModal').modal('hide');
+                    await launch_toast('Xóa thành công');
+                    const { status } = await deleteCustomer_phone(phoneDelete);
+                }
             })
 
 

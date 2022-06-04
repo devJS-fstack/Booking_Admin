@@ -1,10 +1,36 @@
 const accessToken = `${window.localStorage.getItem('accessToken')}`;
-const ids = location.href.split('?idStore=')[1];
-$('#idStore').val(ids);
 if (accessToken != `null`) {
     (async () => {
-        const { status } = await checkToken(accessToken);
+        const ids = location.href.split('?idStore=')[1];
+        $('#idStore').val(ids);
+        const { status, employee, role } = await checkToken(accessToken);
         if (status == 'success') {
+            if (role === 3) {
+                var dropDownsType = document.querySelectorAll('.item-type-employee__dropdown')
+                var admEmployee = document.querySelectorAll('.adm-service')
+                admEmployee.forEach(item => {
+                    if (item.getAttribute('data-manager') === `SuperAdmin`) item.remove();
+                })
+                var dropDownManager = document.querySelectorAll('.item-managers__dropdown')
+                dropDownManager.forEach(item => {
+                    if (item.getAttribute('data-manager') === `SuperAdmin`) item.remove();
+                })
+                dropDownsType[2].remove();
+                dropDownsType[3].remove();
+                if (employee.IDStore !== parseInt(ids)) {
+                    location.href = './page-err'
+                }
+            }
+            else if (role == 4) {
+                var admEmployee = document.querySelectorAll('.adm-service')
+                admEmployee.forEach(item => {
+                    if (item.getAttribute('data-manager') === `SuperAdmin`) item.style.backgroundColor = '#070d3e';
+                })
+                var service_link = document.querySelector('.service-link');
+                var service_span = document.querySelector('.service-span');
+                service_link.classList.remove('d-none');
+                service_span.classList.remove('d-none');
+            }
             const upload_element = document.querySelector('.avatar-uploader');
             const upload_input = document.querySelector('.el-upload__input');
             const upload_dragger = document.querySelector('.el-upload-dragger');
@@ -397,6 +423,34 @@ if (accessToken != `null`) {
                 }
             })
 
+            function renderSelectedAdmin() {
+                itemDropdown_managers.forEach((item, index) => {
+                    if (item.getAttribute('data-manager') === 'SuperAdmin') {
+                        indexPreManager = index
+                        item.classList.add('selected');
+                        idmanager = item.getAttribute('data-manager');
+                        inputManager.value = spans_manager[index].textContent.trim();
+                    } else {
+                        item.classList.remove('selected');
+                        item.style.display = 'none';
+                    }
+                })
+            }
+            var idEmployeeClick_edit;
+
+            function renderSelectedManagerAll() {
+                itemDropdown_managers.forEach((item, index) => {
+                    if (idEmployee == item.getAttribute('data-manager')) {
+                        item.style.display = 'none';
+                    } else {
+                        item.classList.remove('selected');
+                        item.style.display = 'flex';
+                    }
+                })
+                indexPreManager = -1;
+                inputManager.value = "";
+            }
+
             itemDropdown_typeEm.forEach((item, index) => {
                 item.onclick = () => {
                     arrServicesId = [];
@@ -411,6 +465,12 @@ if (accessToken != `null`) {
                     }
                     else {
                         inputService.placeholder = 'Chọn Dịch Vụ Cho Phép';
+                        inputService.value = "";
+                    }
+                    if (index == 2 || index == 3) {
+                        renderSelectedAdmin();
+                    } else {
+                        renderSelectedManagerAll();
                     }
                     itemDropdown_typeEm[indexPreType].classList.remove('selected');
                     inputTypeEm.value = spans_typeEm[index].textContent.trim();
@@ -456,14 +516,14 @@ if (accessToken != `null`) {
                 item.onclick = () => {
                     arrServicesId = [];
                     successInputCategory(3, '')
-                    if (indexPreType == 1) {
+                    if (indexPreType !== 0) {
                         itemDropdown_typeEm[indexPreType].classList.remove('selected');
                         inputTypeEm.value = spans_typeEm[0].textContent.trim();
                         itemDropdown_typeEm[0].classList.add('selected');
                         indexPreType = 0;
                     }
                     inputService.value = " ";
-                    inputService.placeholder = "";
+                    // inputService.placeholder = "Nhân Viên Này Không Cần Chọn";
                     inputService.focus();
                     countClick++;
                     if (countClick == 1) {
@@ -537,6 +597,7 @@ if (accessToken != `null`) {
             var arrServicesId = [];
             const inputArrServices = document.getElementById('arrServiceAssign');
             const formEmployee = document.getElementById('addEmployeeForm');
+            var emailOld, phoneOld;
 
             function pushIdServiceIntoArr() {
                 itemDropdown_service.forEach((item, index) => {
@@ -583,6 +644,7 @@ if (accessToken != `null`) {
                 countService = 0;
                 idmanager = -1;
                 idTypeStaff = 1;
+                idEmployee = '';
                 successInputCategory(0, '');
                 successInputCategory(1, '');
                 successInputCategory(2, '');
@@ -597,7 +659,7 @@ if (accessToken != `null`) {
 
             const inputEditEm = document.querySelector('#idEmployeeEdit');
 
-            btnAddEmployee.addEventListener('click', (e) => {
+            btnAddEmployee.addEventListener('click', async (e) => {
                 e.preventDefault();
                 let flag = 0;
 
@@ -617,7 +679,14 @@ if (accessToken != `null`) {
                 }
                 // validate service
                 if (inputService.placeholder == 'Chọn Dịch Vụ Cho Phép') {
-                    errInputCategory(3, 'Bạn vui lòng chọn dịch vụ cho phép của nhân viên này')
+                    pushIdServiceIntoArr()
+                    if (arrServicesId.length == 0) {
+                        errInputCategory(3, 'Bạn vui lòng chọn dịch vụ cho phép của nhân viên này')
+                    } else {
+                        arrServicesId = [];
+                        successInputCategory(3, '')
+                        if (flag == 2) flag = 4
+                    }
                 } else {
                     successInputCategory(3, '')
                     if (flag == 2) flag = 4
@@ -661,8 +730,23 @@ if (accessToken != `null`) {
                     errInputCategory(9, 'Bạn vui lòng nhập email của nhân viên này')
                 } else {
                     if (validateEmail(inputEmail.value)) {
-                        successInputCategory(9, '')
-                        if (flag == 7) flag = 8
+                        if ($('#adm-btn-employee__add').text().trim() == 'Lưu Thay Đổi') {
+                            const { status } = await checkExistEmail_edit(emailOld, inputEmail.value)
+                            if (status === 'exist') {
+                                errInputCategory(9, 'Email này đã được sử dụng')
+                            } else {
+                                successInputCategory(9, '')
+                                if (flag == 7) flag = 8
+                            }
+                        } else {
+                            const { status } = await checkExistEmail(inputEmail.value)
+                            if (status === 'exist') {
+                                errInputCategory(9, 'Email này đã được sử dụng')
+                            } else {
+                                successInputCategory(9, '')
+                                if (flag == 7) flag = 8
+                            }
+                        }
                     } else {
                         errInputCategory(9, 'Bạn vui lòng nhập đúng email')
                     }
@@ -673,8 +757,23 @@ if (accessToken != `null`) {
                 }
                 else {
                     if (validatePhone(inputPhone.value)) {
-                        successInputCategory(10, '')
-                        if (flag == 8) flag = 9
+                        if ($('#adm-btn-employee__add').text().trim() == 'Lưu Thay Đổi') {
+                            const { status } = await checkExistPhone_edit(phoneOld, inputPhone.value)
+                            if (status == 'exist') {
+                                errInputCategory(10, 'Số điện thoại này đã được dùng')
+                            } else {
+                                successInputCategory(10, '')
+                                if (flag == 8) flag = 9
+                            }
+                        } else {
+                            const { status } = await checkExistPhone(inputPhone.value)
+                            if (status == 'exist') {
+                                errInputCategory(10, 'Số điện thoại này đã được dùng')
+                            } else {
+                                successInputCategory(10, '')
+                                if (flag == 8) flag = 9
+                            }
+                        }
                     } else {
                         errInputCategory(10, 'Bạn vui lòng nhập đúng số điện thoại')
                     }
@@ -880,6 +979,11 @@ if (accessToken != `null`) {
                     const { status, employee } = await getInfoEmployee(idEmployee);
                     const info = employee[0];
                     isUpload = false;
+                    if (item.getAttribute('data-manager') === 'SuperAdmin') {
+                        renderSelectedAdmin();
+                    } else {
+                        renderAllManager();
+                    }
                     if (status == 'success') {
                         // set variable to edit
                         idStore = ids;
@@ -891,6 +995,8 @@ if (accessToken != `null`) {
                         inputNameEmployee.value = info.NameStaff;
                         inputCCCD.value = info.CCCD;
                         inputEmail.value = info.Email;
+                        emailOld = info.Email;
+                        phoneOld = info.Phone;
                         inputPhone.value = info.Phone;
                         upload_dragger.innerHTML = `
             <div class="uploaded-photo-preview">
@@ -1009,14 +1115,14 @@ if (accessToken != `null`) {
                 item.onclick = async () => {
                     let idEmployee_disable = item.getAttribute('data-employee');
                     if (disableText[index].textContent.trim() == 'Tạm nghỉ') {
-                        const { status } = await setStatusEmployee(idEmployee_disable, 'Tạm Nghỉ')
+                        const { status } = await setStatusEmployee(idEmployee_disable, 'Tạm Nghỉ', 'No Active')
                         if (status == 'success') {
                             disableItemClick(idEmployee_disable);
                             launch_toast('Nhân viên này đã được tạm nghỉ');
                         }
                     }
                     else {
-                        const { status } = await setStatusEmployee(idEmployee_disable, 'Hoạt Động')
+                        const { status } = await setStatusEmployee(idEmployee_disable, 'Hoạt Động', 'Active')
                         if (status == 'success') {
                             enableItemClick(idEmployee_disable);
                             launch_toast('Nhân viên này đã được hoạt động');
@@ -1479,6 +1585,32 @@ if (accessToken != `null`) {
                 })).data;
             }
 
+            async function checkExistPhone(phone) {
+                return (await instance.post('/staff/check-exist-phone', {
+                    phone
+                })).data;
+            }
+
+            async function checkExistPhone_edit(phoneOld, phoneNew) {
+                return (await instance.post('/staff/check-exist-phone-edit', {
+                    phoneOld,
+                    phoneNew,
+                })).data;
+            }
+
+            async function checkExistEmail(email) {
+                return (await instance.post('/login/check-exist-email', {
+                    email
+                })).data;
+            }
+
+            async function checkExistEmail_edit(emailOld, emailNew) {
+                return (await instance.post('/staff/check-exist-email-edit', {
+                    emailOld,
+                    emailNew,
+                })).data;
+            }
+
             async function regisShift(arrDate, arrEmployee, idStore) {
                 return (await instance.post('employee/regis-shift', {
                     arrDate,
@@ -1487,10 +1619,11 @@ if (accessToken != `null`) {
                 })).data;
             }
 
-            async function setStatusEmployee(idEmployee, status) {
+            async function setStatusEmployee(idEmployee, status, status_account) {
                 return (await instance.post('employee/set-status', {
                     idEmployee,
-                    status
+                    status,
+                    status_account
                 })).data;
             }
 

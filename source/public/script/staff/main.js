@@ -1,8 +1,20 @@
 const accessToken = `${window.localStorage.getItem('accessToken')}`;
 if (accessToken != `null`) {
     (async () => {
-        const { status, nameEmployee, pathImg, idEmployee, employee } = await checkToken(accessToken);
+        const ids = location.href.split('?idStore=')[1];
+        const { status, idEmployee, employee, role } = await checkToken(accessToken);
         if (status == 'success') {
+            if (role === 3) {
+                if (employee.IDStore !== parseInt(ids)) {
+                    location.href = './page-err'
+                }
+            }
+            else if (role == 4) {
+                var service_link = document.querySelector('.service-link');
+                var service_span = document.querySelector('.service-span');
+                service_link.classList.remove('d-none');
+                service_span.classList.remove('d-none');
+            }
             $('.name-manager').text(`${employee.SurName} ${employee.NameStaff}`);
             var avtManager = document.querySelector('.avt-manager');
             avtManager.style = `background-image: url(${employee.PathImgStaff});color: rgb(19, 150, 110);`
@@ -467,6 +479,7 @@ if (accessToken != `null`) {
             const performance = document.querySelector('.performance')
 
             function renderPerformance_Employee(arr, total_payment) {
+                // console.log(arr);
                 var html = ``;
                 arr.forEach((item, index) => {
                     var percent = (item.sum * 100) / total_payment;
@@ -552,13 +565,10 @@ if (accessToken != `null`) {
 
             const dashboard_itemPerform = document.querySelectorAll('.dashboard-performance-stats__menu__item')
             var indexPreItemPer = 0;
-            // var countDash = 0
+            var countDash = 0
             currentWeek();
             dashboard_itemPerform.forEach((item, index) => {
-                // if (countDash == 0) {
-                //     currentWeek();
-                //     countDash = 1;
-                // }
+
                 item.onclick = async () => {
                     var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
                     var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
@@ -575,6 +585,12 @@ if (accessToken != `null`) {
                             }
                         }
                         else {
+                            if (countDash == 0) {
+                                currentWeek();
+                                firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                                countDash = 1;
+                            }
                             const { status_s, performance_service, total_payment } = await getPerformance_Service(firstDateString, lastDateString)
                             if (status_s == 'success') {
                                 renderPerformance_Service(performance_service, total_payment);

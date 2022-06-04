@@ -33,13 +33,13 @@
                 </svg>
             </a>
             <span>Điều Khiển</span>
-            <a href="service?idStore={{idstore}}">
+            <a href="service?idStore={{idstore}}" class="service-link d-none">
                 <svg id=" service" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
             </a>
-            <span>Dịch Vụ</span>
+            <span class="service-span d-none">Dịch Vụ</span>
             <a href="employee?idStore={{idstore}}">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                     v-bind:svg-inline="''" v-bind:role="'presentation'" v-bind:focusable="'false'"
@@ -178,6 +178,7 @@
                                         <div>
                                             {{#each employee}}
                                             <div class="adm-service" data-employee={{this.IDStaff}}
+                                                data-manager="{{this.IDManager}}"
                                                 style="border-color: rgb(192, 235, 117);background-color: #182e5b;">
                                                 <div class="adm-service__data">
                                                     <div class="flex-center el-row is-align-middle"
@@ -246,6 +247,7 @@
                                                                         style="left: -50px !important; opactity: 1 !important;"
                                                                         aria-labelledby="dropdownMenuButton">
                                                                         <li data-employee={{this.IDStaff}}
+                                                                            data-manager={{this.IDManager}}
                                                                             class="dropdown-item el-dropdown-menu edit-employee"
                                                                             data-target="" data-toggle="modal">
                                                                             <div

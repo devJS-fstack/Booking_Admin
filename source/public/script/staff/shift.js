@@ -1,9 +1,20 @@
 const accessToken = `${window.localStorage.getItem('accessToken')}`;
 if (accessToken != `null`) {
     (async () => {
-        const { status, nameEmployee, pathImg } = await checkToken(accessToken);
+        const { status, employee, role } = await checkToken(accessToken);
         if (status == 'success') {
             const idStore = location.href.split('?idStore=')[1];
+            if (role === 3) {
+                if (employee.IDStore !== parseInt(idStore)) {
+                    location.href = './page-err'
+                }
+            }
+            else if (role == 4) {
+                var service_link = document.querySelector('.service-link');
+                var service_span = document.querySelector('.service-span');
+                service_link.classList.remove('d-none');
+                service_span.classList.remove('d-none');
+            }
             var firstDay;
             var lastDay;
             var timePay, idstaff, amountDay, payment, nameStaff_work, salary_day;

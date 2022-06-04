@@ -1,10 +1,13 @@
 const accessToken = `${window.localStorage.getItem('accessToken')}`;
 if (accessToken != `null`) {
     (async () => {
-        const { status } = await checkToken(accessToken);
+        const { status, employee, role } = await checkToken(accessToken);
         if (status == 'success') {
             (() => {
                 const idStore = location.href.split('?idStore=')[1];
+                if (role === 3) {
+                    location.href = './page-err'
+                }
                 navheader.style.display = 'none'
                 const btn_addCategory = document.getElementById('adm-add-category');
                 const input_category = document.getElementById('input-category');

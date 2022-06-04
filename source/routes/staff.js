@@ -4,7 +4,8 @@ const StaffController = require('../app/Controllers/Staff/StaffController')
 const { uploadFile, getUrlPublic } = require('../app/Models/UploadModal')
 const { sequelize } = require('../util/sequelizedb');
 const fs = require('fs');
-
+const nodemailer = require("nodemailer");
+const bcrypt = require('bcrypt');
 
 const multer = require('multer')
 const path = require('path');
@@ -150,6 +151,26 @@ router.post('/employee/add-employee', upload.single('file'), async (req, res) =>
     let getIdStaffNew = await sequelize.query(`select IDNewStaff from IDNewStaff `);
     let idStaffNew = getIdStaffNew[0][0].IDNewStaff;
     var isDone = false;
+    // insert account
+    var password = Math.floor(Math.random() * 999999) + 100000;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password.toString(), salt);
+    var date = new Date();
+    let dateInsert = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    var idRole = 0;
+    if (parseInt(body.type_staff) == 1 || parseInt(body.type_staff) == 2) {
+        idRole = 2
+    }
+    else if (parseInt(body.type_staff) == 3) {
+        idRole = 3
+    } else if (parseInt(body.type_staff) == 4) {
+        idRole = 4
+    }
+    let inserAccount = await sequelize.query(`INSERT INTO TaiKhoan(Account,Password,Status,IDRole) 
+                    VALUES('${idStaffNew}','${hashedPassword}','Active',${idRole})`)
+
+
+
     let insertStaff = await sequelize.query(`INSERT INTO Staff
     ([IDStaff]
     ,[SurName]
@@ -178,10 +199,10 @@ router.post('/employee/add-employee', upload.single('file'), async (req, res) =>
         ${body.type_staff}
     )
     `)
+    let deleteLastStaff = await sequelize.query(`DELETE IDNewStaff`)
+    let idNew = idStaffNew.split('NV');
+    let updateIdStaffNew = await sequelize.query(`INSERT INTO IDNewStaff(IDLastStaff,IDNewStaff) VALUES('${idStaffNew}','NV${parseInt(idNew[1]) + 1}')`)
     if (req.body.arrServices.length > 0 && insertStaff.length > 0) {
-        let idNew = idStaffNew.split('NV');
-        let deleteLastStaff = await sequelize.query(`DELETE IDNewStaff`)
-        let updateIdStaffNew = await sequelize.query(`INSERT INTO IDNewStaff(IDLastStaff,IDNewStaff) VALUES('${idStaffNew}','NV${parseInt(idNew[1]) + 1}')`)
         var arrIdServices = body.arrServices.split(',');
         var sql = ''
         arrIdServices.forEach((item, index) => {
@@ -195,12 +216,40 @@ router.post('/employee/add-employee', upload.single('file'), async (req, res) =>
         })
         if (isDone) await sequelize.query(`${sql}`)
     }
-
+    let transporter = nodemailer.createTransport({
+        type: 'SMTP',
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_ACCOUNT_AUTHOR,
+            pass: process.env.EMAIL_PASSWORD_AUTHOR,
+        },
+    })
     res.redirect('back');
+    let info = await transporter.sendMail({
+        from: 'vantinhnguyen728@gmail.com', // sender address
+        to: `${body.email}`, // list of receivers
+        subject: "Mật khẩu tài khoản nhân viên TheBaberShop", // Subject line
+        text: "Chào anh, đây là mật khẩu của anh tại website TheBaberShop. Anh vui lòng không để lộ ", // plain text body
+        html: `<p>Chào bạn, đây là tài khoản và mật khẩu của bạn tại website TheBaberShop. Bạn vui lòng không để lộ, có vấn đề liên hệ trực tiếp Admin </p>
+        <h1 style="display:flex">Tài khoản: ${idStaffNew}</h1>,
+        <h1 style="display:flex">Mật khẩu: ${password}</h1>`, // html body
+    }).catch(err => { console.log(err) })
+
 })
 router.post('/employee/edit-employee-without-img', async (req, res) => {
     const body = req.body
-
+    var idRole = 0;
+    if (parseInt(body.type_staff) == 1 || parseInt(body.type_staff) == 2) {
+        idRole = 2
+    }
+    else if (parseInt(body.type_staff) == 3) {
+        idRole = 3
+    } else if (parseInt(body.type_staff) == 4) {
+        idRole = 4
+    }
+    var updateRole = await sequelize.query(`UPDATE TaiKhoan SET IDRole = ${idRole} WHERE Account = '${body.idStaff}' `)
     let updateStaff = await sequelize.query(`
     UPDATE [dbo].[Staff]
    SET 
@@ -385,6 +434,9 @@ router.get('/shift', StaffController.shift)
 // login
 router.post('/checkToken', StaffController.checkToken)
 router.post('/login/check-exist-email', StaffController.checkExistEmail)
+router.post('/staff/check-exist-phone', StaffController.checkExistPhone)
+router.post('/staff/check-exist-phone-edit', StaffController.checkExistPhone_edit)
+router.post('/staff/check-exist-email-edit', StaffController.checkExistEmail_edit)
 router.post('/login/send-email-verify', StaffController.sendEmailVerify);
 router.get('/login/verify-email/', StaffController.verifyEmail);
 router.post('/login', StaffController.login);
