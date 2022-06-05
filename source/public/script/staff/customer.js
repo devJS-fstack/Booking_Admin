@@ -8,12 +8,18 @@ if (accessToken != `null`) {
                 if (employee.IDStore !== parseInt(idStore)) {
                     location.href = './page-err'
                 }
+                const setStatusBtns = document.querySelectorAll('.set-status-customer');
+                setStatusBtns.forEach(item => item.remove())
             }
             else if (role == 4) {
                 var service_link = document.querySelector('.service-link');
                 var service_span = document.querySelector('.service-span');
                 service_link.classList.remove('d-none');
                 service_span.classList.remove('d-none');
+                const setStatusBtns = document.querySelectorAll('.set-status-customer');
+                const iconStatus = document.querySelectorAll('.icon-set-status');
+                const spansSetStatus = document.querySelectorAll('.span_set-status')
+                clickSetStatus(setStatusBtns, iconStatus, spansSetStatus)
             }
             var itemCustomer = document.querySelectorAll('.adm-service');
             const numberBooking = document.querySelectorAll('.num-bookings');
@@ -673,6 +679,28 @@ if (accessToken != `null`) {
 
             }
 
+            function clickSetStatus(list, icons, spans) {
+                list.forEach((item, index) => {
+                    item.onclick = async () => {
+                        if (spans[index].textContent.trim() == 'Khóa tài khoản') {
+                            icons[index].classList.remove('fa-lock')
+                            icons[index].classList.add('fa-unlock')
+                            spans[index].textContent = 'Mở khóa tài khoản'
+                            await launch_toast('Khóa tài khoản thành công')
+                            itemCustomer[index].classList.add('red')
+                            await setStatusCustomer(item.getAttribute('data-customer'), 'No Active')
+                        } else {
+                            icons[index].classList.add('fa-lock')
+                            icons[index].classList.remove('fa-unlock')
+                            spans[index].textContent = 'Khóa tài khoản'
+                            await launch_toast('Mở khóa tài khoản thành công')
+                            itemCustomer[index].classList.remove('red')
+                            await setStatusCustomer(item.getAttribute('data-customer'), 'Active')
+                        }
+                    }
+                })
+            }
+
 
 
 
@@ -680,6 +708,13 @@ if (accessToken != `null`) {
 
 
             // API
+
+            async function setStatusCustomer(account, status) {
+                return (await instance.post('customer/set-status', {
+                    account,
+                    status
+                })).data
+            }
 
             async function renderBooked(phone, idStore) {
                 return (await instance.post('customer/render-booked', {

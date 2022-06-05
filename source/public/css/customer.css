@@ -32,3 +32,9 @@
 
 .content-empty svg {
   width: 100%; }
+
+.adm-service.red {
+  background-color: #a5191b !important; }
+
+.adm-service.red:hover {
+  background-color: #a5191b !important; }

@@ -163,6 +163,9 @@ if (accessToken != `null`) {
                     },
                     axisTicks: {
                         show: false
+                    },
+                    tooltip: {
+                        enabled: false
                     }
                 },
                 yaxis: {

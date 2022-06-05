@@ -149,7 +149,7 @@
                                     <div id="list-customer">
                                         {{#each customers}}
                                         <div data-name="{{this.NameCustomer}}" data-customer={{this.PhoneCustomer}}
-                                            class="adm-service pointer"
+                                            class="adm-service pointer {{renderColorStatusCustomer this.Status}}"
                                             style="border-color: rgb(192, 235, 117);background-color: #182e5b;">
                                             <div class="adm-service__data">
                                                 <div class="flex-center el-row is-align-middle"
@@ -208,6 +208,21 @@
                                                                             </div>
                                                                             <div class="adm-dropdown-item__label">
                                                                                 Chỉnh sửa
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li data-customer={{this.PhoneCustomer}}
+                                                                        class="set-status-customer dropdown-item el-dropdown-menu">
+                                                                        <div
+                                                                            class="adm-dropdown-item__wrapper is-with-icon">
+                                                                            <div class="adm-dropdown-item__icon">
+                                                                                <i class="fa-solid fa-lock icon-set-status"
+                                                                                    style="font-size: 15px;padding-bottom: 3px;"></i>
+                                                                            </div>
+                                                                            <div class="adm-dropdown-item__label">
+                                                                                <span class="span_set-status">
+                                                                                    {{renderStatusCustomer this.Status}}
+                                                                                </span>
                                                                             </div>
                                                                         </div>
                                                                     </li>

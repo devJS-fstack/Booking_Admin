@@ -57,6 +57,14 @@ app.engine('hbs', handlebars({
             var day = result.getDate() > 9 ? result.getDate() : `0${result.getDate()}`;
             var month = result.getMonth() + 1 > 9 ? result.getMonth() + 1 : `0${result.getMonth() + 1}`;
             return `${day}-${month}-${result.getFullYear()}`
+        },
+        renderStatusCustomer: (status) => {
+            if (status == 'Active') return 'Khóa tài khoản'
+            else if (status == 'No Active') return 'Mở khóa tài khoản'
+        },
+        renderColorStatusCustomer: (status) => {
+            if (status == 'Active') return ''
+            else if (status == 'No Active') return 'red'
         }
     }
 }))

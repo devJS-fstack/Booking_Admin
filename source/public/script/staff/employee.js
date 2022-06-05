@@ -809,7 +809,6 @@ if (accessToken != `null`) {
                     idStore = ids;
                     inputManager.value = idmanager;
                     inputTypeEm.value = idTypeStaff;
-                    console.log(formEmployee.action);
                     formEmployee.submit();
                 }
 
@@ -1143,11 +1142,17 @@ if (accessToken != `null`) {
             }
 
             btnConfrimDelete.onclick = async function () {
-                const { status } = await deleteEmployee(idEmployee_delete);
-                if (status == 'success') {
-                    console.log(status);
-                    removeEmployeeDeleted(idEmployee_delete);
+                if (role === 3) {
+                    launch_toast('Bạn không có quyền làm việc này');
                     $('#alertModalDelete').modal('hide');
+                }
+                else if (role === 4) {
+                    const { status } = await deleteEmployee(idEmployee_delete);
+                    if (status == 'success') {
+                        removeEmployeeDeleted(idEmployee_delete);
+                        $('#alertModalDelete').modal('hide');
+                        launch_toast('Xóa thành công');
+                    }
                 }
             }
 

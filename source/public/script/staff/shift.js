@@ -2,6 +2,7 @@ const accessToken = `${window.localStorage.getItem('accessToken')}`;
 if (accessToken != `null`) {
     (async () => {
         const { status, employee, role } = await checkToken(accessToken);
+        var amountDateSuccess = 0;
         if (status == 'success') {
             const idStore = location.href.split('?idStore=')[1];
             if (role === 3) {
@@ -17,9 +18,11 @@ if (accessToken != `null`) {
             }
             var firstDay;
             var lastDay;
+            var dateClick;
             var timePay, idstaff, amountDay, payment, nameStaff_work, salary_day;
             const sidebar_status = document.querySelector('.sidebar__status');
-            const action_booking = document.querySelector('.action-booking');
+            const exportInvoiceBtn = document.querySelector('#adm-export-invoice');
+            const exportDoneBtn = document.querySelector('#adm-check-success');
             const sidebar = document.querySelector('.sidebar');
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -33,6 +36,8 @@ if (accessToken != `null`) {
                 eventClick: async (info) => {
                     let date = info.event.start;
                     idstaff = info.event.id;
+                    amountDateSuccess = 0
+                    dateClick = date;
                     currentMonth(date);
                     var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
                     var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
@@ -48,12 +53,33 @@ if (accessToken != `null`) {
                         avtEmployee.style = `background-image: url(${infoEmployee.PathImgStaff}); color: rgb(36, 112, 172);`
                         $('.name-type__employee').text(`${infoEmployee.SurName} ${infoEmployee.NameStaff} - ${infoEmployee.NameType}`)
                         nameStaff_work = `${infoEmployee.SurName} ${infoEmployee.NameStaff}`;
+                        var haveRegis = false;
                         datework.forEach(obj => {
-                            html += `<span>${formatDateViet(obj.DateRegis)}</span>`
+                            var colorClass = "";
+                            if (obj.Status == 'Ðã hoàn thành') {
+                                colorClass = "text-warning"
+                                amountDateSuccess++;
+                            } else if (obj.Status == 'Ðã thanh toán') {
+                                colorClass = "text-success";
+                            }
+                            else {
+                                var dateDate = new Date(obj.DateRegis);
+                                if (dateDate.getDate() == date.getDate()) {
+                                    haveRegis = true;
+                                }
+                                colorClass = "text-danger"
+                            }
+                            html += `<span class="d-block">${formatDateViet(obj.DateRegis)} - <span class="${colorClass}">${obj.Status}</span>
+                            </span>`
                         })
+                        if (haveRegis) {
+                            exportDoneBtn.classList.remove('d-none')
+                        } else {
+                            exportDoneBtn.classList.add('d-none')
+                        }
                         dateWork_element.innerHTML = html;
-                        var salary = Math.floor(datework.length * infoEmployee.SalaryOnDay)
-                        $('.salary-employee').text(`${formatMoneyViet(salary)}.000đ - ${datework.length} ngày`)
+                        var salary = Math.floor(amountDateSuccess * infoEmployee.SalaryOnDay)
+                        $('.salary-employee').text(`${formatMoneyViet(salary)}.000đ - ${amountDateSuccess} ngày`)
                         payment = salary;
                         salary_day = infoEmployee.SalaryOnDay
                     }
@@ -64,25 +90,34 @@ if (accessToken != `null`) {
                         $('.sidebar-overlay').remove();
                     })
 
-                    if (bill.length == 0) {
-                        action_booking.style.display = 'flex';
-                        sidebar_status.style.display = 'none';
+                    if (amountDateSuccess > 0) {
+                        exportInvoiceBtn.style.display = 'flex';
                     } else {
-                        action_booking.style.display = 'none';
-                        sidebar_status.style.display = 'flex';
+                        exportInvoiceBtn.style.display = 'none';
                     }
                 }
             });
             const btnExport_invoice = document.getElementById('adm-export-invoice');
-
             btnExport_invoice.addEventListener('click', async () => {
                 var idBill = Date.now();
-                const { status } = await createInvoice_Salary(idBill, timePay, idstaff, amountDay, payment);
+                var firstDateString = `${firstDay.getFullYear()}-${firstDay.getMonth() + 1}-${firstDay.getDate()}`
+                var lastDateString = `${lastDay.getFullYear()}-${lastDay.getMonth() + 1}-${lastDay.getDate()}`
+                const { status } = await createInvoice_Salary(idBill, timePay, idstaff, amountDateSuccess, payment, firstDateString, lastDateString);
                 if (status == 'success') {
                     exportInvoice(idBill, amountDay);
                     sidebar.classList.remove('active');
                     $('.sidebar-overlay').remove();
                     launch_toast("Đang xuất hóa đơn...");
+                }
+            })
+
+            exportDoneBtn.addEventListener('click', async () => {
+                var dateString = `${dateClick.getFullYear()}-${dateClick.getMonth() + 1}-${dateClick.getDate()}`
+                const { status } = await updateDoneWork(dateString, idstaff)
+                if (status == 'success') {
+                    sidebar.classList.remove('active');
+                    $('.sidebar-overlay').remove();
+                    launch_toast("Cập nhật trạng thái thành công");
                 }
             })
 
@@ -115,7 +150,7 @@ if (accessToken != `null`) {
                         "due-date": `${day}-${month}-${date.getFullYear()}`
                     },
                     "products": [{
-                        "quantity": lengthDay,
+                        "quantity": amountDateSuccess,
                         "description": `Ngày`,
                         "tax-rate": 0,
                         "price": `${salary_day}`
@@ -221,13 +256,24 @@ if (accessToken != `null`) {
                 last = lastDay.getDate();
             }
 
-            async function createInvoice_Salary(idBill, timePay, idstaff, amountDay, payment) {
+            // call API
+
+            async function updateDoneWork(date, idStaff) {
+                return (await instance.post('shift/update-done-work', {
+                    date,
+                    idStaff
+                })).data
+            }
+
+            async function createInvoice_Salary(idBill, timePay, idstaff, amountDay, payment, firstDate, lastDate) {
                 return (await instance.post('shift/create-invoice', {
                     idBill,
                     timePay,
                     idstaff,
                     amountDay,
-                    payment
+                    payment,
+                    firstDate,
+                    lastDate,
                 })).data
             }
 

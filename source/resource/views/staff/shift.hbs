@@ -124,14 +124,14 @@
                                 </div>
 
                                 <div class="sidebar__content">
-                                    <div class="sidebar__status">
+                                    {{!-- <div class="sidebar__status">
                                         <div class="status flex-center">
                                             <i class="fa-solid fa-user-check mr-3"></i>
                                             <span class="status-symbol approved">
-                                                Đã thanh toán
+                                                <span class="status-date">Đã thanh toán</span>
                                             </span>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div>
                                         <div class="adm-appointment-info-section-employee">
                                             <div class="adm-avatar size-32 mr-0 ml-0 avatar-employe"
@@ -164,7 +164,7 @@
                                                 <div
                                                     class="adm-appointment-info-section-customers__item service-list__book">
                                                     <div class="adm-appointment-info-section-service dates_work"
-                                                        style="flex-wrap: wrap;justify-content: space-around;">
+                                                        style="display:block">
                                                         <span class="ml-2">Cắt gội massage</span>
                                                     </div>
 
@@ -188,6 +188,11 @@
                                             class="adm-button adm-button__filled__blue adm-button-size__medium ml-3"
                                             style="border:none;width:100%">
                                             <span>Thanh Toán</span>
+                                        </button>
+                                        <button id="adm-check-success"
+                                            class="adm-button green adm-button-size__medium ml-3 d-none"
+                                            style="border:none;width:100%">
+                                            <span>Hoàn Thành</span>
                                         </button>
                                     </span>
                                 </div>

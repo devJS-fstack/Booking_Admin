@@ -384,7 +384,7 @@ router.get('/booking', StaffController.mainBooking);
 
 
 // Customer
-
+router.post('/customer/set-status', StaffController.setStatusCustomer)
 router.post('/customer/last-book', StaffController.lastBook)
 router.post('/customer/create', StaffController.createCustomer)
 router.post('/customer/info', StaffController.getInfoCustomer)
@@ -428,6 +428,7 @@ router.get('/dashboard-manager', StaffController.dashboard)
 
 // shift
 router.post('/shift/info-salary', StaffController.salaryEmployee)
+router.post('/shift/update-done-work', StaffController.updateDoneWork)
 router.post('/shift/create-invoice', StaffController.createInvoice_salary)
 router.get('/shift', StaffController.shift)
 

@@ -1214,3 +1214,12 @@ button {
     flex-shrink: 0;
     justify-content: center;
 }
+
+.adm-button.green {
+    background-color: #00cec9 !important;
+}
+
+.adm-button.green:hover {
+    color: #fff !important;
+    background-color: #67cdcd !important;
+}

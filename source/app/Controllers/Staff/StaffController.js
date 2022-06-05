@@ -372,7 +372,7 @@ class StaffController {
 
     async getInfoBook_service(req, res) {
         let infoBookFuture = await sequelize.query(`select IDService FROM BookItem as bi,Book as b WHERE IDService = ${req.body.idService} AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook AND b.StatusBook = N'Đã đặt lịch'`);
-        let infoBookDone = await sequelize.query(`select IDService FROM BookItem as bi,Book as b WHERE IDService = ${req.body.idService} AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook AND b.StatusBook = N'Đã thanh toán'`);
+        let infoBookDone = await sequelize.query(`select IDService FROM BookItem as bi,Book as b WHERE IDService = ${req.body.idService} AND b.DateBook = bi.DateBook AND b.IDShiftBook = bi.IDShiftBook AND b.StatusBook = N'Đã hoàn tất'`);
         return res.status(200).json({
             status: 'success',
             infoBookFuture: infoBookFuture[0],
@@ -382,7 +382,7 @@ class StaffController {
 
     async getInfoBook_Employee(req, res) {
         let infoBookFuture = await sequelize.query(`select IDStaff FROM Book WHERE IDStaff = '${req.body.idEmployee}' AND StatusBook = N'Đã đặt lịch'`);
-        let infoBookDone = await sequelize.query(`select IDStaff FROM Book WHERE IDStaff = '${req.body.idEmployee}' AND StatusBook = N'Đã thanh toán'`);
+        let infoBookDone = await sequelize.query(`select IDStaff FROM Book WHERE IDStaff = '${req.body.idEmployee}' AND StatusBook = N'Đã hoàn tất'`);
         return res.status(200).json({
             status: 'success',
             infoBookFuture: infoBookFuture[0],
@@ -431,6 +431,8 @@ class StaffController {
         let deleteRegis = await sequelize.query(`delete RegisShift WHERE IDStaff = '${id}'`)
         let deleteEmployee = await sequelize.query(`delete Staff WHERE IDStaff = '${id}'`)
         let deleteAccount = await sequelize.query(`delete TaiKhoan WHERE Account = '${id}'`)
+        let deleteBill = await sequelize.query(`delete Bill WHERE IDStaff = '${id}'`)
+        let deleteBill_Salary = await sequelize.query(`delete BillSalary WHERE Staff = '${id}'`)
         return res.status(200).json({
             status: 'success',
         })
@@ -444,6 +446,11 @@ class StaffController {
         return res.status(200).json({
             status: 'success',
         })
+    }
+
+    async setStatusCustomer(req, res) {
+        let setStatus = await sequelize.query(`UPDATE TaiKhoan SET Status = N'${req.body.status}' 
+        WHERE Account = '${req.body.account}'`)
     }
 
     async regisShift(req, res) {
@@ -460,16 +467,17 @@ class StaffController {
                 , [IDStaff]
                 , [IDDayOfWeek]
                 , [IDStore]
+                , [Status]
             )`;
             }
             countLoop++;
             arrEmployee.forEach((employee, index1) => {
                 var d = new Date(`${date}`)
                 if (countLoop == 1) {
-                    sql += `VALUES('${date}', '${employee}', ${d.getDay()}, ${req.body.idStore})`
+                    sql += `VALUES('${date}', '${employee}', ${d.getDay()}, ${req.body.idStore},N'Đã đăng ký')`
                     countLoop = 2;
                 } else {
-                    sql += `, ('${date}', '${employee}', ${d.getDay()}, ${req.body.idStore})`
+                    sql += `, ('${date}', '${employee}', ${d.getDay()}, ${req.body.idStore},N'Đã đăng ký')`
                 }
             })
 
@@ -822,7 +830,7 @@ class StaffController {
 
     // Customer 
     async mainCustomer(req, res) {
-        let customers = await sequelize.query(`SELECT * FROM Customer`);
+        let customers = await sequelize.query(`SELECT c.*,t.Status FROM Customer as c,TaiKhoan as t WHERE t.Account = c.PhoneCustomer`);
         let bookings = await sequelize.query(`SELECT * FROM Book WHERE IDStore = ${req.query.idStore} `);
         let lengthAll = customers[0].length;
         res.render('staff/customer', {
@@ -857,10 +865,12 @@ class StaffController {
         var email = req.body.email;
         var name = req.body.name;
         var date = new Date();
-        var passwordNew = Date.now();
+        var passwordNew = Math.floor(Math.random() * 999999) + 100000;
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(passwordNew.toString(), salt);
         let dateInsert = `${date.getFullYear()} -${date.getMonth() + 1} -${date.getDate()} `
         let inserAccount = await sequelize.query(`INSERT INTO TaiKhoan(Account, Password, Status, IDRole)
-        VALUES('${phone}', '${passwordNew}', 'Active', 1)`)
+        VALUES('${phone}', '${hashedPassword}', 'Active', 1)`)
         let insertCustomer = await sequelize.query(`
         INSERT INTO Customer(PhoneCustomer, NameCustomer, EmailCustomer, DateCreate)
         VALUES('${phone}', N'${name}', '${email}', '${dateInsert}')
@@ -885,7 +895,8 @@ class StaffController {
             subject: "Mật khẩu tài khoản TheBaberShop", // Subject line
             text: "Chào anh, đây là mật khẩu mới của anh. Anh vui lòng không để lộ, dùng tài khoản đặt lịch online sẽ có nhiều ưu đãi hấp dẫn ", // plain text body
             html: `< p > Chào anh, đây là mật khẩu mới của anh.Anh vui lòng không để lộ, dùng tài khoản đặt lịch online sẽ có nhiều ưu đãi hấp dẫn</p >
-            <h1 style="display:flex">${passwordNew}</h1>`, // html body
+            <h1 style="display:flex">Tài khoản: ${phone}</h1>
+            <h1 style="display:flex">Mật khẩu: ${passwordNew}</h1>`, // html body
         }).catch(err => { console.log(err) })
         console.log("Message sent: %s", info.messageId);
     }
@@ -1091,6 +1102,17 @@ class StaffController {
         VALUES
             ('${body.idBill}', '${body.timePay}', '${body.idstaff}', N'Đã thanh toán', ${body.amountDay}, ${body.payment})`
         await sequelize.query(insert_sql)
+        await sequelize.query(`UPDATE RegisShift SET Status = 'Đã thanh toán' WHERE Status = 'Đã hoàn thành'
+         AND IDStaff = '${body.idstaff}' AND DateRegis between '${req.body.firstDate}' and '${req.body.lastDate}'`)
+        return res.status(200).json({
+            status: 'success',
+        })
+    }
+
+    async updateDoneWork(req, res) {
+        await sequelize.query(`UPDATE RegisShift SET Status = N'Ðã hoàn thành' WHERE IDStaff = '${req.body.idStaff}'
+        AND DateRegis = '${req.body.date}'
+        `)
         return res.status(200).json({
             status: 'success',
         })
