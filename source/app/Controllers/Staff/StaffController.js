@@ -345,7 +345,7 @@ class StaffController {
 
     async deleteService(req, res) {
         const id = req.body.idService;
-        let getPathImg = await sequelize.query(`select PathImg FROM Service WHERE IDService = ${id} `);
+        const getPathImg = await sequelize.query(`select PathImg FROM Service WHERE IDService = ${id} `);
         let fileImgOld = getPathImg[0][0].PathImg.split('/');
         let filePathImgOld = path.join(__dirname, `../../../public/img/${fileImgOld[4]}`);
         fs.unlink(filePathImgOld, (err) => err);
